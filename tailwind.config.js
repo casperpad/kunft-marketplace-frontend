@@ -4,6 +4,8 @@ module.exports = {
   theme: {
     extend: {},
     colors: {
+      white: '#fff',
+      black: '#000',
       orange: {
         600: '#FA5F0C',
       },
