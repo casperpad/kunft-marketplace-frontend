@@ -6,6 +6,7 @@ module.exports = {
     '@storybook/addon-links',
     '@storybook/addon-essentials',
     '@storybook/addon-interactions',
+    '@storybook/addon-docs',
     {
       /**
        * NOTE: fix Storybook issue with PostCSS@8
@@ -24,7 +25,15 @@ module.exports = {
     builder: '@storybook/builder-webpack5',
   },
   webpackFinal: async (config, { configType }) => {
-    config.resolve.modules = [path.resolve(__dirname, '..', 'src'), 'node_modules']
+    config.module.rules.push({
+      test: /\.scss$/,
+      use: ['style-loader', 'css-loader', 'sass-loader'],
+      include: path.resolve(__dirname, '../'),
+    })
+    config.resolve.modules = [
+      path.resolve(__dirname, '..', 'src'),
+      'node_modules',
+    ]
     config.resolve.alias = {
       ...config.resolve.alias,
       '@components': path.resolve(__dirname, '../src/components'),

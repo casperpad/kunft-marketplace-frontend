@@ -1,4 +1,5 @@
 import '../styles/globals.css'
+import '../assets/scss/main.scss'
 import type { AppProps } from 'next/app'
 import Providers from '../Providers'
 

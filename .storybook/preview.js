@@ -1,5 +1,6 @@
 import '../public/fonts/server.css'
 import '../src/styles/globals.css'
+import '../src/assets/scss/main.scss'
 
 import * as NextImage from 'next/image'
 

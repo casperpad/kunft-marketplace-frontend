@@ -26,7 +26,7 @@ export default function NFTCard({
 }: NFTCardProps) {
   return (
     <Link href="/component">
-      <div className="relative bg-white border hover:cursor-pointer hover:border-none border-black min-w-min font-Avenir font-light">
+      <div className="nftcard relative bg-white border hover:cursor-pointer hover:border-none border-black min-w-min font-Avenir font-light">
         <Image
           src={image}
           width={320}
