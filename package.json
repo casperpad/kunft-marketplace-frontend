@@ -20,6 +20,12 @@
     "test:config": "jest src/config/__tests__/ --testPathIgnorePatterns"
   },
   "dependencies": {
+    "@reduxjs/toolkit": "^1.8.3",
+    "casper-cep47-js-client": "^1.0.1",
+    "casper-erc20-js-client": "^0.2.0",
+    "casper-js-client-helper": "^1.0.1",
+    "casper-js-sdk": "^2.9.1",
+    "lodash": "^4.17.21",
     "next": "12.2.0",
     "react": "18.2.0",
     "react-dom": "18.2.0"
