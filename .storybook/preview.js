@@ -1,4 +1,6 @@
+import '../public/fonts/server.css'
 import '../src/styles/globals.css'
+
 import * as NextImage from 'next/image'
 
 const OriginalNextImage = NextImage.default
@@ -15,5 +17,18 @@ export const parameters = {
       color: /(background|color)$/i,
       date: /Date$/,
     },
+  },
+  backgrounds: {
+    default: 'twitter',
+    values: [
+      {
+        name: 'twitter',
+        value: '#00aced',
+      },
+      {
+        name: 'facebook',
+        value: '#3b5998',
+      },
+    ],
   },
 }

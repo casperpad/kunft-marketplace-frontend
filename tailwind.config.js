@@ -14,6 +14,10 @@ module.exports = {
         900: '#191919',
       },
     },
+    fontFamily: {
+      Avenir: ['Avenir'],
+      Castle: ['Castle'],
+    },
   },
   plugins: [],
 }
