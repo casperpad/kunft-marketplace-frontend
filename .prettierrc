@@ -2,5 +2,13 @@
   "trailingComma": "all",
   "semi": false,
   "singleQuote": true,
-  "printWidth": 120
+  "printWidth": 80,
+  "overrides": [
+    {
+      "files": ["*.css", "*.scss", "*.html"],
+      "options": {
+        "tabWidth": 4
+      }
+    }
+  ]
 }
