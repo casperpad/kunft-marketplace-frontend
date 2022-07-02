@@ -17,4 +17,5 @@ export const Primary = Template.bind({})
 Primary.args = {
   logo: '/assets/images/Logo/KUNFTLogo.png',
   menuItems: ['Discover', 'Create', 'Collections', 'TopNFTs'],
+  loggedIn: false,
 }
