@@ -4,6 +4,7 @@ interface NavbarProps {
   logo: string
   menuItems: string[]
   avatar?: string
+  loggedIn: boolean
 }
 
 function MenuItem({ item }: { item: string }) {
@@ -15,19 +16,29 @@ function MenuItem({ item }: { item: string }) {
 }
 
 export default function Navbar(props: NavbarProps) {
-  const { logo, menuItems, avatar } = props
-  const menuAvatar = avatar ?? '/assets/images/Avatar/NotConnectedWallet.svg'
+  const { logo, menuItems, avatar, loggedIn } = props
+  const menuAvatar = loggedIn
+    ? avatar
+      ? (avatar as string)
+      : '/assets/images/Avatar/Default.svg'
+    : '/assets/images/Avatar/NotConnectedWallet.svg'
 
   return (
     <div className="fixed h-[65px] w-full top-0 left-0 border-b border-black flex flex-row justify-between items-center px-9 py-1 font-Castle">
       <div>
-        <Image src={logo} alt="logo" width={101} height={57} />
+        <Image src={logo} alt="" width={101} height={57} />
       </div>
       <div className="flex flex-row items-center">
-        {menuItems.map((item, index) => {
+        {menuItems.map((item) => {
           return <MenuItem item={item} key={item} />
         })}
-        <Image src={menuAvatar} alt="" width={30} height={30} />
+        <Image
+          src={menuAvatar}
+          alt=""
+          width={30}
+          height={30}
+          className="rounded-full overflow-hidden"
+        />
       </div>
     </div>
   )
