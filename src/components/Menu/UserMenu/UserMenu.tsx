@@ -1,30 +1,35 @@
 import Image from 'next/image'
 import { IoSettingsOutline, FiCopy, RiLogoutBoxRLine } from 'react-icons/all'
 
-import UserMenuDivider from './UserMenuDivider'
 import UserMenuItem from './UserMenuItem'
+
+function UserMenuDivider() {
+  return <div className=" border-t-[1px] border-white mt-[5px] w-full" />
+}
 
 interface UserMenuProps {
   avatar?: string
-  copySvg: string
-  settingSvg: string
-  logSvg: string
 }
 
 export default function UserMenu(props: UserMenuProps) {
-  const { avatar, copySvg, settingSvg, logSvg } = props
+  const { avatar } = props
+
+  const profileAvatar = avatar
+    ? (avatar as string)
+    : '/assets/images/Avatar/Default.svg'
+
   return (
     <div className="rounded-l-[10px] bg-gray-900 w-[330px] text-[14px] text-white border-black border-b pb-[5px]">
       <UserMenuItem>
         <Image
-          src={props.avatar ?? '/assets/images/Avatar/Default.svg'}
-          alt="image"
+          src={profileAvatar}
+          alt=""
           width={73}
           height={74}
           className="rounded-full overflow-hidden"
         />
         <div>
-          <div className="items-center">
+          <div className="items-center flex flex-row">
             <span className="mr-2 text-[10px] text-gray-300/60">
               0202994438940iu38a...8cf93739c45
             </span>
