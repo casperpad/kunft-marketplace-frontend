@@ -5,7 +5,7 @@ import Link from 'next/link'
 export default function CollectionCard() {
   return (
     <Link href="/component">
-      <div className="">CollectionCard1</div>
+      <div className="">CollectionCard</div>
     </Link>
   )
 }
