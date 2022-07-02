@@ -1,5 +1,4 @@
-import React, { useEffect, useState } from 'react'
-import { Signer } from 'casper-js-sdk'
+import React from 'react'
 
 interface CasperWeb3ContextProps {
   detected: boolean

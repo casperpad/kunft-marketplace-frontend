@@ -1,9 +1,8 @@
 import Image from 'next/image'
+import { IoSettingsOutline, FiCopy, RiLogoutBoxRLine } from 'react-icons/all'
 
 import UserMenuDivider from './UserMenuDivider'
 import UserMenuItem from './UserMenuItem'
-
-import { IoSettingsOutline, FiCopy, RiLogoutBoxRLine } from 'react-icons/all'
 
 interface UserMenuProps {
   avatar?: string

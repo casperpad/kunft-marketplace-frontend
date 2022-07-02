@@ -25,7 +25,7 @@ export default function Navbar(props: NavbarProps) {
       </div>
       <div className="flex flex-row items-center">
         {menuItems.map((item, index) => {
-          return <MenuItem item={item} key={`menu_${index}`} />
+          return <MenuItem item={item} key={item} />
         })}
         <Image src={menuAvatar} alt="" width={30} height={30} />
       </div>

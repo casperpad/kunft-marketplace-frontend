@@ -1,8 +1,14 @@
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
+
 import { Signer } from 'casper-js-sdk'
+
 import CasperWeb3Context from '../context/CasperWeb3'
 
-export default function CasperWeb3Provider({ children }: { children: React.ReactNode }) {
+export default function CasperWeb3Provider({
+  children,
+}: {
+  children: React.ReactNode
+}) {
   const [detected, setDetected] = useState(false)
   const [connected, setConnected] = useState(false)
   const [currentAccount, setCurrentAccount] = useState<string | undefined>()
@@ -32,8 +38,8 @@ export default function CasperWeb3Provider({ children }: { children: React.React
       setDetected(false)
       return
     }
-    Signer.isConnected().then((connected) => {
-      if (connected) {
+    Signer.isConnected().then((_connected) => {
+      if (_connected) {
         handleWalletStateChange()
         setConnected(true)
       }
@@ -55,20 +61,26 @@ export default function CasperWeb3Provider({ children }: { children: React.React
       window.removeEventListener('signer:locked', handleWalletStateChange)
       window.removeEventListener('signer:connected', handleWalletStateChange)
       window.removeEventListener('signer:unlocked', handleWalletStateChange)
-      window.removeEventListener('signer:activeKeyChanged', handleWalletStateChange)
+      window.removeEventListener(
+        'signer:activeKeyChanged',
+        handleWalletStateChange,
+      )
     }
   }, [handleWalletStateChange])
 
+  const providerValues = useMemo(
+    () => ({
+      detected,
+      connected,
+      currentAccount,
+      connect,
+      disconnect,
+    }),
+    [connect, connected, currentAccount, detected, disconnect],
+  )
+
   return (
-    <CasperWeb3Context.Provider
-      value={{
-        detected,
-        connected,
-        currentAccount,
-        connect,
-        disconnect,
-      }}
-    >
+    <CasperWeb3Context.Provider value={providerValues}>
       {children}
     </CasperWeb3Context.Provider>
   )
