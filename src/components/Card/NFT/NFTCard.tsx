@@ -4,8 +4,96 @@ import { BigNumberish } from '@ethersproject/bignumber'
 import Image from 'next/image'
 import Link from 'next/link'
 import { BsHeart, BsHeartFill } from 'react-icons/bs'
+import styled from 'styled-components'
 
 import { NFTType } from 'types/nft.types'
+
+const Button = styled.button`
+  transition: opacity 0.5s;
+  &:hover {
+    opacity: 0.8;
+  }
+`
+
+const StarsButton = styled(Button)`
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  color: ${({ theme }) => theme.colors.orange_600};
+  fill: ${({ theme }) => theme.colors.orange_600};
+  font-size: 1.5rem;
+  line-height: 2rem;
+`
+
+const SaleButton = styled(Button)`
+  position: absolute;
+  bottom: 0rem;
+  left: 0rem;
+  transform: translateY(100%);
+  background-color: ${({ theme }) => theme.colors.orange_600};
+  border-bottom-left-radius: 6px;
+  border-bottom-right-radius: 6px;
+  width: 100%;
+  padding: 8px;
+  font-family: ${({ theme }) => theme.fonts.Castle};
+  font-size: 1.125rem;
+  line-height: 1.75rem;
+`
+
+const ImageContainer = styled.div`
+  border-radius: 100%;
+  overflow: hidden;
+`
+
+const FlexRow = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px;
+  border-top: 1px solid ${({ theme }) => theme.colors.black};
+`
+
+const FlexCol = styled.div.attrs((props: { align: string }) => props)`
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  align-items: ${(props) => props.align};
+`
+
+const Text = styled.div.attrs(
+  (props: {
+    size: string
+    line_height: string
+    color?: boolean
+    castle?: boolean
+  }) => props,
+)`
+  font-family: ${(props) => (props.castle ? 'Castle' : 'Avenir')};
+  font-size: ${(props) => props.size};
+  color: ${(props) =>
+    props.color ? props.theme.colors.orange_600 : props.theme.colors.black};
+`
+
+const NFTCardContainer = styled.div`
+  position: relative;
+  background-color: ${({ theme }) => theme.colors.white};
+  border-width: 1px solid ${({ theme }) => theme.colors.black};
+  min-width: min-content;
+  font-family: ${({ theme }) => theme.fonts.Avenir};
+  font-weight: lighter;
+  cursor: pointer;
+  &:hover {
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    border-color: transparent;
+    ${ImageContainer} {
+      border-radius: 0;
+    }
+    ${FlexRow} {
+      border-color: transparent;
+    }
+  }
+`
 
 interface NFTCardProps {
   image: string
@@ -30,49 +118,42 @@ export default function NFTCard({
 }: NFTCardProps) {
   return (
     <Link href="/component">
-      <div className="group relative bg-white border hover:cursor-pointer hover:drop-shadow-xl hover:border-transparent border-black min-w-min font-Avenir font-light">
-        <Image
-          src={image}
-          width={320}
-          height={320}
-          layout="responsive"
-          alt={name}
-          className="rounded-full group-hover:rounded-none"
-        />
-        <div className="flex items-center justify-between p-2 border-t  group-hover:border-transparent border-black">
-          <div className="flex flex-col items-start">
-            <div className="font-Castle text-3xl">{name}</div>
-            <button
-              type="button"
-              className="flex items-center gap-1 text-orange-600 text-2xl group-hover:opacity-80 transition-opacity duration-500"
-              onClick={onStarClick}
-            >
-              {userStarred ? (
-                <BsHeartFill fill="#FA5F0C" />
-              ) : (
-                <BsHeart fill="#FA5F0C" />
-              )}
+      <NFTCardContainer className="group">
+        <ImageContainer>
+          <Image
+            src={image}
+            width={320}
+            height={320}
+            layout="responsive"
+            alt={name}
+          />
+        </ImageContainer>
+        <FlexRow>
+          <FlexCol align="flex-start">
+            <Text castle size="30px" line_height="36px">
+              {name}
+            </Text>
+            <StarsButton onClick={onStarClick}>
+              {userStarred ? <BsHeartFill /> : <BsHeart />}
               {stars}
-            </button>
-          </div>
-          <div className="flex flex-col gap-1 items-end">
-            <div className="text-3xl">Price</div>
-            <div className="text-orange-600 text-2xl">
+            </StarsButton>
+          </FlexCol>
+          <FlexCol align="flex-end">
+            <Text size="30px" line_height="36px">
+              Price
+            </Text>
+            <Text color size="24px" line_height="32px">
               {price.toLocaleString()}
-            </div>
-          </div>
-        </div>
+            </Text>
+          </FlexCol>
+        </FlexRow>
 
         {(type === 'NoneSale' || type === 'Sale') && (
-          <button
-            type="button"
-            className="absolute bottom-0 left-0 translate-y-full bg-orange-600 rounded-bl-md rounded-br-md w-full p-2 font-Castle text-lg group-hover:opacity-80 transition-opacity duration-500"
-            onClick={props.onClick}
-          >
+          <SaleButton onClick={props.onClick}>
             {type === 'Sale' ? 'BUY NOW' : 'MAKE OFFER'}
-          </button>
+          </SaleButton>
         )}
-      </div>
+      </NFTCardContainer>
     </Link>
   )
 }

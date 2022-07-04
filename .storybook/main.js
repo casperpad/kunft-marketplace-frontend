@@ -7,6 +7,7 @@ module.exports = {
     '@storybook/addon-essentials',
     '@storybook/addon-interactions',
     '@storybook/addon-docs',
+    'storybook-addon-styled-component-theme/dist/preset',
     {
       /**
        * NOTE: fix Storybook issue with PostCSS@8

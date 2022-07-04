@@ -24,7 +24,7 @@
 @font-face {
     font-family: 'Avenir';
     font-display: block;
-    font-weight: 800;
+    font-weight: 700;
     src: url('/fonts/Avenir/Avenir-Black.woff2') format('woff2'),
         url('/fonts/Avenir/Avenir-Black.ttf') format('truetype');
 }

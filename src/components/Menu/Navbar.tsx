@@ -1,4 +1,39 @@
 import Image from 'next/image'
+import styled from 'styled-components'
+
+const MenuItemContainer = styled.div`
+  margin-right: 32px;
+  cursor: pointer;
+  color: ${({ theme }) => theme.colors.black};
+  font-family: ${({ theme }) => theme.fonts.Castle};
+  transition: color 0.2s;
+  &:hover {
+    color: ${({ theme }) => theme.colors.orange_600};
+  }
+`
+
+const NavbarContainer = styled.div`
+  position: fixed;
+  height: 65px;
+  width: 100vw;
+  top: 0px;
+  left: 0px;
+  padding: 4px 36px;
+  border-bottom: 1px solid ${({ theme }) => theme.colors.black};
+  font-family: ${({ theme }) => theme.fonts.Castle};
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+`
+
+const LogoContainer = styled.div``
+
+const MenuContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+`
 
 interface NavbarProps {
   logo: string
@@ -8,11 +43,7 @@ interface NavbarProps {
 }
 
 function MenuItem({ item }: { item: string }) {
-  return (
-    <div className="mr-8 cursor-pointer text-black hover:text-orange-600 transition-colors duration-150">
-      {item}
-    </div>
-  )
+  return <MenuItemContainer>{item}</MenuItemContainer>
 }
 
 export default function Navbar(props: NavbarProps) {
@@ -24,11 +55,11 @@ export default function Navbar(props: NavbarProps) {
     : '/assets/images/Avatar/NotConnectedWallet.svg'
 
   return (
-    <div className="fixed h-[65px] w-full top-0 left-0 border-b border-black flex flex-row justify-between items-center px-9 py-1 font-Castle">
-      <div>
+    <NavbarContainer>
+      <LogoContainer>
         <Image src={logo} alt="" width={101} height={57} />
-      </div>
-      <div className="flex flex-row items-center">
+      </LogoContainer>
+      <MenuContainer>
         {menuItems.map((item) => {
           return <MenuItem item={item} key={item} />
         })}
@@ -39,7 +70,7 @@ export default function Navbar(props: NavbarProps) {
           height={30}
           className="rounded-full overflow-hidden"
         />
-      </div>
-    </div>
+      </MenuContainer>
+    </NavbarContainer>
   )
 }
