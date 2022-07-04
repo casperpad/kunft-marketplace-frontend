@@ -6,6 +6,7 @@ import {
 import Chance from 'chance'
 import express from 'express'
 import { body } from 'express-validator'
+import { StatusCodes } from 'http-status-codes'
 import { sign as signJwt } from 'jsonwebtoken'
 import { JWT_SECRET, JWT_EXPIRE, JWT_NAME } from '@server/config'
 import { auth } from '@server/middleware'
@@ -16,12 +17,12 @@ const router = express.Router()
 const generateNonce = () => {
   const chance = new Chance()
   const nonce = chance.string({ length: 20 })
-  console.log(nonce)
+
   return nonce
 }
 
 router.get('/check', auth, (req, res) => {
-  console.log(req.header)
+  res.json(req.headers.user)
 })
 
 router.get('/:publicKey', async (req, res) => {
@@ -34,7 +35,9 @@ router.get('/:publicKey', async (req, res) => {
   } catch (error: any) {
     if (error instanceof Error) {
       console.error(error)
-      res.status(404).json({ message: error.message })
+      res
+        .status(StatusCodes.INTERNAL_SERVER_ERROR)
+        .json({ message: error.message })
     }
   }
 })
@@ -68,11 +71,14 @@ router.post(
         nonce: generateNonce(),
       })
       await user.save()
+
       res.json(user)
     } catch (error: any | Error) {
       if (error instanceof Error) {
         console.error(error)
-        res.status(404).json({ message: error.message })
+        res
+          .status(StatusCodes.INTERNAL_SERVER_ERROR)
+          .json({ message: error.message })
       }
     }
   },
@@ -105,32 +111,31 @@ router.post(
 
       await user.save()
 
-      const { emailVerified: _e, nonce: _n, ...signObject } = user.toJSON()
+      const { nonce: _n, ...signObject } = user.toJSON()
 
       const token = signJwt(signObject, JWT_SECRET, {
         expiresIn: JWT_EXPIRE,
       })
 
-      // req.session.user = token;
+      res.cookie(JWT_NAME, token, {
+        maxAge: JWT_EXPIRE * 1000,
+        httpOnly: process.env.NODE_ENV !== 'development',
+        secure: process.env.NODE_ENV !== 'development',
+      })
 
-      // req.session.cookie(JWT_NAME, token, {
-      //   maxAge: JWT_EXPIRE * 1000,
-      //   sameSite: false,
-      //   // httpOnly: process.env.NODE_ENV !== 'development',
-      //   // secure: process.env.NODE_ENV !== 'development',
-      // });
-
-      res.json(user)
+      res.json({ ...signObject, expire: JWT_EXPIRE * 1000 })
     } catch (error: any) {
       if (error instanceof Error) {
         console.error(error)
-        res.status(404).json({ message: error.message })
+        res
+          .status(StatusCodes.INTERNAL_SERVER_ERROR)
+          .json({ message: error.message })
       }
     }
   },
 )
 
-router.post('/signout', async () => {
+router.post('/signout', auth, async () => {
   // TODO
 })
 

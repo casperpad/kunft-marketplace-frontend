@@ -57,16 +57,16 @@ const userSchema = new Schema<User, UserModel, UserInstanceMethods>({
   },
 })
 
-userSchema.statics.getNonce = async (publicKey: string) => {
+userSchema.statics.getNonce = async function (publicKey: string) {
   const user = await this.findOne({ publicKey }).select('nonce')
   return user?.nonce
 }
 
-userSchema.statics.findByPublicKey = async (publicKey: string) => {
+userSchema.statics.findByPublicKey = async function (publicKey: string) {
   return await this.findOne({ publicKey })
 }
 
-userSchema.methods.toJSON = () => {
+userSchema.methods.toJSON = function () {
   const { _id, __v, ...user } = this._doc
   return user
 }

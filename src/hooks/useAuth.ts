@@ -1,8 +1,8 @@
 import { useCallback } from 'react'
 
 import { Signer } from 'casper-js-sdk'
-import { useCasperWeb3Provider } from 'provider/CasperWeb3Provider'
-import { api, auth } from 'service'
+import { useCasperWeb3Provider } from 'src/provider/CasperWeb3Provider'
+import { api, auth } from 'src/service'
 
 export default function useAuth() {
   const { currentAccount } = useCasperWeb3Provider()

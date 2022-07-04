@@ -1,6 +1,7 @@
 import * as Sentry from '@sentry/node'
 import * as Tracing from '@sentry/tracing'
 import compression from 'compression'
+import cookieParser from 'cookie-parser'
 import cors from 'cors'
 import express from 'express'
 import rateLimit from 'express-rate-limit'
@@ -59,6 +60,7 @@ async function startServer() {
   server.use(cors({ origin: '*' }))
   server.use(express.json({ limit: '25mb' }))
   server.use(express.urlencoded({ limit: '25mb', extended: true }))
+  server.use(cookieParser())
   server.use(morgan('dev'))
   server.use(limiter)
   server.use(responseTime())

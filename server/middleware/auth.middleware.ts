@@ -1,19 +1,7 @@
-import {
-  CLPublicKey,
-  decodeBase16,
-  verifyMessageSignature,
-} from 'casper-js-sdk'
 import express from 'express'
 import { StatusCodes } from 'http-status-codes'
 import jwt from 'jsonwebtoken'
 import { JWT_NAME, JWT_SECRET } from '@server/config'
-
-interface SignObject {
-  publicKey: string
-  name: string
-  email?: string | undefined
-  role: 'user' | 'admin'
-}
 
 export const auth = (
   req: express.Request,
@@ -33,7 +21,7 @@ export const auth = (
           .status(StatusCodes.UNAUTHORIZED)
           .send({ message: 'Invalid authentication' })
       }
-      console.log({ decoded })
+
       // eslint-disable-next-line no-param-reassign
       req.headers.user = decoded
       next()

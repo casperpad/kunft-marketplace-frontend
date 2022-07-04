@@ -140,6 +140,7 @@
     "import/no-extraneous-dependencies": 0,
     "jsx-a11y/media-has-caption": 0,
     // Exchange
+    "func-names": "off",
     "no-return-await": "off",
     "no-param-reassign": 0,
     "react/require-default-props": 0,

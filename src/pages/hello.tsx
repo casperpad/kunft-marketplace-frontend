@@ -1,8 +1,7 @@
 import React, { useEffect } from 'react'
-
 import { Signer } from 'casper-js-sdk'
 
-import { useAuth, useCasperWeb3Provider } from 'hooks'
+import { useAuth, useCasperWeb3Provider } from '@hooks/index'
 
 export default function Hello() {
   const { connected, connect } = useCasperWeb3Provider()
