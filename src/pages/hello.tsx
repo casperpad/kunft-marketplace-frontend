@@ -1,29 +1,40 @@
 import React, { useEffect } from 'react'
-
 import { Signer } from 'casper-js-sdk'
 
-import CollectionCard from '@components/Card/Collection/CollectionCard'
-
-import { useCasperWeb3Provider } from '../provider/CasperWeb3Provider'
+import { useAuth, useCasperWeb3Provider } from '@hooks/index'
 
 export default function Hello() {
-  const { connected, currentAccount, detected, connect, disconnect } =
-    useCasperWeb3Provider()
+  const { connected, connect } = useCasperWeb3Provider()
+  const { signUp, signIn, checkAuth } = useAuth()
 
   useEffect(() => {
     Signer.sendConnectionRequest()
   }, [])
-
-  console.log(connected, currentAccount, detected)
 
   return (
     <div>
       <button
         type="button"
         className="w-12 h-5"
-        onClick={connected ? disconnect : connect}
+        onClick={connected ? signUp : connect}
       >
-        {connected ? currentAccount : 'Connect'}
+        {connected ? 'SignUp[' : 'Connect'}
+      </button>
+
+      <button
+        type="button"
+        className="w-12 h-5"
+        onClick={connected ? signIn : connect}
+      >
+        {connected ? 'SignIn' : 'Connect'}
+      </button>
+
+      <button
+        type="button"
+        className="w-12 h-5"
+        onClick={connected ? checkAuth : connect}
+      >
+        {connected ? 'check' : 'Connect'}
       </button>
     </div>
   )

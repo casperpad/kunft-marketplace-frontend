@@ -69,6 +69,11 @@
             "position": "before"
           },
           {
+            "pattern": "@server/**",
+            "group": "external",
+            "position": "after"
+          },
+          {
             "pattern": "@components/**",
             "group": "type",
             "position": "after"
@@ -80,7 +85,6 @@
           }
         ],
         "pathGroupsExcludedImportTypes": ["react", "builtin"],
-        "newlines-between": "always-and-inside-groups",
         "alphabetize": {
           "order": "asc" /* sort in ascending order. Options: ['ignore', 'asc', 'desc'] */,
           "caseInsensitive": true /* ignore case. Options: [true, false] */
@@ -88,6 +92,7 @@
         "warnOnUnassignedImports": true
       }
     ],
+
     "no-use-before-define": "off",
     "@typescript-eslint/no-use-before-define": ["warn"],
     "no-shadow": "off",
@@ -135,10 +140,9 @@
     "import/no-extraneous-dependencies": 0,
     "jsx-a11y/media-has-caption": 0,
     // Exchange
-    "no-param-reassign": [
-      "error",
-      { "props": true, "ignorePropertyModificationsFor": ["state", "memo"] }
-    ],
+    "func-names": "off",
+    "no-return-await": "off",
+    "no-param-reassign": 0,
     "react/require-default-props": 0,
     "no-nested-ternary": 0,
     "max-classes-per-file": 0
