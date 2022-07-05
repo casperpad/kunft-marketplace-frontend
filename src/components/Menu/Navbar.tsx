@@ -4,11 +4,11 @@ import styled from 'styled-components'
 const MenuItemContainer = styled.div`
   margin-right: 32px;
   cursor: pointer;
-  color: ${({ theme }) => theme.colors.black};
-  font-family: ${({ theme }) => theme.fonts.Castle};
+  color: ${({ theme }) => theme.colors.text};
+  font-family: 'Castle';
   transition: color 0.2s;
   &:hover {
-    color: ${({ theme }) => theme.colors.orange_600};
+    color: ${({ theme }) => theme.colors.primary};
   }
 `
 
@@ -19,8 +19,8 @@ const NavbarContainer = styled.div`
   top: 0px;
   left: 0px;
   padding: 4px 36px;
-  border-bottom: 1px solid ${({ theme }) => theme.colors.black};
-  font-family: ${({ theme }) => theme.fonts.Castle};
+  border-bottom: 1px solid black;
+  font-family: 'Castle';
   display: flex;
   flex-direction: row;
   justify-content: space-between;

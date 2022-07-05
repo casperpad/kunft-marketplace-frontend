@@ -9,6 +9,8 @@ import styled from 'styled-components'
 import { NFTType } from 'types/nft.types'
 
 const Button = styled.button`
+  border: 0px;
+  background-color: white;
   transition: opacity 0.5s;
   &:hover {
     opacity: 0.8;
@@ -19,8 +21,8 @@ const StarsButton = styled(Button)`
   display: flex;
   align-items: center;
   gap: 1rem;
-  color: ${({ theme }) => theme.colors.orange_600};
-  fill: ${({ theme }) => theme.colors.orange_600};
+  color: ${({ theme }) => theme.colors.primary};
+  fill: ${({ theme }) => theme.colors.primary};
   font-size: 1.5rem;
   line-height: 2rem;
 `
@@ -30,12 +32,12 @@ const SaleButton = styled(Button)`
   bottom: 0rem;
   left: 0rem;
   transform: translateY(100%);
-  background-color: ${({ theme }) => theme.colors.orange_600};
+  background-color: ${({ theme }) => theme.colors.primary};
   border-bottom-left-radius: 6px;
   border-bottom-right-radius: 6px;
   width: 100%;
   padding: 8px;
-  font-family: ${({ theme }) => theme.fonts.Castle};
+  font-family: 'Castle';
   font-size: 1.125rem;
   line-height: 1.75rem;
 `
@@ -51,7 +53,7 @@ const FlexRow = styled.div`
   align-items: center;
   justify-content: space-between;
   padding: 8px;
-  border-top: 1px solid ${({ theme }) => theme.colors.black};
+  border-top: 1px solid black;
 `
 
 const FlexCol = styled.div.attrs((props: { align: string }) => props)`
@@ -72,15 +74,15 @@ const Text = styled.div.attrs(
   font-family: ${(props) => (props.castle ? 'Castle' : 'Avenir')};
   font-size: ${(props) => props.size};
   color: ${(props) =>
-    props.color ? props.theme.colors.orange_600 : props.theme.colors.black};
+    props.color ? props.theme.colors.primary : props.theme.colors.text};
 `
 
 const NFTCardContainer = styled.div`
   position: relative;
-  background-color: ${({ theme }) => theme.colors.white};
-  border-width: 1px solid ${({ theme }) => theme.colors.black};
+  background-color: white;
+  border-width: 1px solid;
   min-width: min-content;
-  font-family: ${({ theme }) => theme.fonts.Avenir};
+  font-family: 'Avenir';
   font-weight: lighter;
   cursor: pointer;
   &:hover {
