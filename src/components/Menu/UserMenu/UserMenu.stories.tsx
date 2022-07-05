@@ -5,7 +5,7 @@ import { ComponentStory, ComponentMeta } from '@storybook/react'
 import UserMenu from './UserMenu'
 
 export default {
-  title: 'Menu/UserMenu/UserMenu',
+  title: 'Menu/UserMenu',
   component: UserMenu,
   argTypes: {},
 } as ComponentMeta<typeof UserMenu>

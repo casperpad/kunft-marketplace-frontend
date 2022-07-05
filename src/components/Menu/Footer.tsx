@@ -2,11 +2,13 @@ import Image from 'next/image'
 import styled from 'styled-components'
 
 const Container = styled.footer`
-  border: solid 1px white;
+  border: solid 1px;
   display: flex;
   flex-direction: row;
   height: 435px;
   padding: 103px 86px 70px;
+  background-color: ${({ theme }) => theme.colors.gray_900};
+  fill: white;
 `
 
 const ImageContainer = styled.div`
@@ -19,9 +21,9 @@ export default function Footer() {
     <Container>
       <ImageContainer>
         <Image
-          src="/assets/images/Logo/KUNFTLogo.png"
+          src="/assets/images/Logo/KUNFTLogo_White.png"
           alt=""
-          width={120}
+          width={160}
           height={60}
         />
       </ImageContainer>

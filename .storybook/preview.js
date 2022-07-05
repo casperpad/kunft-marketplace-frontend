@@ -2,14 +2,14 @@ import '../public/fonts/server.css'
 import '../src/styles/globals.css'
 import '../src/assets/scss/main.scss'
 
-import { theme } from '../src/provider/ThemeProvider'
+import { light } from '../src/theme'
 import { ThemeProvider } from 'styled-components'
 import { addDecorator } from '@storybook/react'
 import { withThemesProvider } from 'storybook-addon-styled-component-theme'
 
 import * as NextImage from 'next/image'
 
-const themes = [theme]
+const themes = [light]
 addDecorator(withThemesProvider(themes), ThemeProvider)
 
 const OriginalNextImage = NextImage.default
