@@ -10,6 +10,7 @@ export type Colors = {
   primary: string
   background: string
   backgroundSecondary: string
+  transparent: string
   text: string
   textSecondary: string
   input: string

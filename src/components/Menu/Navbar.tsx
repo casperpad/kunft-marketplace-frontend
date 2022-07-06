@@ -1,4 +1,5 @@
 import Image from 'next/image'
+import Link from 'next/link'
 import styled from 'styled-components'
 
 const MenuItemContainer = styled.div`
@@ -33,17 +34,28 @@ const MenuContainer = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
+  background-color: ${({ theme }) => theme.colors.background};
+  z-index: 100;
 `
+
+interface MenuItem {
+  text: string
+  link: string
+}
 
 interface NavbarProps {
   logo: string
-  menuItems: string[]
+  menuItems: MenuItem[]
   avatar?: string
   loggedIn: boolean
 }
 
-function MenuItem({ item }: { item: string }) {
-  return <MenuItemContainer>{item}</MenuItemContainer>
+function MenuItem({ item }: { item: MenuItem }) {
+  return (
+    <MenuItemContainer>
+      <Link href={item.link}>{item.text}</Link>
+    </MenuItemContainer>
+  )
 }
 
 export default function Navbar(props: NavbarProps) {
@@ -61,7 +73,7 @@ export default function Navbar(props: NavbarProps) {
       </LogoContainer>
       <MenuContainer>
         {menuItems.map((item) => {
-          return <MenuItem item={item} key={item} />
+          return <MenuItem item={item} key={item.text} />
         })}
         <Image
           src={menuAvatar}

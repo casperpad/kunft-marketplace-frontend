@@ -7,8 +7,7 @@ const Container = styled.footer`
   flex-direction: row;
   height: 435px;
   padding: 103px 86px 70px;
-  background-color: ${({ theme }) => theme.colors.gray_900};
-  fill: white;
+  background-color: ${({ theme }) => theme.colors.backgroundSecondary};
 `
 
 const ImageContainer = styled.div`

@@ -28,7 +28,7 @@ export const parameters = {
     },
   },
   backgrounds: {
-    default: 'twitter',
+    default: 'default',
     values: [
       {
         name: 'twitter',
@@ -37,6 +37,10 @@ export const parameters = {
       {
         name: 'facebook',
         value: '#3b5998',
+      },
+      {
+        name: 'default',
+        value: '#E5E5E5',
       },
     ],
   },
