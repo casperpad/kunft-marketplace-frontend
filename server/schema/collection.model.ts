@@ -1,20 +1,21 @@
-import { Schema, model, Model } from 'mongoose';
+import { Schema, model, Model } from 'mongoose'
 
 interface ICollection {
-  contractPackageHash: string;
-  contractHash: string;
-  slug: string;
-  name: string;
-  symbol: string;
-  description?: string;
-  verified: boolean;
-  image?: string;
-  twitter?: string;
-  discord?: string;
-  website?: string;
+  contractPackageHash: string
+  contractHash: string
+  slug: string
+  name: string
+  symbol: string
+  description?: string
+  verified: boolean
+  image?: string
+  twitter?: string
+  discord?: string
+  website?: string
+  key: [string]
 }
 
-type CollectionModel = Model<ICollection>;
+type CollectionModel = Model<ICollection>
 
 const collectionSchema = new Schema<ICollection, CollectionModel>({
   contractPackageHash: {
@@ -37,11 +38,11 @@ const collectionSchema = new Schema<ICollection, CollectionModel>({
   twitter: { type: String },
   discord: { type: String },
   website: { type: String },
-});
+})
 
 const Collection = model<ICollection, CollectionModel>(
   'Collection',
   collectionSchema,
-);
+)
 
-export default Collection;
+export default Collection
