@@ -1,9 +1,8 @@
 import React from 'react'
-
 import { ThemeProvider } from 'styled-components'
-import { light } from 'theme'
 
 import CasperWeb3Provider from './provider/CasperWeb3Provider'
+import { light } from './theme'
 
 const StyledThemeProvider = (props: any) => {
   return <ThemeProvider theme={light} {...props} />

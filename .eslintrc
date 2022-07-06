@@ -79,6 +79,21 @@
             "position": "after"
           },
           {
+            "pattern": "@views/**",
+            "group": "type",
+            "position": "after"
+          },
+          {
+            "pattern": "@utils/**",
+            "group": "type",
+            "position": "after"
+          },
+          {
+            "pattern": "@config/**",
+            "group": "type",
+            "position": "after"
+          },
+          {
             "pattern": "@hooks/**",
             "group": "type",
             "position": "after"

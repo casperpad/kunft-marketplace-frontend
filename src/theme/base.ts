@@ -24,9 +24,11 @@ const shadows = {
   active: '0px 4px 4px 0px #00000040',
   hover: '0px 4px 4px 0px #00000040',
   base: '0px 4px 4px 0px #00000040',
+  slider: '0px 0px 4px 4px #00000040',
 }
 
 export default {
+  siteWidth: 1512,
   breakpoints,
   mediaQueries,
   shadows,
