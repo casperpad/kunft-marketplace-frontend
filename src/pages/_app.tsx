@@ -1,3 +1,4 @@
+import styled from 'styled-components'
 import type { AppProps } from 'next/app'
 import { PageMeta } from '@components/Layout'
 import { Navbar, Footer } from '@components/Menu'
@@ -7,6 +8,10 @@ import Providers from '../Providers'
 // eslint-disable-next-line import/order
 import '../assets/scss/main.scss'
 import '../styles/globals.css'
+
+const Layout = styled.div`
+  background-color: ${({ theme }) => theme.colors.background};
+`
 
 function MyApp({ Component, pageProps }: AppProps) {
   const menuItems = [
@@ -24,7 +29,9 @@ function MyApp({ Component, pageProps }: AppProps) {
         logo="/assets/images/Logo/KUNFTLogo.png"
         loggedIn={false}
       />
-      <Component {...pageProps} />
+      <Layout>
+        <Component {...pageProps} />
+      </Layout>
       <Footer />
     </Providers>
   )

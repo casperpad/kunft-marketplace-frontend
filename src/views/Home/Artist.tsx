@@ -22,7 +22,7 @@ export default function Artist() {
           <Text
             fontFamily="Avenir"
             fontSize="28px"
-            width="75%"
+            width="70%"
             color="textSecondary"
           >
             Our goal is to serve as a platform for NFT creators to exhibit their
