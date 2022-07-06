@@ -4,7 +4,7 @@
   "private": true,
   "main": "dist/index.js",
   "scripts": {
-    "dev": "tsnd --respawn --project tsconfig.server.json --transpile-only --watch ./server -r tsconfig-paths/register server/index.ts ",
+    "dev": "tsnd --respawn --project tsconfig.server.json --transpile-only --watch ./server --ignore-watch=.next -r tsconfig-paths/register server/index.ts ",
     "build-next": "next build",
     "build-server": "tsc --p tsconfig.server.json && tsc-alias -p tsconfig.server.json",
     "build": "build-next && build-server",
