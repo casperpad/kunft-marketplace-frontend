@@ -26,6 +26,8 @@ const NavbarContainer = styled.div`
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
+  background-color: ${({ theme }) => theme.colors.background};
+  z-index: 100;
 `
 
 const LogoContainer = styled.div``
@@ -34,8 +36,6 @@ const MenuContainer = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
-  background-color: ${({ theme }) => theme.colors.background};
-  z-index: 100;
 `
 
 interface MenuItem {

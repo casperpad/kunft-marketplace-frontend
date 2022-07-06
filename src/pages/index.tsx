@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import type { NextPage } from 'next'
 
 import { Landing, Artist, Collections, About } from '@views/Home'
