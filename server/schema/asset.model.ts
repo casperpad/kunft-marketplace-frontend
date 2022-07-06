@@ -1,12 +1,16 @@
 import { Model, Schema, model } from 'mongoose'
 
+type Trait = {
+  [key: string]: string
+}
+
 interface IAsset {
   collectionNFT: Schema.Types.ObjectId
   tokenId: string
   image: string
   name: string
   owner: string
-  metadata: string
+  metadata: Trait[]
 }
 
 type AssetModel = Model<IAsset>
@@ -32,7 +36,12 @@ const nftSchema = new Schema<IAsset, AssetModel>({
     type: String,
   },
   metadata: {
-    type: String,
+    type: [
+      {
+        key: String,
+        value: String,
+      },
+    ],
     required: true,
   },
 })
