@@ -1,19 +1,13 @@
+import dynamic from 'next/dynamic'
 import type { NextPage } from 'next'
 
-import { Landing, Artist, Collections, About } from '@views/Home'
+// eslint-disable-next-line @typescript-eslint/ban-types
+const HomeView = dynamic<{}>(() => import('@views/Home'), {
+  ssr: false,
+})
 
 const Home: NextPage = () => {
-  const tops: string[] = []
-  const collections: string[] = []
-
-  return (
-    <>
-      <Landing tops={tops} />
-      <Artist />
-      <Collections collections={collections} />
-      <About />
-    </>
-  )
+  return <HomeView />
 }
 
 export default Home

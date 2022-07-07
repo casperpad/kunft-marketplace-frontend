@@ -1,3 +1,4 @@
+import React from 'react'
 import styled from 'styled-components'
 
 import { Flex } from '@components/Box'
@@ -12,7 +13,7 @@ const Container = styled(Flex)`
 export default function Discover() {
   return (
     <Layout>
-      <Flex flexDirection="row" mt="40px">
+      <Flex flexDirection="row">
         <DiscoverFilter />
         <Container>
           <NFTCard
@@ -23,7 +24,7 @@ export default function Discover() {
                   : 'NoneSale'
                 : 'Upcoming'
             }
-            image="asd"
+            image="https://beta.api.solanalysis.com/images/400x400/filters:frames(,0)/https://arweave.net/eWX3j4ulh4LK8RXC2VSIyF1Lwd-dKZIymXBuGiKsEpY"
             name="KUNFT"
             price={Math.random() * 10000}
             stars={Math.floor(Math.random() * 100)}
