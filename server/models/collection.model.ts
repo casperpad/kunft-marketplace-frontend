@@ -1,23 +1,11 @@
-import { Schema, model, Model } from 'mongoose'
+import mongoose, { Schema } from 'mongoose'
+import {
+  CollectionDocument,
+  CollectionModel,
+  CollectionSchema,
+} from '../interfaces/mongoose.gen'
 
-interface ICollection {
-  contractPackageHash: string
-  contractHash: string
-  slug: string
-  name: string
-  symbol: string
-  description?: string
-  verified: boolean
-  image?: string
-  twitter?: string
-  discord?: string
-  website?: string
-  key: [string]
-}
-
-type CollectionModel = Model<ICollection>
-
-const collectionSchema = new Schema<ICollection, CollectionModel>({
+const CollectionSchema: CollectionSchema = new Schema({
   contractPackageHash: {
     type: String,
     required: true,
@@ -40,9 +28,7 @@ const collectionSchema = new Schema<ICollection, CollectionModel>({
   website: { type: String },
 })
 
-const Collection = model<ICollection, CollectionModel>(
+export const Collection = mongoose.model<CollectionDocument, CollectionModel>(
   'Collection',
-  collectionSchema,
+  CollectionSchema,
 )
-
-export default Collection

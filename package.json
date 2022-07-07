@@ -20,7 +20,8 @@
     "analyze": "ANALYZE=true yarn build",
     "test": "jest",
     "test:watch": "jest --watch",
-    "test:config": "jest src/config/__tests__/ --testPathIgnorePatterns"
+    "test:config": "jest src/config/__tests__/ --testPathIgnorePatterns",
+    "generate-types": "mtgen ./server/models -p tsconfig.server.json -o ./server/interfaces"
   },
   "dependencies": {
     "@ethersproject/bignumber": "^5.6.2",
@@ -59,7 +60,9 @@
     "http-status-codes": "^2.2.0",
     "jsonwebtoken": "^8.5.1",
     "lodash": "^4.17.21",
-    "mongoose": "^6.4.2",
+    "mongoose": "6.3.1",
+    "mongoose-aggregate-paginate-v2": "^1.0.6",
+    "mongoose-tsgen": "^9.0.7",
     "morgan": "^1.10.0",
     "next": "12.2.0",
     "rc-slider": "^10.0.0",
