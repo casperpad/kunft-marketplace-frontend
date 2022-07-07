@@ -1,11 +1,8 @@
 import mongoose, { Schema } from 'mongoose'
-import {
-  TokenDocument,
-  TokenModel,
-  TokenSchema,
-} from '../interfaces/mongoose.gen'
+import mongooseAggregatePaginate from 'mongoose-aggregate-paginate-v2'
+import { TokenDocument } from '../interfaces/mongoose.gen'
 
-const TokenSchema: TokenSchema = new Schema({
+const TokenSchema = new Schema({
   collectionNFT: {
     type: Schema.Types.ObjectId,
     required: true,
@@ -36,7 +33,9 @@ const TokenSchema: TokenSchema = new Schema({
   },
 })
 
-export const Token = mongoose.model<TokenDocument, TokenModel>(
-  'Token',
-  TokenSchema,
-)
+TokenSchema.plugin(mongooseAggregatePaginate)
+
+export const Token = mongoose.model<
+  TokenDocument,
+  mongoose.AggregatePaginateModel<TokenDocument>
+>('Token', TokenSchema)

@@ -13,6 +13,10 @@ import responseTime from 'response-time'
 import { MONGODB_URL, PORT, SENTRY_DSN, NODE_ENV } from '@server/config'
 import redisClient from '@server/providers/redis'
 import serverRouter from '@server/routes/index.routes'
+import {
+  startMarketplaceEventStream,
+  // startCEP47EventStream,
+} from './web3/event'
 
 const dev = NODE_ENV !== 'production'
 const app = next({ dev })
@@ -73,6 +77,8 @@ async function startServer() {
   server.use(Sentry.Handlers.errorHandler())
 
   server.listen(PORT, () => {
+    startMarketplaceEventStream()
+    // startCEP47EventStream()
     console.info(`Server is running on ${PORT}`)
   })
 }

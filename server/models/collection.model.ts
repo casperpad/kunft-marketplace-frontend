@@ -1,11 +1,8 @@
 import mongoose, { Schema } from 'mongoose'
-import {
-  CollectionDocument,
-  CollectionModel,
-  CollectionSchema,
-} from '../interfaces/mongoose.gen'
+import mongooseAggregatePaginate from 'mongoose-aggregate-paginate-v2'
+import { CollectionDocument } from '../interfaces/mongoose.gen'
 
-const CollectionSchema: CollectionSchema = new Schema({
+const CollectionSchema = new Schema({
   contractPackageHash: {
     type: String,
     required: true,
@@ -28,7 +25,9 @@ const CollectionSchema: CollectionSchema = new Schema({
   website: { type: String },
 })
 
-export const Collection = mongoose.model<CollectionDocument, CollectionModel>(
-  'Collection',
-  CollectionSchema,
-)
+CollectionSchema.plugin(mongooseAggregatePaginate)
+
+export const Collection = mongoose.model<
+  CollectionDocument,
+  mongoose.AggregatePaginateModel<CollectionDocument>
+>('Collection', CollectionSchema)

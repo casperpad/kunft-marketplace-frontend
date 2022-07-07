@@ -64,7 +64,9 @@ export type CollectionQueries = {}
 
 export type CollectionMethods = {}
 
-export type CollectionStatics = {}
+export type CollectionStatics = {
+  aggregatePaginate: (this: CollectionModel, ...args: any[]) => any
+}
 
 /**
  * Mongoose Model type

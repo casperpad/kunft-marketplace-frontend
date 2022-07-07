@@ -41,3 +41,5 @@ router.use('/', (req, res) => {
     ).pipe(res)
   }
 })
+
+export default router

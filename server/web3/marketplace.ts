@@ -1,3 +1,5 @@
+import { BigNumberish } from '@ethersproject/bignumber'
+import { types } from 'casper-js-client-helper'
 import {
   CLValue,
   CLPublicKey,
@@ -12,17 +14,15 @@ import {
   CLTypeTag,
   CLStringType,
   CLKeyType,
-} from 'casper-js-sdk';
-import { BigNumberish } from '@ethersproject/bignumber';
-import { Some, None } from 'ts-results';
-import { types } from 'casper-js-client-helper';
+} from 'casper-js-sdk'
+import { Some, None } from 'ts-results'
 
-const { Contract } = Contracts;
-type RecipientType = types.RecipientType;
+const { Contract } = Contracts
+type RecipientType = types.RecipientType
 
 export interface MarketplaceInstallArgs {
-  feeWallet: RecipientType;
-  contractName: string;
+  feeWallet: RecipientType
+  contractName: string
 }
 
 export enum MarketplaceEvents {
@@ -43,30 +43,29 @@ export const MarketplaceEventParser = (
 ) => {
   if (value.body.DeployProcessed.execution_result.Success) {
     const { transforms } =
-      value.body.DeployProcessed.execution_result.Success.effect;
+      value.body.DeployProcessed.execution_result.Success.effect
 
     const cep47Events = transforms.reduce((acc: any, val: any) => {
       if (
+        // eslint-disable-next-line no-prototype-builtins
         val.transform.hasOwnProperty('WriteCLValue') &&
         typeof val.transform.WriteCLValue.parsed === 'object' &&
         val.transform.WriteCLValue.parsed !== null
       ) {
-        const maybeCLValue = CLValueParsers.fromJSON(
-          val.transform.WriteCLValue,
-        );
-        const clValue = maybeCLValue.unwrap();
+        const maybeCLValue = CLValueParsers.fromJSON(val.transform.WriteCLValue)
+        const clValue = maybeCLValue.unwrap()
         if (clValue && clValue.clType().tag === CLTypeTag.Map) {
           const hash = (clValue as CLMap<CLValue, CLValue>).get(
             CLValueBuilder.string('contract_package_hash'),
-          );
+          )
           const preferContractPackageHash = contractPackageHash.startsWith(
             'hash-',
           )
             ? contractPackageHash.slice(5).toLowerCase()
-            : contractPackageHash.toLowerCase();
+            : contractPackageHash.toLowerCase()
           const event = (clValue as CLMap<CLValue, CLValue>).get(
             CLValueBuilder.string('event_type'),
-          );
+          )
           if (
             hash &&
             // NOTE: Calling toLowerCase() because current JS-SDK doesn't support checksumed hashes and returns all lower case value
@@ -75,26 +74,27 @@ export const MarketplaceEventParser = (
             event &&
             eventNames.includes(event.value())
           ) {
-            acc = [...acc, { name: event.value(), clValue }];
+            acc = [...acc, { name: event.value(), clValue }]
           }
         }
       }
-      return acc;
-    }, []);
+      return acc
+    }, [])
 
-    return { error: null, success: !!cep47Events.length, data: cep47Events };
+    return { error: null, success: !!cep47Events.length, data: cep47Events }
   }
 
-  return null;
-};
+  return null
+}
 
 export class MarketplaceClient {
-  casperClient: CasperClient;
-  contractClient: Contracts.Contract;
+  casperClient: CasperClient
+
+  contractClient: Contracts.Contract
 
   constructor(public _nodeAddress: string, public networkName: string) {
-    this.casperClient = new CasperClient(_nodeAddress);
-    this.contractClient = new Contract(this.casperClient);
+    this.casperClient = new CasperClient(_nodeAddress)
+    this.contractClient = new Contract(this.casperClient)
   }
 
   public install(
@@ -108,7 +108,7 @@ export class MarketplaceClient {
       fee_wallet: args.feeWallet,
       fee: CLValueBuilder.u8(250),
       contract_name: CLValueBuilder.string(args.contractName),
-    });
+    })
 
     return this.contractClient.install(
       wasm,
@@ -117,22 +117,22 @@ export class MarketplaceClient {
       deploySender,
       this.networkName,
       keys || [],
-    );
+    )
   }
 
   public setContractHash(contractHash: string, contractPackageHash?: string) {
-    this.contractClient.setContractHash(contractHash, contractPackageHash);
+    this.contractClient.setContractHash(contractHash, contractPackageHash)
   }
 
   public async balanceOf(account: CLPublicKey) {
     const result = await this.contractClient.queryContractDictionary(
       'balances',
       account.toAccountHashStr().slice(13),
-    );
+    )
 
-    const maybeValue = result.value().unwrap();
+    const maybeValue = result.value().unwrap()
 
-    return maybeValue.value().toString();
+    return maybeValue.value().toString()
   }
 
   public createSellOrder(
@@ -152,7 +152,7 @@ export class MarketplaceClient {
       pay_token: payToken
         ? CLValueBuilder.option(Some(CLValueBuilder.string(payToken)))
         : CLValueBuilder.option(None, new CLStringType()),
-    });
+    })
 
     return this.contractClient.callEntrypoint(
       'create_sell_order',
@@ -161,8 +161,9 @@ export class MarketplaceClient {
       this.networkName,
       paymentAmount,
       [key],
-    );
+    )
   }
+
   public cancelSellOrder(
     collection: string,
     tokenId: BigNumberish,
@@ -172,7 +173,7 @@ export class MarketplaceClient {
     const runtimeArgs = RuntimeArgs.fromMap({
       collection: CLValueBuilder.string(collection),
       token_id: CLValueBuilder.u256(tokenId),
-    });
+    })
     return this.contractClient.callEntrypoint(
       'cancel_sell_order',
       runtimeArgs,
@@ -180,7 +181,7 @@ export class MarketplaceClient {
       this.networkName,
       paymentAmount,
       [key],
-    );
+    )
   }
 
   public buySellOrder(
@@ -198,7 +199,7 @@ export class MarketplaceClient {
       additional_recipient: additionalReccipient
         ? CLValueBuilder.option(Some(additionalReccipient))
         : CLValueBuilder.option(None, new CLKeyType()),
-    });
+    })
     return this.contractClient.callEntrypoint(
       'cancel_sell_order',
       runtimeArgs,
@@ -206,7 +207,7 @@ export class MarketplaceClient {
       this.networkName,
       paymentAmount,
       [key],
-    );
+    )
   }
 
   public createBuyOrder(
@@ -224,7 +225,7 @@ export class MarketplaceClient {
       additional_recipient: additionalReccipient
         ? CLValueBuilder.option(Some(additionalReccipient))
         : CLValueBuilder.option(None, new CLKeyType()),
-    });
+    })
     return this.contractClient.callEntrypoint(
       'cancel_sell_order',
       runtimeArgs,
@@ -232,6 +233,6 @@ export class MarketplaceClient {
       this.networkName,
       paymentAmount,
       [key],
-    );
+    )
   }
 }

@@ -1,49 +1,52 @@
 import express from 'express'
+import { query } from 'express-validator'
+import { validateRequest } from '@server/middleware'
 import { Collection } from '@server/models/collection.model'
-import { Token } from '@server/models/token.model'
+
 // import redisClient from '@server/providers/redis'
 
 const router = express.Router()
 
-router.get('/:collection', async (req, res) => {
-  try {
-    const { collection } = req.params
-    // const existCollection: string | null = await redisClient.get(collection)
-    // if (existCollection) {
-    //   return res.json(JSON.parse(existCollection))
-    // }
-    const collectionDB = await Collection.findOne({ slug: collection })
+router.get(
+  '/',
+  query('name').isString().optional(),
+  query('page')
+    .isNumeric({ no_symbols: true })
+    .custom((value) => value > 0)
+    .optional(),
+  query('limit')
+    .isNumeric({ no_symbols: true })
+    .custom((value) => value > 0)
+    .optional(),
+  validateRequest,
 
-    if (collectionDB === null) throw Error(`Not exist ${collection}`)
+  async (req, res) => {
+    try {
+      // const { collection } = req.body
+      // const existCollection: string | null = await redisClient.get(collection)
+      // if (existCollection) {
+      //   return res.json(JSON.parse(existCollection))
+      // }
 
-    console.info(collectionDB._id)
+      // @ts-ignore
+      const { page, limit } = req.query
 
-    const token = await Token.find({
-      collectionNFT: collectionDB._id,
-    })
+      const aggregate = Collection.aggregate()
 
-    // await redisClient.set(collection, JSON.stringify(collectionDB))
-    // await setAsync(collection, 3600, JSON.stringify(collectionDB))
-    res.json(token)
-  } catch (error: any) {
-    console.error(error)
-  }
-})
+      const options = {
+        page: (page as unknown as number) || 1,
+        limit: (limit as unknown as number) || 20,
+      }
 
-router.get('/:collection/:tokenId', async (req, res) => {
-  try {
-    const { collection, tokenId } = req.params
-    // TODO REdis
-    const collectionDB = await Collection.findOne({ slug: collection })
-    if (collectionDB === null) throw Error(`Not exist ${collection}`)
-    const token = await Token.findOne({
-      collectionNFT: collectionDB._id,
-      tokenId,
-    }).populate('collectionNFT')
-    res.json(token)
-  } catch (error: any) {
-    console.error(error)
-  }
-})
+      const collectionDB = await Collection.aggregatePaginate(
+        aggregate,
+        options,
+      )
+      res.json(collectionDB)
+    } catch (error: any) {
+      console.error(error)
+    }
+  },
+)
 
 export default router

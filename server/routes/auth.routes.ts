@@ -10,7 +10,7 @@ import { StatusCodes } from 'http-status-codes'
 import { sign as signJwt } from 'jsonwebtoken'
 import { JWT_SECRET, JWT_EXPIRE, JWT_NAME } from '@server/config'
 import { auth } from '@server/middleware'
-import User from '@server/schema/user.model'
+import { User } from '@server/models/user.model'
 
 const router = express.Router()
 
