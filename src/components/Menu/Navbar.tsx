@@ -1,19 +1,15 @@
 import Image from 'next/image'
-import Link from 'next/link'
+import { useRouter } from 'next/router'
 import styled from 'styled-components'
 
-const MenuItemContainer = styled.div`
+import { CustomLink } from '@components/Link'
+import { navLinks } from '@config/constants/data'
+
+const MenuItem = styled(CustomLink)`
   margin-right: 32px;
-  cursor: pointer;
-  color: ${({ theme }) => theme.colors.text};
-  font-family: 'Castle';
-  transition: color 0.2s;
-  &:hover {
-    color: ${({ theme }) => theme.colors.primary};
-  }
 `
 
-const NavbarContainer = styled.div`
+const NavbarContainer = styled.nav`
   position: fixed;
   height: 65px;
   width: 100vw;
@@ -30,36 +26,22 @@ const NavbarContainer = styled.div`
   z-index: 100;
 `
 
-const LogoContainer = styled.div``
-
 const MenuContainer = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
 `
 
-interface MenuItem {
-  text: string
-  link: string
-}
-
 interface NavbarProps {
   logo: string
-  menuItems: MenuItem[]
   avatar?: string
   loggedIn: boolean
 }
 
-function MenuItem({ item }: { item: MenuItem }) {
-  return (
-    <MenuItemContainer>
-      <Link href={item.link}>{item.text}</Link>
-    </MenuItemContainer>
-  )
-}
-
 export default function Navbar(props: NavbarProps) {
-  const { logo, menuItems, avatar, loggedIn } = props
+  const { pathname } = useRouter()
+
+  const { logo, avatar, loggedIn } = props
   const menuAvatar = loggedIn
     ? avatar
       ? (avatar as string)
@@ -68,12 +50,22 @@ export default function Navbar(props: NavbarProps) {
 
   return (
     <NavbarContainer>
-      <LogoContainer>
+      <CustomLink href="/">
         <Image src={logo} alt="" width={101} height={57} />
-      </LogoContainer>
+      </CustomLink>
       <MenuContainer>
-        {menuItems.map((item) => {
-          return <MenuItem item={item} key={item.text} />
+        {navLinks.map((item) => {
+          if (pathname.indexOf(item.path) > -1)
+            return (
+              <MenuItem href={item.path} key={item.name} active>
+                {item.name}
+              </MenuItem>
+            )
+          return (
+            <MenuItem href={item.path} key={item.name}>
+              {item.name}
+            </MenuItem>
+          )
         })}
         <Image
           src={menuAvatar}

@@ -18,9 +18,6 @@ const StarsButton = styled(DefaultButton)`
 
 const SaleButton = styled(_SaleButton)`
   display: none;
-  position: relative;
-  bottom: 0rem;
-  left: 0rem;
   /* transform: translateY(-100%); */
 `
 

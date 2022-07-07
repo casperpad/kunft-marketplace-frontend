@@ -1,9 +1,8 @@
-import type { NextPage } from 'next'
+import dynamic from 'next/dynamic'
 
-import { Discover } from '@views/Discover'
-
-const DiscoverPage: NextPage = () => {
-  return <Discover />
-}
+// eslint-disable-next-line @typescript-eslint/ban-types
+const DiscoverPage = dynamic<{}>(() => import('@views/Discover'), {
+  ssr: false,
+})
 
 export default DiscoverPage

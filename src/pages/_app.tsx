@@ -1,3 +1,4 @@
+import React from 'react'
 import styled from 'styled-components'
 import type { AppProps } from 'next/app'
 import { PageMeta } from '@components/Layout'
@@ -11,24 +12,16 @@ import '../styles/globals.css'
 
 const Layout = styled.div`
   background-color: ${({ theme }) => theme.colors.background};
+  position: relative;
+  top: 64px;
+  min-height: calc(100vh - 64px);
 `
 
 function MyApp({ Component, pageProps }: AppProps) {
-  const menuItems = [
-    { text: 'Discover', link: '/discover' },
-    { text: 'Create', link: '/create' },
-    { text: 'Collections', link: '/collections' },
-    { text: 'TopNFTs', link: '/topnfts' },
-  ]
-
   return (
     <Providers>
       <PageMeta symbol="" />
-      <Navbar
-        menuItems={menuItems}
-        logo="/assets/images/Logo/KUNFTLogo.png"
-        loggedIn={false}
-      />
+      <Navbar logo="/assets/images/Logo/KUNFTLogo.png" loggedIn={false} />
       <Layout>
         <Component {...pageProps} />
       </Layout>

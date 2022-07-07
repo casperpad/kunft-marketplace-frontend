@@ -11,12 +11,23 @@ export default function About() {
         <Text fontSize="110px" textAlign="center" mb="50px">
           ABOUT KUNFT
         </Text>
-        <Text fontFamily="Avenir" fontSize="28px" textAlign="center" mb="100px">
+        <Text
+          fontFamily="Avenir"
+          fontSize="28px"
+          textAlign="center"
+          mb="100px"
+          width="66%"
+        >
           Our goal is to serve as a platform for NFT creators to exhibit their
           unique work, & to bridge between creatives and collectors. Hop on
           board, push the boundaries and start creating!
         </Text>
-        <Flex flexDirection="row" alignItems="center" justifyContent="center">
+        <Flex
+          flexDirection="row"
+          alignItems="center"
+          justifyContent="space-around"
+          width="100%"
+        >
           <Image
             src="/assets/images/About_1.png"
             alt=""
