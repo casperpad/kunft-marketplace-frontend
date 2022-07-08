@@ -14,6 +14,7 @@ const {
 const MONGODB_URL = process.env.MONGODB_URL!
 const REDIS_URL = process.env.REDIS_URL!
 const NODE_ENV = process.env.NODE_ENV as 'development' | 'production'
+const APP_ENV = process.env.APP_ENV || 'development'
 
 const JWT_SECRET =
   process.env.JWT_SECRET ||
@@ -30,6 +31,7 @@ export {
   JWT_EXPIRE,
   JWT_NAME,
   NODE_ENV,
+  APP_ENV,
   NEXT_PUBLIC_CASPER_EVENT_STREAM_ADDRESS,
   MARKET_PLACE_CONTRACT_PACKAGE_HASH,
   NEXT_PUBLIC_CASPER_CHAIN_NAME,

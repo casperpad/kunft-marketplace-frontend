@@ -10,7 +10,7 @@ import morgan from 'morgan'
 import next from 'next'
 import responseTime from 'response-time'
 
-import { MONGODB_URL, PORT, SENTRY_DSN, NODE_ENV } from '@server/config'
+import { MONGODB_URL, PORT, SENTRY_DSN, APP_ENV } from '@server/config'
 import redisClient from '@server/providers/redis'
 import serverRouter from '@server/routes/index.routes'
 import {
@@ -18,7 +18,7 @@ import {
   // startCEP47EventStream,
 } from './web3/event'
 
-const dev = NODE_ENV !== 'production'
+const dev = APP_ENV === 'development'
 const app = next({ dev })
 
 const handle = app.getRequestHandler()
@@ -28,7 +28,7 @@ async function startServer() {
   })
 
   await redisClient.connect()
-  await app.prepare()
+  await app.prepare().catch((err) => console.error(err))
 
   const server = express()
 
