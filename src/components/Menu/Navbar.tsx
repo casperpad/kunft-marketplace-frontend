@@ -1,12 +1,32 @@
+import { useState } from 'react'
 import Image from 'next/image'
 import { useRouter } from 'next/router'
 import styled from 'styled-components'
 
+import { Flex } from '@components/Box'
 import { CustomLink } from '@components/Link'
 import { navLinks } from '@config/constants/data'
+import { UserMenu } from './UserMenu'
+
+const ProfileMenu = styled.div`
+  position: absolute;
+  right: 0px;
+  bottom: 0px;
+  transform: translateY(100%);
+`
 
 const MenuItem = styled(CustomLink)`
   margin-right: 32px;
+`
+
+const StyledAvatar = styled(Image)`
+  cursor: pointer;
+`
+
+const MenuContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
 `
 
 const NavbarContainer = styled.nav`
@@ -26,12 +46,6 @@ const NavbarContainer = styled.nav`
   z-index: 100;
 `
 
-const MenuContainer = styled.div`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-`
-
 interface NavbarProps {
   logo: string
   avatar?: string
@@ -40,8 +54,9 @@ interface NavbarProps {
 
 export default function Navbar(props: NavbarProps) {
   const { pathname } = useRouter()
-
   const { logo, avatar, loggedIn } = props
+
+  const [show, setShow] = useState(false)
   const menuAvatar = loggedIn
     ? avatar
       ? (avatar as string)
@@ -55,26 +70,39 @@ export default function Navbar(props: NavbarProps) {
       </CustomLink>
       <MenuContainer>
         {navLinks.map((item) => {
-          if (pathname.indexOf(item.path) > -1)
-            return (
-              <MenuItem href={item.path} key={item.name} active>
-                {item.name}
-              </MenuItem>
-            )
+          const active = pathname.indexOf(item.path) > -1
           return (
-            <MenuItem href={item.path} key={item.name}>
+            <MenuItem href={item.path} key={item.name} active={active}>
               {item.name}
             </MenuItem>
           )
         })}
-        <Image
-          src={menuAvatar}
-          alt=""
-          width={30}
-          height={30}
-          className="rounded-full overflow-hidden"
-        />
+        <Flex
+          width="70px"
+          height="70px"
+          justifyContent="center"
+          alignItems="center"
+          ml="-20px"
+          onMouseEnter={() => setShow(true)}
+          onMouseLeave={() => setShow(false)}
+        >
+          <StyledAvatar
+            src={menuAvatar}
+            alt=""
+            width={30}
+            height={30}
+            className="rounded-full overflow-hidden"
+          />
+        </Flex>
       </MenuContainer>
+      {show && (
+        <ProfileMenu
+          onMouseEnter={() => setShow(true)}
+          onMouseLeave={() => setShow(false)}
+        >
+          <UserMenu />
+        </ProfileMenu>
+      )}
     </NavbarContainer>
   )
 }

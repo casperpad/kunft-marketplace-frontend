@@ -7,31 +7,47 @@ import { DiscoverFilter } from '@components/Filter'
 import { Layout } from '@components/Layout'
 
 const Container = styled(Flex)`
-  margin-left: 80px;
+  flex-direction: row;
 `
 
-export default function Discover() {
+const DiscoverContainer = styled(Flex)`
+  margin-left: 80px;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-around;
+`
+
+interface DiscoverProps {
+  NFTs: string[]
+}
+
+export default function Discover({ NFTs = [] }: DiscoverProps) {
   return (
     <Layout>
-      <Flex flexDirection="row">
+      <Container>
         <DiscoverFilter />
-        <Container>
-          <NFTCard
-            type={
-              Math.random() > 0.5
-                ? Math.random() > 0.5
-                  ? 'Sale'
-                  : 'NoneSale'
-                : 'Upcoming'
-            }
-            image="https://beta.api.solanalysis.com/images/400x400/filters:frames(,0)/https://arweave.net/eWX3j4ulh4LK8RXC2VSIyF1Lwd-dKZIymXBuGiKsEpY"
-            name="KUNFT"
-            price={Math.random() * 10000}
-            stars={Math.floor(Math.random() * 100)}
-            userStarred={Math.random() > 0.5}
-          />
-        </Container>
-      </Flex>
+        <DiscoverContainer width="100%">
+          {NFTs.map((item) => {
+            return (
+              <NFTCard
+                key={item}
+                type={
+                  Math.random() > 0.5
+                    ? Math.random() > 0.5
+                      ? 'Sale'
+                      : 'NoneSale'
+                    : 'Upcoming'
+                }
+                image={item}
+                name="KUNFT"
+                price={Math.random() * 10000}
+                stars={Math.floor(Math.random() * 100)}
+                userStarred={Math.random() > 0.5}
+              />
+            )
+          })}
+        </DiscoverContainer>
+      </Container>
     </Layout>
   )
 }

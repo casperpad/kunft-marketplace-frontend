@@ -3,7 +3,7 @@ import React from 'react'
 import Text from '@components/Text/Text'
 
 import { Button as ButtonComponent } from './Button'
-import SaleButton from './SaleButton'
+import SaleButton from './CardButton'
 import StyledButton from './StyledButton'
 
 export default {
@@ -19,8 +19,8 @@ export const Button: React.FC = () => {
         <Text>Button</Text>
       </ButtonComponent>
       <StyledButton text="Styled Button" />
-      <SaleButton type="Sale" />
-      <SaleButton type="NoneSale" />
+      <SaleButton text="BUY NOW" />
+      <SaleButton text="MAKE OFFER" />
     </div>
   )
 }

@@ -1,7 +1,7 @@
 import { useState } from 'react'
-import Discover from './Discover'
+import Profile from './Profile'
 
-export default function DiscoverPage() {
+export default function ProfilePage() {
   const [NFTs] = useState<string[]>([
     'https://beta.api.solanalysis.com/images/400x400/filters:frames(,0)/https://arweave.net/eWX3j4ulh4LK8RXC2VSIyF1Lwd-dKZIymXBuGiKsEpY',
     'https://beta.api.solanalysis.com/images/400x400/filters:frames(,0)/https://arweave.net/8-ybozau-7aLDlpkDw_NCB1rlDjbpQkM68x6dXP3PDU',
@@ -9,5 +9,5 @@ export default function DiscoverPage() {
     'https://beta.api.solanalysis.com/images/400x400/filters:frames(,0)/https://arweave.net/6ZblxHYuELA179gLjEZ9UIQI4piSkMvt9WEuXRLDa4g',
   ])
 
-  return <Discover NFTs={NFTs} />
+  return <Profile NFTs={NFTs} />
 }

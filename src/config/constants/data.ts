@@ -1,7 +1,7 @@
 export const navLinks = [
   {
     name: 'Discover',
-    path: '/discover',
+    path: '/explorer',
   },
   {
     name: 'Create',
