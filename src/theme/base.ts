@@ -1,10 +1,10 @@
 export const breakpointMap: { [key: string]: number } = {
-  xs: 370,
+  xs: 375,
   sm: 576,
   md: 852,
   lg: 968,
   xl: 1080,
-  xxl: 1200,
+  xxl: 1280,
 }
 
 const breakpoints = Object.values(breakpointMap).map(
