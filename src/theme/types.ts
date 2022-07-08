@@ -15,6 +15,7 @@ export type Colors = {
   textSecondary: string
   input: string
   inputSecondary: string
+  inputReadOnly: string
   border: string
   disabled: string
 }

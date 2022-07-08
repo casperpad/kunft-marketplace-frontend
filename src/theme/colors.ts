@@ -11,6 +11,7 @@ export const lightColors = {
   textSecondary: '#fff',
   input: '#C4C4C499',
   inputSecondary: '#494949',
+  inputReadOnly: '#494949',
   border: '#000',
   disabled: '#C4C4C4',
 }

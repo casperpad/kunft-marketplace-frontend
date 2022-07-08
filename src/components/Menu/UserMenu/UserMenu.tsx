@@ -1,11 +1,20 @@
-import Image from 'next/image'
-import { IoSettingsOutline, FiCopy, RiLogoutBoxRLine } from 'react-icons/all'
+import { FiCopy } from 'react-icons/fi'
+import { IoSettingsOutline } from 'react-icons/io5'
+import { RiLogoutBoxRLine } from 'react-icons/ri'
 
-import UserMenuItem from './UserMenuItem'
+import { Box, Flex } from '@components/Box'
+import { CustomLink } from '@components/Link'
+import { Text } from '@components/Text'
 
-function UserMenuDivider() {
-  return <div className=" border-t-[1px] border-white mt-[5px] w-full" />
-}
+import {
+  UserMenuContainer,
+  UserProfile,
+  ItemContainer as UserMenuItem,
+  StyledText,
+  StyledIcon,
+  UserMenuDivider,
+  StyledImage,
+} from './UserMenu.styles'
 
 interface UserMenuProps {
   avatar?: string
@@ -19,35 +28,41 @@ export default function UserMenu(props: UserMenuProps) {
     : '/assets/images/Avatar/Default.svg'
 
   return (
-    <div className="rounded-l-[10px] bg-gray-900 w-[330px] text-[14px] text-white border-black border-b pb-[5px]">
-      <UserMenuItem>
-        <Image
+    <UserMenuContainer>
+      <UserProfile>
+        <StyledImage
           src={profileAvatar}
           alt=""
           width={73}
           height={74}
           className="rounded-full overflow-hidden"
         />
-        <div>
-          <div className="items-center flex flex-row">
-            <span className="mr-2 text-[10px] text-gray-300/60">
-              0202994438940iu38a...8cf93739c45
-            </span>
-            <FiCopy className="w-5 h-5" />
-          </div>
-          <span className="text-[12px] text-white">Profile</span>
-        </div>
+        <Box>
+          <Flex flexDirection="row" alignItems="center">
+            <Text mr="8px" fontSize="10px" color="input">
+              0202994438940...8cf93739c45
+            </Text>
+            <StyledIcon>
+              <FiCopy size={20} />
+            </StyledIcon>
+          </Flex>
+          <CustomLink href="/profile">
+            <StyledText fontSize="12px" color="textSecondary">
+              Profile
+            </StyledText>
+          </CustomLink>
+        </Box>
+      </UserProfile>
+      <UserMenuDivider />
+      <UserMenuItem>
+        <StyledText>Settings</StyledText>
+        <IoSettingsOutline size={23} />
       </UserMenuItem>
       <UserMenuDivider />
       <UserMenuItem>
-        <div>Settings</div>
-        <IoSettingsOutline className="w-[23px] h-[23px]" />
+        <StyledText>Log Out</StyledText>
+        <RiLogoutBoxRLine size={23} />
       </UserMenuItem>
-      <UserMenuDivider />
-      <UserMenuItem>
-        <div>Log Out</div>
-        <RiLogoutBoxRLine className="w-[23px] h-[21px]" />
-      </UserMenuItem>
-    </div>
+    </UserMenuContainer>
   )
 }

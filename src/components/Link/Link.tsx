@@ -29,15 +29,9 @@ const CustomLink: React.FC<CustomLinkProps> = ({
 }) => {
   return (
     <NextLink href={href} as={as} passHref>
-      {active ? (
-        <StyledText color="primary">
-          <a className={className}>{children}</a>
-        </StyledText>
-      ) : (
-        <StyledText>
-          <a className={className}>{children}</a>
-        </StyledText>
-      )}
+      <StyledText color={active ? 'primary' : 'text'}>
+        <a className={className}>{children}</a>
+      </StyledText>
     </NextLink>
   )
 }
