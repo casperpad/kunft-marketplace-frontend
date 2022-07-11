@@ -10,11 +10,17 @@ import Providers from '../Providers'
 import '../assets/scss/main.scss'
 import '../styles/globals.css'
 
-const Layout = styled.div`
+const Page = styled.div`
   background-color: ${({ theme }) => theme.colors.background};
-  position: relative;
-  top: 64px;
-  min-height: calc(100vh - 64px);
+  margin-top: 65px;
+  display: flex;
+  justify-content: center;
+`
+
+const Layout = styled.div`
+  ${({ theme }) => theme.mediaQueries.xxl} {
+    width: 1512px;
+  }
 `
 
 function MyApp({ Component, pageProps }: AppProps) {
@@ -22,9 +28,11 @@ function MyApp({ Component, pageProps }: AppProps) {
     <Providers>
       <PageMeta symbol="" />
       <Navbar logo="/assets/images/Logo/KUNFTLogo.png" loggedIn={false} />
-      <Layout>
-        <Component {...pageProps} />
-      </Layout>
+      <Page>
+        <Layout>
+          <Component {...pageProps} />
+        </Layout>
+      </Page>
       <Footer />
     </Providers>
   )

@@ -1,8 +1,17 @@
 import Image from 'next/image'
+import styled from 'styled-components'
 
 import { Flex } from '@components/Box'
 import { Layout } from '@components/Layout'
 import { Text } from '@components/Text'
+
+const ImageContainer = styled(Flex)`
+  flex-direction: row;
+  width: 85%;
+  gap: 40px;
+  align-items: center;
+  justify-content: center;
+`
 
 export default function About() {
   return (
@@ -22,12 +31,7 @@ export default function About() {
           unique work, & to bridge between creatives and collectors. Hop on
           board, push the boundaries and start creating!
         </Text>
-        <Flex
-          flexDirection="row"
-          alignItems="center"
-          justifyContent="space-around"
-          width="100%"
-        >
+        <ImageContainer>
           <Image
             src="/assets/images/About_1.png"
             alt=""
@@ -46,7 +50,7 @@ export default function About() {
             width={320}
             height={320}
           />
-        </Flex>
+        </ImageContainer>
       </Flex>
     </Layout>
   )
