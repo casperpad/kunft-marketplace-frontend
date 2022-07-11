@@ -11,7 +11,7 @@ export default function Collections(props: CollectionsProps) {
   const { collections } = props
 
   return (
-    <Layout>
+    <Layout mt="60px">
       <Box>
         <Text fontSize="60px">COLLECTION XYZ</Text>
         <Text fontFamily="Avenir" fontSize="28px" mb="70px">

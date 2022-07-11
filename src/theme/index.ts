@@ -1,7 +1,6 @@
 import { Breakpoints, Colors, MediaQueries, Shadows } from './types'
 
 export interface Theme {
-  siteWidth: number
   isDark: boolean
   colors: Colors
   breakpoints: Breakpoints
