@@ -1,7 +1,7 @@
 # Pull Docker Hub base image
 FROM nikolaik/python-nodejs:latest
 
-RUN ["npm", "install -g pnpm",]
+RUN [ "npm", "install -g pnpm" ]
 
 # Set working directory
 WORKDIR /usr/app
