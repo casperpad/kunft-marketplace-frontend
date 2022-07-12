@@ -3,7 +3,7 @@ version: '3.7'
 services:
   #cache redis
   redis:
-    container_name: redis
+    container_name: kunft-redis
     image: redis:latest
     restart: always
     ports:
@@ -22,6 +22,6 @@ services:
       - /usr/app/node_modules
 
     depends_on:
-      - redis
+      - kunft-redis
     ports:
       - 8000:8000
