@@ -1,62 +1,21 @@
 import React from 'react'
 
 import { BigNumberish } from '@ethersproject/bignumber'
-import Image from 'next/image'
 import { BsHeart, BsHeartFill } from 'react-icons/bs'
-import styled from 'styled-components'
 
 import { Box, Flex } from '@components/Box'
-import { DefaultButton, CardButton } from '@components/Button'
 import { CustomLink } from '@components/Link'
 import { Text } from '@components/Text'
 
 import { NFTType } from '../../../types/nft.types'
 
-const StarsButton = styled(DefaultButton)`
-  color: ${({ theme }) => theme.colors.primary};
-`
-
-const SaleButton = styled(CardButton)`
-  opacity: 0;
-  position: absolute;
-  width: 100%;
-`
-
-const ImageContainer = styled.div`
-  border-bottom: 1px solid ${({ theme }) => theme.colors.border};
-`
-
-const StyledImage = styled(Image)`
-  border-radius: 10px;
-  border-bottom-left-radius: 0px;
-  border-bottom-right-radius: 0px;
-`
-
-const NFTCardContainer = styled.div`
-  position: relative;
-  background-color: transparent;
-  border-radius: 10px;
-  box-shadow: ${({ theme }) => theme.shadows.base};
-  width: 320px;
-  font-family: 'Avenir';
-  font-weight: lighter;
-  margin: 40px 10px;
-  transition: all 0.3s;
-  cursor: pointer;
-  &:hover {
-    box-shadow: ${({ theme }) => theme.shadows.hover};
-    border-bottom-left-radius: 0px;
-    border-bottom-right-radius: 0px;
-    ${StyledImage} {
-    }
-    ${SaleButton} {
-      opacity: 1;
-      &:hover {
-        opacity: 0.8;
-      }
-    }
-  }
-`
+import {
+  StarsButton,
+  SaleButton,
+  StyledImage,
+  ImageContainer,
+  Container,
+} from './NFTCard.styles'
 
 interface NFTCardProps {
   image: string
@@ -84,7 +43,7 @@ export default function NFTCard({
 
   return (
     <CustomLink href="/nftview">
-      <NFTCardContainer>
+      <Container>
         <ImageContainer>
           <StyledImage
             src={image}
@@ -121,7 +80,7 @@ export default function NFTCard({
           </Flex>
         </Box>
         {show && <SaleButton onClick={props.onClick} text={text} />}
-      </NFTCardContainer>
+      </Container>
     </CustomLink>
   )
 }

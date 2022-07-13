@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import Image from 'next/image'
 import styled from 'styled-components'
 
@@ -17,7 +17,7 @@ const InputContainer = styled(Box)`
 `
 
 const SaveButton = styled(CardButton)`
-  position: relative;
+  position: absolute;
   width: 100%;
   bottom: 0px;
   left: 0px;
@@ -30,19 +30,22 @@ const Container = styled(Box)`
   border-radius: 10px 10px 0px 0px;
   padding: 44px 77px 56px 84px;
   max-width: 700px;
+  z-index: 300;
 `
 
 const ModalContainer = styled.div`
-  position: absolute;
+  position: fixed;
   top: 0px;
   left: 0px;
   width: 100vw;
   height: 100vh;
-  background: rgb(0, 0, 0, 0.5);
+  background: rgb(0, 0, 0, 0);
+  backdrop-filter: blur(3px);
   display: flex;
   align-items: center;
   justify-content: center;
   transition: opacity 0.4s;
+  z-index: 200;
 `
 
 interface ProfileProps {
@@ -65,6 +68,14 @@ export default function Profile({
   setShow,
 }: ProfileProps) {
   const profileAvatar = avatar || '/assets/images/Avatar/Default.svg'
+
+  useEffect(() => {
+    document.body.style.overflow = 'hidden'
+
+    return () => {
+      document.body.style.overflow = 'unset'
+    }
+  }, [])
 
   return (
     <ModalContainer>

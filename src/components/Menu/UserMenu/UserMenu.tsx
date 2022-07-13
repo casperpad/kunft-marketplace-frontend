@@ -1,3 +1,5 @@
+import React from 'react'
+
 import { FiCopy } from 'react-icons/fi'
 import { IoSettingsOutline } from 'react-icons/io5'
 import { RiLogoutBoxRLine } from 'react-icons/ri'
@@ -18,10 +20,11 @@ import {
 
 interface UserMenuProps {
   avatar?: string
+  onSettingClick: React.Dispatch<React.SetStateAction<boolean>>
 }
 
 export default function UserMenu(props: UserMenuProps) {
-  const { avatar } = props
+  const { avatar, onSettingClick } = props
 
   const profileAvatar = avatar
     ? (avatar as string)
@@ -30,13 +33,7 @@ export default function UserMenu(props: UserMenuProps) {
   return (
     <UserMenuContainer>
       <UserProfile>
-        <StyledImage
-          src={profileAvatar}
-          alt=""
-          width={73}
-          height={74}
-          className="rounded-full overflow-hidden"
-        />
+        <StyledImage src={profileAvatar} alt="" width={73} height={74} />
         <Box>
           <Flex flexDirection="row" alignItems="center">
             <Text mr="8px" fontSize="10px" color="input">
@@ -54,7 +51,7 @@ export default function UserMenu(props: UserMenuProps) {
         </Box>
       </UserProfile>
       <UserMenuDivider />
-      <UserMenuItem>
+      <UserMenuItem onClick={() => onSettingClick(true)}>
         <StyledText>Settings</StyledText>
         <IoSettingsOutline size={23} />
       </UserMenuItem>

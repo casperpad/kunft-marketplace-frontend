@@ -13,6 +13,7 @@ export type Colors = {
   transparent: string
   text: string
   textSecondary: string
+  detail: string
   input: string
   inputSecondary: string
   inputReadOnly: string

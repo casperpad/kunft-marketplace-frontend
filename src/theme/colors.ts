@@ -9,6 +9,7 @@ export const lightColors = {
   transparent: 'transparent',
   text: '#000',
   textSecondary: '#fff',
+  detail: '#19191999',
   input: '#C4C4C499',
   inputSecondary: '#494949',
   inputReadOnly: '#494949',

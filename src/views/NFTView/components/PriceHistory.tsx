@@ -1,6 +1,6 @@
 import styled from 'styled-components'
 
-import { Box } from '@components/Box'
+import { Box, Flex } from '@components/Box'
 import { Text } from '@components/Text'
 
 const Container = styled(Box)`
@@ -9,10 +9,22 @@ const Container = styled(Box)`
   font-family: 'Avenir';
 `
 
+const TitleContainer = styled(Flex)`
+  font-family: 'Avenir';
+  font-size: 25px;
+  border-bottom: 1px solid ${({ theme }) => theme.colors.border};
+  width: 100%;
+  height: 70px;
+  padding-left: 33px;
+  align-items: center;
+`
+
 export default function PriceHistory() {
   return (
     <Container>
-      <Text>Price History</Text>
+      <TitleContainer>
+        <Text fontWeight={500}>Price History</Text>
+      </TitleContainer>
     </Container>
   )
 }

@@ -5,6 +5,7 @@ import styled from 'styled-components'
 
 import { Flex } from '@components/Box'
 import { CustomLink } from '@components/Link'
+import { ProfileModal as Modal } from '@components/Modal'
 import { navLinks } from '@config/constants/data'
 import { UserMenu } from './UserMenu'
 
@@ -56,6 +57,7 @@ export default function Navbar(props: NavbarProps) {
   const { pathname } = useRouter()
   const { logo, avatar, loggedIn } = props
 
+  const [modalShow, setModalShow] = useState(false)
   const [show, setShow] = useState(false)
   const menuAvatar = loggedIn
     ? avatar
@@ -64,45 +66,42 @@ export default function Navbar(props: NavbarProps) {
     : '/assets/images/Avatar/NotConnectedWallet.svg'
 
   return (
-    <NavbarContainer>
-      <CustomLink href="/">
-        <Image src={logo} alt="" width={101} height={57} />
-      </CustomLink>
-      <MenuContainer>
-        {navLinks.map((item) => {
-          const active = pathname.indexOf(item.path) > -1
-          return (
-            <MenuItem href={item.path} key={item.name} active={active}>
-              {item.name}
-            </MenuItem>
-          )
-        })}
-        <Flex
-          width="70px"
-          height="70px"
-          justifyContent="center"
-          alignItems="center"
-          ml="-20px"
-          onMouseEnter={() => setShow(true)}
-          onMouseLeave={() => setShow(false)}
-        >
-          <StyledAvatar
-            src={menuAvatar}
-            alt=""
-            width={30}
-            height={30}
-            className="rounded-full overflow-hidden"
-          />
-        </Flex>
-      </MenuContainer>
-      {show && (
-        <ProfileMenu
-          onMouseEnter={() => setShow(true)}
-          onMouseLeave={() => setShow(false)}
-        >
-          <UserMenu />
-        </ProfileMenu>
-      )}
-    </NavbarContainer>
+    <>
+      <NavbarContainer>
+        <CustomLink href="/">
+          <Image src={logo} alt="" width={101} height={57} />
+        </CustomLink>
+        <MenuContainer>
+          {navLinks.map((item) => {
+            const active = pathname.indexOf(item.path) > -1
+            return (
+              <MenuItem href={item.path} key={item.name} active={active}>
+                {item.name}
+              </MenuItem>
+            )
+          })}
+          <Flex
+            width="70px"
+            height="70px"
+            justifyContent="center"
+            alignItems="center"
+            ml="-20px"
+            onMouseEnter={() => setShow(true)}
+            onMouseLeave={() => setShow(false)}
+          >
+            <StyledAvatar src={menuAvatar} alt="" width={30} height={30} />
+          </Flex>
+        </MenuContainer>
+        {show && (
+          <ProfileMenu
+            onMouseEnter={() => setShow(true)}
+            onMouseLeave={() => setShow(false)}
+          >
+            <UserMenu onSettingClick={setModalShow} />
+          </ProfileMenu>
+        )}
+      </NavbarContainer>
+      {modalShow && <Modal setShow={setModalShow} />}
+    </>
   )
 }

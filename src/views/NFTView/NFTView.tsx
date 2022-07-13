@@ -1,7 +1,6 @@
 import { useState } from 'react'
 
 import { Box } from '@components/Box'
-import { Layout } from '@components/Layout'
 import { Text } from '@components/Text'
 
 import {
@@ -20,6 +19,7 @@ import {
   StyledImage,
   HistoryContainer,
   DescriptionContainer,
+  Layout,
 } from './NFTView.styles'
 
 export default function NFTView() {

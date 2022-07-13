@@ -1,5 +1,5 @@
 import styled, { DefaultTheme } from 'styled-components'
-import { border, layout, space } from 'styled-system'
+import { border, layout, space, typography } from 'styled-system'
 import getThemeValue from '@utils/getThemeValue'
 
 import { BaseButtonProps } from './types'
@@ -17,6 +17,7 @@ export const DefaultButton = styled.div<BaseButtonProps>`
   ${border}
   ${layout}
   ${space}
+  ${typography}
   cursor: pointer;
   transition: opacity 0.3s;
   &:hover {
