@@ -33,7 +33,7 @@ export default function Buy() {
         </Text>
       </PriceContainer>
       <ButtonContainer>
-        <StyledButton text="Buy Now" link={false} fontsize="20px" height={44} />
+        <StyledButton text="Buy Now" link={false} fontSize="20px" height={44} />
       </ButtonContainer>
     </Container>
   )

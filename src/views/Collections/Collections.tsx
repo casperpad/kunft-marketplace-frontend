@@ -20,6 +20,14 @@ const StyledImage = styled(Image)`
   }
 `
 
+const CollectionContainer = styled(Flex)`
+  gap: 20px;
+  flex-direction: row;
+  flex-wrap: wrap;
+  width: 100%;
+  margin: auto;
+`
+
 interface CollectionsProps {
   collections: string[]
 }
@@ -27,7 +35,7 @@ interface CollectionsProps {
 export default function Collections({ collections = [] }: CollectionsProps) {
   return (
     <Layout>
-      <Box>
+      <Flex flexDirection="column">
         <Text fontSize="90px" mb="70px">
           DISCOVER NTFs
         </Text>
@@ -35,12 +43,7 @@ export default function Collections({ collections = [] }: CollectionsProps) {
         <Text fontFamily="Avenir" fontSize="28px" mb="70px">
           This is a short and brief description about the featured collection.
         </Text>
-        <Flex
-          flexDirection="row"
-          justifyContent="space-around"
-          flexWrap="wrap"
-          width="100%"
-        >
+        <CollectionContainer>
           {collections.map((collection) => {
             return (
               <ImageContainer key={collection}>
@@ -48,8 +51,8 @@ export default function Collections({ collections = [] }: CollectionsProps) {
               </ImageContainer>
             )
           })}
-        </Flex>
-      </Box>
+        </CollectionContainer>
+      </Flex>
     </Layout>
   )
 }

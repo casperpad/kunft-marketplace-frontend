@@ -15,6 +15,7 @@ const Page = styled.div`
   margin-top: 65px;
   display: flex;
   justify-content: center;
+  min-height: calc(100vh - 65px);
 `
 
 const Layout = styled.div`

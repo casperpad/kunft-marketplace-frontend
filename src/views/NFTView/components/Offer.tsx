@@ -60,7 +60,7 @@ export default function Offer() {
         <StyledButton
           text="Make Offer"
           link={false}
-          fontsize="20px"
+          fontSize="20px"
           height={44}
         />
       </ButtonContainer>

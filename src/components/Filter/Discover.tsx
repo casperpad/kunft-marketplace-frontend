@@ -19,6 +19,7 @@ const PriceText = styled(Text)`
 const Container = styled(Box)`
   background-color: ${({ theme }) => theme.colors.background};
   max-width: max-content;
+  height: max-content;
 `
 
 function Checkbox({ text }: { text: string }) {

@@ -10,11 +10,24 @@ const Container = styled(Flex)`
   flex-direction: row;
 `
 
-const DiscoverContainer = styled(Flex)`
-  margin-left: 80px;
+const Filter = styled.div`
+  position: sticky;
+  height: max-content;
+  left: 0px;
+  top: 120px;
+`
+
+const FilterContainer = styled(Flex)`
+  position: relative;
+  padding: 120px 0px 120px 86px;
+`
+
+const DiscoverContainer = styled(Layout)`
+  display: flex;
   flex-direction: row;
   flex-wrap: wrap;
   justify-content: space-around;
+  width: 100%;
 `
 
 interface DiscoverProps {
@@ -23,31 +36,33 @@ interface DiscoverProps {
 
 export default function Discover({ NFTs = [] }: DiscoverProps) {
   return (
-    <Layout>
-      <Container>
-        <DiscoverFilter />
-        <DiscoverContainer width="100%">
-          {NFTs.map((item) => {
-            return (
-              <NFTCard
-                key={item}
-                type={
-                  Math.random() > 0.5
-                    ? Math.random() > 0.5
-                      ? 'Sale'
-                      : 'NoneSale'
-                    : 'Upcoming'
-                }
-                image={item}
-                name="KUNFT"
-                price={Math.random() * 10000}
-                stars={Math.floor(Math.random() * 100)}
-                userStarred={Math.random() > 0.5}
-              />
-            )
-          })}
-        </DiscoverContainer>
-      </Container>
-    </Layout>
+    <Container>
+      <FilterContainer>
+        <Filter>
+          <DiscoverFilter />
+        </Filter>
+      </FilterContainer>
+      <DiscoverContainer>
+        {NFTs.map((item) => {
+          return (
+            <NFTCard
+              key={item}
+              type={
+                Math.random() > 0.5
+                  ? Math.random() > 0.5
+                    ? 'Sale'
+                    : 'NoneSale'
+                  : 'Upcoming'
+              }
+              image={item}
+              name="KUNFT"
+              price={Math.random() * 10000}
+              stars={Math.floor(Math.random() * 100)}
+              userStarred={Math.random() > 0.5}
+            />
+          )
+        })}
+      </DiscoverContainer>
+    </Container>
   )
 }

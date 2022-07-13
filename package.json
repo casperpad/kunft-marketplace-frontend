@@ -80,6 +80,7 @@
     "sharp": "^0.30.7",
     "style-loader": "^3.3.1",
     "styled-components": "^5.3.5",
+    "styled-react-modal": "^3.0.0",
     "styled-system": "^5.1.5",
     "ts-node-dev": "^2.0.0",
     "ts-results": "^3.3.0",

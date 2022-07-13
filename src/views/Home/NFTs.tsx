@@ -1,14 +1,21 @@
-import { Box, Flex } from '@components/Box'
+import styled from 'styled-components'
+
+import { Box, Grid } from '@components/Box'
 import { NFTCard } from '@components/Card/NFT'
 import { Layout } from '@components/Layout'
 import { Text } from '@components/Text'
 
-interface CollectionsProps {
-  collections: string[]
+const Container = styled(Grid)`
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+`
+
+interface NFTsProps {
+  nfts: string[]
 }
 
-export default function Collections(props: CollectionsProps) {
-  const { collections } = props
+export default function NFTs(props: NFTsProps) {
+  const { nfts } = props
 
   return (
     <Layout mt="60px">
@@ -17,16 +24,11 @@ export default function Collections(props: CollectionsProps) {
         <Text fontFamily="Avenir" fontSize="28px" mb="70px">
           This is a short and brief description about the featured collection.
         </Text>
-        <Flex
-          flexDirection="row"
-          justifyContent="space-around"
-          flexWrap="wrap"
-          width="100%"
-        >
-          {collections.map((collection) => {
+        <Container>
+          {nfts.map((nft) => {
             return (
               <NFTCard
-                key={collection}
+                key={nft}
                 type={
                   Math.random() > 0.5
                     ? Math.random() > 0.5
@@ -34,7 +36,7 @@ export default function Collections(props: CollectionsProps) {
                       : 'NoneSale'
                     : 'Upcoming'
                 }
-                image={collection}
+                image={nft}
                 name="KUNFT"
                 price={Math.random() * 10000}
                 stars={Math.floor(Math.random() * 100)}
@@ -42,7 +44,7 @@ export default function Collections(props: CollectionsProps) {
               />
             )
           })}
-        </Flex>
+        </Container>
       </Box>
     </Layout>
   )

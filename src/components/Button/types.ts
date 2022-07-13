@@ -1,10 +1,19 @@
-import { LayoutProps, SpaceProps, BorderProps } from 'styled-system'
+import {
+  LayoutProps,
+  SpaceProps,
+  BorderProps,
+  TypographyProps,
+} from 'styled-system'
 
 export const variants = {
   PRIMARY: 'primary',
   DISABLE: 'disable',
 }
 
-export interface BaseButtonProps extends LayoutProps, SpaceProps, BorderProps {
+export interface BaseButtonProps
+  extends LayoutProps,
+    SpaceProps,
+    BorderProps,
+    TypographyProps {
   color?: string
 }

@@ -1,7 +1,7 @@
 import Image from 'next/image'
 import styled from 'styled-components'
 
-import { Flex } from '@components/Box'
+import { Grid } from '@components/Box'
 import { Layout } from '@components/Layout'
 
 const ImageContainer = styled.div`
@@ -19,6 +19,11 @@ const StyledImage = styled(Image)`
   }
 `
 
+const Container = styled(Grid)`
+  gap: 20px;
+  grid-template-columns: repeat(8, 1fr);
+`
+
 interface LandingProps {
   tops: string[]
 }
@@ -26,15 +31,15 @@ interface LandingProps {
 export default function Landing({ tops }: LandingProps) {
   return (
     <Layout>
-      <Flex justifyContent="center">
+      <Container>
         {tops.map((item) => {
           return (
-            <ImageContainer key="item">
+            <ImageContainer key={item}>
               <StyledImage src={item} alt="" width={150} height={150} />
             </ImageContainer>
           )
         })}
-      </Flex>
+      </Container>
     </Layout>
   )
 }
