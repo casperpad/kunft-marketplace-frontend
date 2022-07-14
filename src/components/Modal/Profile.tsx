@@ -28,9 +28,23 @@ const Container = styled(Box)`
   position: relative;
   background: ${({ theme }) => theme.colors.backgroundSecondary};
   border-radius: 10px 10px 0px 0px;
-  padding: 44px 77px 56px 84px;
+
   max-width: 700px;
   z-index: 300;
+
+  padding: 30px 47px 38px 48px;
+
+  ${({ theme }) => theme.mediaQueries.md} {
+    padding: 38px 57px 48px 64px;
+  }
+
+  ${({ theme }) => theme.mediaQueries.lg} {
+    padding: 44px 67px 56px 74px;
+  }
+
+  ${({ theme }) => theme.mediaQueries.xl2} {
+    padding: 44px 77px 56px 84px;
+  }
 `
 
 const ModalContainer = styled.div`
@@ -44,7 +58,6 @@ const ModalContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: opacity 0.4s;
   z-index: 200;
 `
 
@@ -78,7 +91,7 @@ export default function Profile({
   }, [])
 
   return (
-    <ModalContainer>
+    <ModalContainer onClick={() => setShow(false)}>
       <Container>
         <Flex flexDirection="row" alignItems="center" mb="9px">
           <StyledImage src={profileAvatar} alt="" width={100} height={100} />

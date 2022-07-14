@@ -1,33 +1,33 @@
 import React from 'react'
 import styled from 'styled-components'
 
-import { Flex } from '@components/Box'
+import { Flex, Grid } from '@components/Box'
 import { NFTCard } from '@components/Card/NFT'
-import { DiscoverFilter } from '@components/Filter'
 import { Layout } from '@components/Layout'
 
+import Filter from './Filter'
+
 const Container = styled(Flex)`
-  flex-direction: row;
-`
-
-const Filter = styled.div`
-  position: sticky;
-  height: max-content;
-  left: 0px;
-  top: 120px;
-`
-
-const FilterContainer = styled(Flex)`
   position: relative;
-  padding: 120px 0px 120px 86px;
+  flex-direction: row;
 `
 
-const DiscoverContainer = styled(Layout)`
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  justify-content: space-around;
-  width: 100%;
+const DiscoverContainer = styled(Grid)`
+  grid-column-gap: 20px;
+  grid-row-gap: 80px;
+  grid-template-columns: repeat(1, 1fr);
+
+  ${({ theme }) => theme.mediaQueries.sm} {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  ${({ theme }) => theme.mediaQueries.md} {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  ${({ theme }) => theme.mediaQueries.xl2} {
+    grid-template-columns: repeat(4, 1fr);
+  }
 `
 
 interface DiscoverProps {
@@ -37,32 +37,30 @@ interface DiscoverProps {
 export default function Discover({ NFTs = [] }: DiscoverProps) {
   return (
     <Container>
-      <FilterContainer>
-        <Filter>
-          <DiscoverFilter />
-        </Filter>
-      </FilterContainer>
-      <DiscoverContainer>
-        {NFTs.map((item) => {
-          return (
-            <NFTCard
-              key={item}
-              type={
-                Math.random() > 0.5
-                  ? Math.random() > 0.5
-                    ? 'Sale'
-                    : 'NoneSale'
-                  : 'Upcoming'
-              }
-              image={item}
-              name="KUNFT"
-              price={Math.random() * 10000}
-              stars={Math.floor(Math.random() * 100)}
-              userStarred={Math.random() > 0.5}
-            />
-          )
-        })}
-      </DiscoverContainer>
+      <Filter />
+      <Layout>
+        <DiscoverContainer>
+          {NFTs.map((item) => {
+            return (
+              <NFTCard
+                key={item}
+                type={
+                  Math.random() > 0.5
+                    ? Math.random() > 0.5
+                      ? 'Sale'
+                      : 'NoneSale'
+                    : 'Upcoming'
+                }
+                image={item}
+                name="KUNFT"
+                price={Math.random() * 10000}
+                stars={Math.floor(Math.random() * 100)}
+                userStarred={Math.random() > 0.5}
+              />
+            )
+          })}
+        </DiscoverContainer>
+      </Layout>
     </Container>
   )
 }

@@ -15,6 +15,8 @@ import {
   StyledImage,
   ImageContainer,
   Container,
+  NameContainer,
+  ValueContainer,
 } from './NFTCard.styles'
 
 interface NFTCardProps {
@@ -54,22 +56,11 @@ export default function NFTCard({
           />
         </ImageContainer>
         <Box px="28px" py={[14, 17]}>
-          <Flex
-            flexDirection="row"
-            justifyContent="space-between"
-            fontSize="27px"
-            alignItems="center"
-          >
+          <NameContainer>
             <Text fontFamily="Castle">{name}</Text>
             <Text>Price</Text>
-          </Flex>
-          <Flex
-            flexDirection="row"
-            justifyContent="space-between"
-            fontSize="20px"
-            mt="4px"
-            alignItems="center"
-          >
+          </NameContainer>
+          <ValueContainer>
             <Flex flexDirection="row" alignItems="center">
               <StarsButton color="transparent" onClick={onStarClick}>
                 {userStarred ? <BsHeartFill /> : <BsHeart />}
@@ -77,7 +68,7 @@ export default function NFTCard({
               <Text ml="4px">{stars}</Text>
             </Flex>
             <Text color="primary">{price.toLocaleString()}</Text>
-          </Flex>
+          </ValueContainer>
         </Box>
         {show && <SaleButton onClick={props.onClick} text={text} />}
       </Container>
