@@ -88,7 +88,7 @@ export default function Filter({
             <PriceText>{minValue}</PriceText>
             <PriceText>{maxValue}</PriceText>
           </Flex>
-          <Flex mt="28px" pr="20px">
+          <Flex mt="28px" mb="5px" pr="27px" pl="12px">
             <RangeSlider
               min={min}
               max={max}
