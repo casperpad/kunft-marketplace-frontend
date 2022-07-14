@@ -5,31 +5,34 @@ import { StyledButton } from '@components/Button'
 import { Layout } from '@components/Layout'
 import { Text } from '@components/Text'
 
-const StyledLayout = styled(Layout)`
-  display: none;
+const CollectionButton = styled(StyledButton)`
+  font-size: 20px;
   ${({ theme }) => theme.mediaQueries.xl} {
-    display: block;
+    font-size: 25px;
   }
 `
 
 const Container = styled(Flex)`
-  background: url('/assets/images/Collection.png');
+  background: url('/assets/images/Home/Collection.png');
   background-size: 100% 100%;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
   padding: 40px 46px 33px 74px;
-  font-size: 60px;
+  font-size: 40px;
+  ${({ theme }) => theme.mediaQueries.xl} {
+    font-size: 60px;
+  }
 `
 
 export default function Collection() {
   return (
-    <StyledLayout>
+    <Layout>
       <Container>
         <Text color="background">ALL NFT COLLECTIONS</Text>
-        <StyledButton text="Collections" />
+        <CollectionButton text="Collections" />
       </Container>
-    </StyledLayout>
+    </Layout>
   )
 }

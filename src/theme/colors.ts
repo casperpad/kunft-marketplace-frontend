@@ -15,6 +15,7 @@ export const lightColors = {
   inputReadOnly: '#494949',
   border: '#000',
   disabled: '#C4C4C4',
+  checkbox: '#D9D9D9',
 }
 
 export const darkColors = {

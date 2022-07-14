@@ -1,7 +1,7 @@
 import { useState, useCallback } from 'react'
 import styled from 'styled-components'
 
-import { Box, Flex } from '@components/Box'
+import { Box, Flex, BoxProps } from '@components/Box'
 import { RangeSlider } from '@components/Slider'
 import { Text } from '@components/Text'
 
@@ -16,7 +16,7 @@ const PriceText = styled(Text)`
   border: 1px solid ${({ theme }) => theme.colors.border};
 `
 
-const Container = styled(Box)`
+const Container = styled(Box)<BoxProps>`
   background-color: ${({ theme }) => theme.colors.background};
   max-width: max-content;
   height: max-content;
@@ -31,7 +31,7 @@ function Checkbox({ text }: { text: string }) {
   )
 }
 
-interface FilterProps {
+interface FilterProps extends BoxProps {
   min?: number
   max?: number
   step?: number
@@ -41,6 +41,7 @@ export default function Filter({
   min = 0,
   max = 50000,
   step = 10,
+  ...props
 }: FilterProps) {
   const [minValue, setMinValue] = useState(min)
   const [maxValue, setMaxValue] = useState(max)
@@ -51,7 +52,7 @@ export default function Filter({
   }, [])
 
   return (
-    <Container>
+    <Container {...props}>
       <Text fontSize="40px" mb="20px">
         FILTER
       </Text>
