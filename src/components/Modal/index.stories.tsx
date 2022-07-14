@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 
 import Modal from './Profile'
 
@@ -16,7 +16,7 @@ export const ProfileModal: React.FC = () => {
       <button type="button" onClick={() => setShow(!show)}>
         click
       </button>
-      {show && <Modal setShow={setShow} />}
+      <Modal setShow={setShow} show={show} />
     </>
   )
 }

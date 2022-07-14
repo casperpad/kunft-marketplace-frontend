@@ -7,13 +7,6 @@ import { DiscoverFilter } from '@components/Filter'
 const CustomFilter = styled(DiscoverFilter)`
   position: sticky;
   top: 184px;
-
-  &:after {
-    content: '';
-    position: absolute;
-    top: 10px;
-    right: 25px;
-  }
 `
 
 const Container = styled(Flex)`
