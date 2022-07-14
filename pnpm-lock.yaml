@@ -88,7 +88,6 @@ specifiers:
   react-icons: ^4.4.0
   react-overlays: ^5.2.0
   react-redux: ^8.0.2
-  react-transition-group: ^4.4.2
   react-tsparticles: ^2.1.3
   redis: ^4.1.1
   redis-mock: ^0.56.3
@@ -166,7 +165,6 @@ dependencies:
   react-icons: 4.4.0_react@18.2.0
   react-overlays: 5.2.0_biqbaboplfbrettd7655fr4n2y
   react-redux: 8.0.2_jcbkrypqxz3emsprsw5dchskju
-  react-transition-group: 4.4.2_biqbaboplfbrettd7655fr4n2y
   react-tsparticles: 2.1.3_react@18.2.0
   redis: 4.1.1
   redis-mock: 0.56.3
