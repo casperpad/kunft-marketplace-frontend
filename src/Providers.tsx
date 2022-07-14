@@ -4,7 +4,8 @@ import { Provider } from 'react-redux'
 import { Store } from 'redux'
 import { persistStore } from 'redux-persist'
 import { PersistGate } from 'redux-persist/integration/react'
-import { ThemeProvider } from 'styled-components'
+import styled, { ThemeProvider } from 'styled-components'
+import { ModalProvider, BaseModalBackground } from 'styled-react-modal'
 
 import CasperWeb3Provider from './provider/CasperWeb3Provider'
 import { light } from './theme'
@@ -18,13 +19,22 @@ interface ProvdersProps {
   store: Store
 }
 
+const BlurBackground = styled(BaseModalBackground)`
+  backdrop-filter: blur(3px);
+  background-color: rgb(0, 0, 0, 0);
+`
+
 export default function Providers({ children, store }: ProvdersProps) {
   const persistor = persistStore(store)
   return (
     <Provider store={store}>
       <PersistGate persistor={persistor} loading={<div>Loading...</div>}>
         <CasperWeb3Provider>
-          <StyledThemeProvider>{children}</StyledThemeProvider>
+          <StyledThemeProvider>
+            <ModalProvider backgroundComponent={BlurBackground}>
+              {children}
+            </ModalProvider>
+          </StyledThemeProvider>
         </CasperWeb3Provider>
       </PersistGate>
     </Provider>

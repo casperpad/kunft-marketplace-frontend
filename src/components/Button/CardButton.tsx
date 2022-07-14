@@ -14,14 +14,12 @@ const CardButton: React.FC<CardButtonProps> = ({ text, ...props }) => {
     <Button
       borderBottomLeftRadius={10}
       borderBottomRightRadius={10}
-      height={47}
-      pt="6px"
+      fontSize="22px"
+      py="6px"
       {...props}
     >
-      <Flex alignItems="center" justifyContent="center">
-        <Text fontSize="22px" fontFamily="Castle">
-          {text}
-        </Text>
+      <Flex justifyContent="center">
+        <Text fontFamily="Castle">{text}</Text>
       </Flex>
     </Button>
   )

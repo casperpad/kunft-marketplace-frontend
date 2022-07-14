@@ -19,4 +19,5 @@ export type Colors = {
   inputReadOnly: string
   border: string
   disabled: string
+  checkbox: string
 }
