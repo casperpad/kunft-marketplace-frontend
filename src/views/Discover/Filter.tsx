@@ -47,7 +47,7 @@ const Container = styled(Flex)`
 `
 
 export default function Filter() {
-  const [show, setShow] = useState(false)
+  const [show, setShow] = useState(true)
   const size = useWindowSize()
 
   useEffect(() => {
