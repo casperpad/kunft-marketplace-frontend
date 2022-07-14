@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import Image from 'next/image'
 import { useRouter } from 'next/router'
 import styled from 'styled-components'
@@ -7,7 +7,7 @@ import { Flex } from '@components/Box'
 import { CustomLink } from '@components/Link'
 import { ProfileModal as Modal } from '@components/Modal'
 import { navLinks } from '@config/constants/data'
-import useAuth from '@hooks/useAuth'
+import { useCasperWeb3Provider, useAuth } from '@hooks/index'
 import { UserMenu } from './UserMenu'
 
 const ProfileMenu = styled.div`
@@ -50,6 +50,8 @@ const NavbarContainer = styled.nav`
 export default function Navbar() {
   const { pathname } = useRouter()
   const { signIn, user } = useAuth()
+  const { connected, connect } = useCasperWeb3Provider()
+  const [requestConnect, setRequestConnect] = useState(false)
 
   const [modalShow, setModalShow] = useState(false)
   const [show, setShow] = useState(false)
@@ -58,6 +60,23 @@ export default function Navbar() {
       ? user.avatar
       : '/assets/images/Avatar/Default.svg'
     : '/assets/images/Avatar/NotConnectedWallet.svg'
+
+  const signInOnConnected = useCallback(() => {
+    if (!connected) {
+      connect()
+      setRequestConnect(true)
+    } else {
+      signIn()
+    }
+  }, [connect, connected, signIn])
+
+  useEffect(() => {
+    if (connected && requestConnect) {
+      signIn().then(() => {
+        setRequestConnect(false)
+      })
+    }
+  }, [connected, requestConnect, signIn])
 
   return (
     <>
@@ -93,7 +112,7 @@ export default function Navbar() {
               alt=""
               width={30}
               height={30}
-              onClick={user ? undefined : signIn}
+              onClick={user ? undefined : signInOnConnected}
             />
           </Flex>
         </MenuContainer>
