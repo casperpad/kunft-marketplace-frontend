@@ -7,6 +7,7 @@ import { Flex } from '@components/Box'
 import { CustomLink } from '@components/Link'
 import { ProfileModal as Modal } from '@components/Modal'
 import { navLinks } from '@config/constants/data'
+import useAuth from '@hooks/useAuth'
 import { UserMenu } from './UserMenu'
 
 const ProfileMenu = styled.div`
@@ -47,21 +48,15 @@ const NavbarContainer = styled.nav`
   z-index: 100;
 `
 
-interface NavbarProps {
-  logo: string
-  avatar?: string
-  loggedIn: boolean
-}
-
-export default function Navbar(props: NavbarProps) {
+export default function Navbar() {
   const { pathname } = useRouter()
-  const { logo, avatar, loggedIn } = props
+  const { signIn, user } = useAuth()
 
   const [modalShow, setModalShow] = useState(false)
   const [show, setShow] = useState(false)
-  const menuAvatar = loggedIn
-    ? avatar
-      ? (avatar as string)
+  const menuAvatar = user
+    ? user.avatar
+      ? user.avatar
       : '/assets/images/Avatar/Default.svg'
     : '/assets/images/Avatar/NotConnectedWallet.svg'
 
@@ -69,7 +64,12 @@ export default function Navbar(props: NavbarProps) {
     <>
       <NavbarContainer>
         <CustomLink href="/">
-          <Image src={logo} alt="" width={101} height={57} />
+          <Image
+            src="/assets/images/Logo/KUNFTLogo.png"
+            alt="KUNFT"
+            width={101}
+            height={57}
+          />
         </CustomLink>
         <MenuContainer>
           {navLinks.map((item) => {
@@ -89,10 +89,16 @@ export default function Navbar(props: NavbarProps) {
             onMouseEnter={() => setShow(true)}
             onMouseLeave={() => setShow(false)}
           >
-            <StyledAvatar src={menuAvatar} alt="" width={30} height={30} />
+            <StyledAvatar
+              src={menuAvatar}
+              alt=""
+              width={30}
+              height={30}
+              onClick={user ? undefined : signIn}
+            />
           </Flex>
         </MenuContainer>
-        {show && (
+        {user && show && (
           <ProfileMenu
             onMouseEnter={() => setShow(true)}
             onMouseLeave={() => setShow(false)}

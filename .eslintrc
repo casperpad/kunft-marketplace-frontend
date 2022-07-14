@@ -97,6 +97,11 @@
             "pattern": "@hooks/**",
             "group": "type",
             "position": "after"
+          },
+          {
+            "pattern": "@store/**",
+            "group": "type",
+            "position": "after"
           }
         ],
         "pathGroupsExcludedImportTypes": ["react", "builtin"],
@@ -112,6 +117,7 @@
     "@typescript-eslint/no-use-before-define": ["warn"],
     "no-shadow": "off",
     "@typescript-eslint/no-shadow": ["error"],
+    "@typescript-eslint/no-non-null-assertion": "off",
     "no-console": ["warn", { "allow": ["info", "warn", "error"] }],
     "no-plusplus": 0,
     "prefer-destructuring": ["warn", { "object": true, "array": false }],

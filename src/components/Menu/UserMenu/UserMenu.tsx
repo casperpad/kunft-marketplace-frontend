@@ -8,6 +8,7 @@ import { Box, Flex } from '@components/Box'
 import { CustomLink } from '@components/Link'
 import { Text } from '@components/Text'
 
+import useAuth from '@hooks/useAuth'
 import {
   UserMenuContainer,
   UserProfile,
@@ -25,10 +26,15 @@ interface UserMenuProps {
 
 export default function UserMenu(props: UserMenuProps) {
   const { avatar, onSettingClick } = props
+  const { signOut, user } = useAuth()
 
   const profileAvatar = avatar
     ? (avatar as string)
     : '/assets/images/Avatar/Default.svg'
+
+  const shortenPublicKey = (publicKey: string) => {
+    return `${publicKey.slice(0, 7)}...${publicKey.slice(-7)}`
+  }
 
   return (
     <UserMenuContainer>
@@ -37,7 +43,7 @@ export default function UserMenu(props: UserMenuProps) {
         <Box>
           <Flex flexDirection="row" alignItems="center">
             <Text mr="8px" fontSize="10px" color="input">
-              0202994438940...8cf93739c45
+              {shortenPublicKey(user!.publicKey)}
             </Text>
             <StyledIcon>
               <FiCopy size={20} />
@@ -56,7 +62,7 @@ export default function UserMenu(props: UserMenuProps) {
         <IoSettingsOutline size={23} />
       </UserMenuItem>
       <UserMenuDivider />
-      <UserMenuItem>
+      <UserMenuItem onClick={signOut}>
         <StyledText>Log Out</StyledText>
         <RiLogoutBoxRLine size={23} />
       </UserMenuItem>

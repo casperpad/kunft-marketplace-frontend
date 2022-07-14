@@ -135,7 +135,9 @@ router.post(
   },
 )
 
-router.post('/signout', auth, async () => {
+router.post('/signout', auth, async (req, res) => {
+  res.clearCookie(JWT_NAME)
+  res.json({ ok: true })
   // TODO
 })
 

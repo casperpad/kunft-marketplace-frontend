@@ -5,6 +5,7 @@ import { PageMeta } from '@components/Layout'
 import { Navbar, Footer } from '@components/Menu'
 
 import Providers from '../Providers'
+import store from '../store'
 
 // eslint-disable-next-line import/order
 import '../assets/scss/main.scss'
@@ -26,9 +27,9 @@ const Layout = styled.div`
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
-    <Providers>
+    <Providers store={store}>
       <PageMeta symbol="" />
-      <Navbar logo="/assets/images/Logo/KUNFTLogo.png" loggedIn={false} />
+      <Navbar />
       <Page>
         <Layout>
           <Component {...pageProps} />

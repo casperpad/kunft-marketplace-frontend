@@ -1,20 +1,22 @@
-import { CasperClient, CLPublicKey, Keys } from 'casper-js-sdk';
-import _ from 'lodash';
-import * as fs from 'fs';
+/* eslint-disable no-await-in-loop */
+import * as fs from 'fs'
+import { CasperClient, CLPublicKey, Keys } from 'casper-js-sdk'
+import find from 'lodash/find'
 
 export const parseTokenMeta = (str: string): Array<[string, string]> =>
   str.split(',').map((s) => {
-    const map = s.split(' ');
-    return [map[0], map[1]];
-  });
+    const map = s.split(' ')
+    return [map[0], map[1]]
+  })
 
 export const getBinary = (pathToBinary: string) => {
-  return new Uint8Array(fs.readFileSync(pathToBinary, null).buffer);
-};
+  return new Uint8Array(fs.readFileSync(pathToBinary, null).buffer)
+}
 
 export const sleep = (ms: number) => {
-  return new Promise((resolve) => setTimeout(resolve, ms));
-};
+  // eslint-disable-next-line no-promise-executor-return
+  return new Promise((resolve) => setTimeout(resolve, ms))
+}
 
 /**
  * Returns a set ECC key pairs - one for each NCTL user account.
@@ -26,54 +28,55 @@ export const getKeyPairOfUserSet = (pathToUsers: string) => {
     return Keys.Ed25519.parseKeyFiles(
       `${pathToUsers}/user-${userID}/public_key.pem`,
       `${pathToUsers}/user-${userID}/secret_key.pem`,
-    );
-  });
-};
+    )
+  })
+}
 
 export const getDeploy = async (NODE_URL: string, deployHash: string) => {
-  const client = new CasperClient(NODE_URL);
-  let i = 300;
-  while (i != 0) {
-    const [deploy, raw] = await client.getDeploy(deployHash);
+  const client = new CasperClient(NODE_URL)
+  let i = 300
+  while (i !== 0) {
+    const [deploy, raw] = await client.getDeploy(deployHash)
     if (raw.execution_results.length !== 0) {
       // @ts-ignore
       if (raw.execution_results[0].result.Success) {
-        return deploy;
-      } else {
-        // @ts-ignore
-        throw Error(
-          'Contract execution: ' +
-            // @ts-ignore
-            raw.execution_results[0].result.Failure.error_message,
-        );
+        return deploy
       }
+      // @ts-ignore
+      throw Error(
+        `Contract execution: ${
+          // @ts-ignore
+          raw.execution_results[0].result.Failure.error_message
+        }`,
+      )
     } else {
-      i--;
-      await sleep(1000);
-      continue;
+      i--
+      // eslint-disable-next-line no-await-in-loop
+      await sleep(1000)
     }
   }
-  throw Error('Timeout after ' + i + "s. Something's wrong");
-};
+  throw Error(`Timeout after ${i}s. Something's wrong`)
+}
 
 interface AccountInfo {
-  namedKeys: any;
+  namedKeys: any
 }
 
 export const getAccountInfo = async (
   client: CasperClient,
   publicKey: CLPublicKey,
 ): Promise<AccountInfo> => {
-  const accountHash = publicKey.toAccountHashStr();
-  const stateRootHash = await client.nodeClient.getStateRootHash();
+  const accountHash = publicKey.toAccountHashStr()
+  const stateRootHash = await client.nodeClient.getStateRootHash()
   const { Account: accountInfo } = await client.nodeClient.getBlockState(
     stateRootHash,
     accountHash,
     [],
-  );
+  )
 
-  return accountInfo!;
-};
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+  return accountInfo!
+}
 
 /**
  * Returns a value under an on-chain account's storage.
@@ -88,12 +91,12 @@ export const getAccountNamedKeyValue = async (
   namedKey: string,
 ): Promise<string> => {
   // Chain query: get account information.
-  const accountInfo = await getAccountInfo(client, publicKey);
+  const accountInfo = await getAccountInfo(client, publicKey)
   // console.log("accountInfo:", accountInfo);
   // Get value of contract v1 named key.
-  const { key: contractHash } = _.find(accountInfo.namedKeys, (i) => {
-    return i.name === namedKey;
-  });
+  const { key: contractHash } = find(accountInfo.namedKeys, (i) => {
+    return i.name === namedKey
+  })
 
-  return contractHash;
-};
+  return contractHash
+}
