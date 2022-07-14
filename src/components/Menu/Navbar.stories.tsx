@@ -10,11 +10,6 @@ export default {
   argTypes: {},
 } as ComponentMeta<typeof Navbar>
 
-const Template: ComponentStory<typeof Navbar> = (args) => <Navbar {...args} />
+const Template: ComponentStory<typeof Navbar> = () => <Navbar />
 
 export const Primary = Template.bind({})
-
-Primary.args = {
-  logo: '/assets/images/Logo/KUNFTLogo.png',
-  loggedIn: false,
-}
