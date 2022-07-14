@@ -16,4 +16,7 @@ COPY . .
 RUN [ "pnpm", "build" ]
 
 EXPOSE 8000
+
+ENV APP_ENV=production
+
 CMD [ "pnpm", "start" ]
