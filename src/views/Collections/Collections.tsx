@@ -26,7 +26,7 @@ export default function Collections({ collections = [] }: CollectionsProps) {
             This is a short and brief description about the featured collection.
           </Description>
         </TextContainer>
-        <Flex justifyContent="center" height="320px" overflow="hidden">
+        <Flex justifyContent="center">
           <CollectionContainer>
             {collections.map((collection, index) => {
               return (

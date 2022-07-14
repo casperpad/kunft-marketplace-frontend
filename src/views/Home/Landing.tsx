@@ -97,7 +97,7 @@ const TopsContainer = styled(Flex)`
   flex-direction: row;
   flex-wrap: wrap;
   height: 320px;
-  overflow: hidden;
+  /* overflow: hidden; */
 `
 
 interface LandingProps {
