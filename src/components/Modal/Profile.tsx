@@ -10,6 +10,7 @@ import { Text } from '@components/Text'
 
 const StyledImage = styled(Image)`
   border-radius: 100%;
+  min-width: 100px;
 `
 
 const InputContainer = styled(Box)`
@@ -25,10 +26,13 @@ const SaveButton = styled(CardButton)`
   transform: translateY(100%);
 `
 
-const StyledModal = Modal.styled`
+const MyModal = Modal.styled``
+
+const StyledModal = styled(MyModal)`
   position: relative;
   background: ${({ theme }) => theme.colors.backgroundSecondary};
   border-radius: 10px 10px 0px 0px;
+  margin: auto 10px;
 
   max-width: 700px;
   z-index: 300;
@@ -81,9 +85,14 @@ export default function Profile({
       onBackgroundClick={closeModal}
       onEscapeKeydown={closeModal}
     >
-      <Flex flexDirection="row" alignItems="center" mb="9px">
+      <Flex
+        flexDirection="row"
+        alignItems="center"
+        mb="9px"
+        justifyContent="space-between"
+      >
         <StyledImage src={profileAvatar} alt="" width={100} height={100} />
-        <Text ml="19px" fontSize="30px" color="background">
+        <Text fontSize="30px" color="background" textAlign="center" ml="19px">
           PROFILE SETTINGS
         </Text>
       </Flex>
