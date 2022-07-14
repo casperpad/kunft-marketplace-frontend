@@ -25,7 +25,7 @@ const Title = styled(Text)`
   }
 
   ${({ theme }) => theme.mediaQueries.xl2} {
-    width: 80%;
+    width: 95%;
     font-size: 110px;
   }
 `

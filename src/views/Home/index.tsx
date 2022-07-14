@@ -23,9 +23,9 @@ export default function HomeView() {
   return (
     <>
       <Landing tops={tops} />
-      {/* <Artist /> */}
-      {/* <NFTs nfts={nfts} /> */}
-      {/* <Collection /> */}
+      <Artist />
+      <NFTs nfts={nfts} />
+      <Collection />
       <About />
     </>
   )

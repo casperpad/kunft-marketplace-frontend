@@ -16,9 +16,7 @@ const ProfileMenu = styled.div`
   transform: translateY(100%);
 `
 
-const MenuItem = styled(CustomLink)`
-  margin-right: 32px;
-`
+const MenuItem = styled(CustomLink)``
 
 const StyledAvatar = styled(Image)`
   cursor: pointer;
@@ -28,6 +26,7 @@ const MenuContainer = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
+  gap: 32px;
 `
 
 const NavbarContainer = styled.nav`

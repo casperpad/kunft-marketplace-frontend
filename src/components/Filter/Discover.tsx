@@ -53,9 +53,7 @@ export default function Filter({
 
   return (
     <Container {...props}>
-      <Text fontSize="40px" mb="20px">
-        FILTER
-      </Text>
+      <Text fontSize="27px">FILTER</Text>
       <Flex flexDirection="column">
         <Box>
           <Text fontFamily="Avenir" fontSize="25px" fontWeight={500} mb="4px">
