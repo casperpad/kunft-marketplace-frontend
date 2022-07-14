@@ -10,6 +10,7 @@ import Filter from './Filter'
 const Container = styled(Flex)`
   position: relative;
   flex-direction: row;
+  height: 100%;
 `
 
 const DiscoverContainer = styled(Grid)`

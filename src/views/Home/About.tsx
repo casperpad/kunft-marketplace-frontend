@@ -35,7 +35,7 @@ const Description = styled(Text)`
 
   ${({ theme }) => theme.mediaQueries.lg} {
     font-size: 28px;
-    width: 62%;
+    width: 66%;
   }
 `
 

@@ -100,7 +100,7 @@ export default function Navbar(props: NavbarProps) {
           </ProfileMenu>
         )}
       </NavbarContainer>
-      {modalShow && <Modal setShow={setModalShow} />}
+      <Modal setShow={setModalShow} show={modalShow} />
     </>
   )
 }

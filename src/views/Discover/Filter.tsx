@@ -6,10 +6,7 @@ import { DiscoverFilter } from '@components/Filter'
 
 const CustomFilter = styled(DiscoverFilter)`
   position: sticky;
-  /* left: 120px;
-  top: 100px; */
-  left: 0;
-  top: 0;
+  top: 184px;
 
   &:after {
     content: '';
@@ -24,7 +21,7 @@ const Container = styled(Flex)`
   left: 0;
   top: 0;
   padding: 120px 0px 120px 46px;
-  z-index: 55;
+  z-index: 20;
   background-color: ${({ theme }) => theme.colors.background};
   height: 100%;
 
