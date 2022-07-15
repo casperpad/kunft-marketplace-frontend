@@ -47,17 +47,22 @@ const Container = styled(Flex)`
 `
 
 export default function Filter() {
-  const [show, setShow] = useState(false)
+  const [show, setShow] = useState(true)
   const size = useWindowSize()
 
   useEffect(() => {
+    if (size[0] === 0) return
     if (size[0] >= 1080) setShow(true)
     else setShow(false)
   }, [size])
 
   return (
     <Container width={show ? '300px' : '20px'}>
-      <ShowButton onClick={() => setShow(!show)}>
+      <ShowButton
+        onClick={() => {
+          if (size[0] < 1080) setShow(!show)
+        }}
+      >
         {show ? <BsArrowLeftCircle /> : <BsArrowRightCircle />}
       </ShowButton>
       <CustomFilter />
