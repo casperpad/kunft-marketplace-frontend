@@ -7,6 +7,11 @@ import { Text } from '@components/Text'
 const PriceContainer = styled(Flex)`
   flex-direction: column;
   font-family: 'Avenir';
+  align-items: center;
+
+  ${({ theme }) => theme.mediaQueries.sm} {
+    align-items: start;
+  }
 `
 
 const ButtonContainer = styled(Flex)`
@@ -14,13 +19,18 @@ const ButtonContainer = styled(Flex)`
 `
 
 const Container = styled(Flex)`
-  flex-direction: row;
-  flex-wrap: wrap;
-  justify-content: space-between;
+  flex-direction: column;
+  gap: 10px;
   align-items: center;
   width: 100%;
   padding: 20px 32px;
   border: 1px solid ${({ theme }) => theme.colors.border};
+
+  ${({ theme }) => theme.mediaQueries.sm} {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+  }
 `
 
 export default function Buy() {

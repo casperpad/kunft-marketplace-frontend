@@ -6,6 +6,7 @@ import { Text } from '@components/Text'
 
 export const Title = styled(Text)`
   font-size: 30px;
+  margin-bottom: 60px;
 
   ${({ theme }) => theme.mediaQueries.sm} {
     font-size: 40px;
@@ -54,19 +55,7 @@ export const Description = styled(Text)`
 `
 
 export const TextContainer = styled(Box)`
-  margin: 20px 0px;
-
-  ${({ theme }) => theme.mediaQueries.sm} {
-    margin: 30px 0px;
-  }
-
-  ${({ theme }) => theme.mediaQueries.md} {
-    margin: 55px 0px;
-  }
-
-  ${({ theme }) => theme.mediaQueries.xl} {
-    margin: 70px 0px;
-  }
+  margin-top: 40px;
 `
 
 export const CollectionContainer = styled(Flex)`

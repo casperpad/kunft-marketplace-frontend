@@ -1,7 +1,7 @@
 import Image from 'next/image'
 import styled from 'styled-components'
 
-import { Flex, Grid } from '@components/Box'
+import { Box, Flex } from '@components/Box'
 import { Layout as _Layout } from '@components/Layout'
 
 export const PriceContainer = styled(Flex)`
@@ -17,17 +17,21 @@ export const ImageContainer = styled(Flex)`
   align-items: end;
 `
 
-export const RowContainer = styled(Grid)`
-  grid-auto-columns: 1fr;
-  grid-auto-flow: column;
+export const RowContainer = styled(Box)`
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  gap: 30px;
 
   ${({ theme }) => theme.mediaQueries.xl2} {
+    display: grid;
+    grid-auto-flow: column;
+    grid-template-columns: repeat(3, 1fr);
     gap: 35px;
   }
 
   ${({ theme }) => theme.mediaQueries.xl3} {
-    gap: 105px;
-    grid-template-columns: repeat(3, 1fr);
+    gap: 75px;
   }
 `
 
@@ -35,11 +39,11 @@ export const ColumnContainer = styled(Flex)`
   flex-direction: column;
 `
 
-export const HistoryContainer = styled(Grid)`
+export const HistoryContainer = styled(Flex)`
   grid-column: 1/3;
+  width: 100%;
   flex-direction: column;
   gap: 32px;
-  grid-template-rows: repeat(3, 1fr);
 `
 
 export const DescriptionContainer = styled(Flex)`
