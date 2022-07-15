@@ -1,0 +1,42 @@
+import styled from 'styled-components'
+
+import { Flex } from '@components/Box'
+import { Text } from '@components/Text'
+
+export const Container = styled(Flex)`
+  flex-direction: column;
+  gap: 4px;
+  border: 1px solid ${({ theme }) => theme.colors.border};
+  padding: 26px 32px;
+  font-family: 'Avenir';
+`
+
+export const StyledText = styled(Text)`
+  font-weight: 500;
+  font-size: 25px;
+`
+
+export const DataContainer = styled(Flex)`
+  flex-direction: row;
+  justify-content: space-between;
+`
+
+export const NameContainer = styled(Flex)`
+  flex-direction: column;
+  justify-content: space-around;
+  gap: 5px;
+  font-size: 17px;
+  ${({ theme }) => theme.mediaQueries.sm} {
+    font-size: 20px;
+  }
+`
+
+export const ValueContainer = styled(Flex)`
+  flex-direction: column;
+  justify-content: space-around;
+  gap: 5px;
+  font-size: 12px;
+  ${({ theme }) => theme.mediaQueries.sm} {
+    font-size: 14px;
+  }
+`

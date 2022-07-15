@@ -2,6 +2,7 @@ import { useState } from 'react'
 
 import { Box } from '@components/Box'
 import { Text } from '@components/Text'
+import useWindowSize from '@hooks/useWindowResize'
 
 import {
   Buy,
@@ -11,6 +12,7 @@ import {
   PriceHistory,
   SaleListing,
   Description,
+  Tabs,
 } from './components'
 import {
   RowContainer,
@@ -25,6 +27,9 @@ import {
 export default function NFTView() {
   const [sales] = useState<string[]>([])
   const [offers] = useState<string[]>([])
+  const [active, setActive] = useState(0)
+
+  const size = useWindowSize()
 
   return (
     <Layout>
@@ -53,14 +58,33 @@ export default function NFTView() {
         </ImageContainer>
       </RowContainer>
       <RowContainer>
-        <HistoryContainer>
-          <PriceHistory />
-          <SaleListing lists={sales} />
-          <OfferListing lists={offers} />
-        </HistoryContainer>
-        <DescriptionContainer>
-          <Description />
-        </DescriptionContainer>
+        {(size[0] >= 1280 && (
+          <>
+            <HistoryContainer>
+              <PriceHistory />
+              <SaleListing lists={sales} />
+              <OfferListing lists={offers} />
+            </HistoryContainer>
+            <DescriptionContainer>
+              <Description />
+            </DescriptionContainer>
+          </>
+        )) || (
+          <>
+            <Tabs active={active} setActive={setActive} />
+            {(active === 0 && (
+              <HistoryContainer>
+                <PriceHistory />
+                <SaleListing lists={sales} />
+                <OfferListing lists={offers} />
+              </HistoryContainer>
+            )) || (
+              <DescriptionContainer>
+                <Description />
+              </DescriptionContainer>
+            )}
+          </>
+        )}
       </RowContainer>
     </Layout>
   )

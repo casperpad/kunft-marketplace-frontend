@@ -1,39 +1,16 @@
 import styled from 'styled-components'
-
-import { Flex } from '@components/Box'
 import { Text } from '@components/Text'
 
-const Container = styled(Flex)`
-  flex-direction: column;
-  gap: 12px;
-  border: 1px solid ${({ theme }) => theme.colors.border};
-  padding: 26px 32px;
-  font-family: 'Avenir';
-  border-bottom-width: 0px;
-`
+import {
+  Container as DefaultContainer,
+  StyledText,
+  DataContainer,
+  NameContainer,
+  ValueContainer,
+} from './styles'
 
-const StyledText = styled(Text)`
-  font-weight: 500;
-  font-size: 25px;
-`
-
-const DataContainer = styled(Flex)`
-  flex-direction: row;
-  justify-content: space-between;
-`
-
-const NameContainer = styled(Flex)`
-  flex-direction: column;
-  justify-content: space-around;
-  gap: 5px;
-  font-size: 20px;
-`
-
-const ValueContainer = styled(Flex)`
-  flex-direction: column;
-  justify-content: space-around;
-  gap: 5px;
-  font-size: 14px;
+const Container = styled(DefaultContainer)`
+  border-bottom: 0;
 `
 
 export default function Detail() {
