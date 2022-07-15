@@ -54,7 +54,7 @@ const NavbarContainer = styled.nav`
 export default function Navbar() {
   const { pathname } = useRouter()
   const { signIn, user } = useAuth()
-  const { connected, connect } = useCasperWeb3Provider()
+  const { currentAccount, connect } = useCasperWeb3Provider()
   const [requestConnect, setRequestConnect] = useState(false)
 
   const [modalShow, setModalShow] = useState(false)
@@ -66,21 +66,21 @@ export default function Navbar() {
     : '/assets/images/Avatar/NotConnectedWallet.svg'
 
   const signInOnConnected = useCallback(() => {
-    if (!connected) {
+    if (currentAccount === undefined) {
       connect()
       setRequestConnect(true)
     } else {
       signIn()
     }
-  }, [connect, connected, signIn])
+  }, [connect, currentAccount, signIn])
 
   useEffect(() => {
-    if (connected && requestConnect) {
+    if (currentAccount !== undefined && requestConnect) {
       signIn().then(() => {
         setRequestConnect(false)
       })
     }
-  }, [connected, requestConnect, signIn])
+  }, [currentAccount, requestConnect, signIn])
 
   return (
     <>

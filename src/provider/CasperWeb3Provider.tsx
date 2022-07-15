@@ -41,7 +41,6 @@ export default function CasperWeb3Provider({
     Signer.isConnected().then((_connected) => {
       if (_connected) {
         handleWalletStateChange()
-        setConnected(true)
       }
     })
     window.addEventListener('signer:disconnected', () => {

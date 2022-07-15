@@ -12,9 +12,7 @@ const getColor = ({ color, theme }: ThemeProps) => {
   return getThemeValue(`colors.${color}`, color)(theme)
 }
 
-export const DefaultButton = styled.button.attrs({
-  type: 'button',
-})<BaseButtonProps>`
+export const DefaultButton = styled.button<BaseButtonProps>`
   background-color: ${getColor};
   border: 0;
   ${border}

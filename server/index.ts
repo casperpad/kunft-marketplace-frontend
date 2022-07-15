@@ -4,7 +4,6 @@ import compression from 'compression'
 import cookieParser from 'cookie-parser'
 import cors from 'cors'
 import express from 'express'
-import rateLimit from 'express-rate-limit'
 import mongoose from 'mongoose'
 import morgan from 'morgan'
 import next from 'next'
@@ -12,7 +11,8 @@ import responseTime from 'response-time'
 
 import { MONGODB_URL, PORT, SENTRY_DSN, APP_ENV } from '@server/config'
 import redisClient from '@server/providers/redis'
-import serverRouter from '@server/routes/index.routes'
+import apiRouter from '@server/routes'
+import { authLimiter } from './middlewares'
 import {
   startMarketplaceEventStream,
   // startCEP47EventStream,
@@ -31,12 +31,6 @@ async function startServer() {
   await app.prepare().catch((err) => console.error(err))
 
   const server = express()
-
-  // Global rate limiter
-  const limiter = rateLimit({
-    windowMs: 1 * 60 * 1000, // 1 minute
-    max: 1000, // limit each IP to 1000 requests per minute
-  })
 
   if (SENTRY_DSN)
     Sentry.init({
@@ -66,10 +60,15 @@ async function startServer() {
   server.use(express.urlencoded({ limit: '25mb', extended: true }))
   server.use(cookieParser())
   server.use(morgan('dev'))
-  server.use(limiter)
+
   server.use(responseTime())
 
-  server.use('/api', serverRouter)
+  // limit repeated failed requests to auth endpoints
+  if (APP_ENV !== 'development') {
+    server.use('/api/v1/auth', authLimiter)
+  }
+
+  server.use('/api', apiRouter)
   server.all('*', (req, res) => {
     return handle(req, res)
   })

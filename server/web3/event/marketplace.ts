@@ -12,7 +12,7 @@ import {
   NEXT_PUBLIC_CASPER_NODE_ADDRESS,
   NEXT_PUBLIC_CASPER_CHAIN_NAME,
   NEXT_PUBLIC_CASPER_EVENT_STREAM_ADDRESS,
-  MARKET_PLACE_CONTRACT_PACKAGE_HASH,
+  NEXT_PUBLIC_MARKETPLACE_CONTRACT_PACKAGE_HASH,
 } from '../../config'
 import { Sale } from '../../models/sale.model'
 import { MarketplaceEventParser, MarketplaceEvents } from '../marketplace'
@@ -27,7 +27,7 @@ import { MarketplaceEventParser, MarketplaceEvents } from '../marketplace'
 export const startMarketplaceEventStream = async () => {
   console.info(`Starting Marketplace event listener`)
   const es = new EventStream(NEXT_PUBLIC_CASPER_EVENT_STREAM_ADDRESS!)
-  const contractPackageHash = MARKET_PLACE_CONTRACT_PACKAGE_HASH!
+  const contractPackageHash = NEXT_PUBLIC_MARKETPLACE_CONTRACT_PACKAGE_HASH!
 
   es.subscribe(EventName.DeployProcessed, async (events) => {
     const parsedEvents = MarketplaceEventParser(
