@@ -2,32 +2,15 @@ import Image from 'next/image'
 import styled from 'styled-components'
 
 import { Flex } from '@components/Box'
+import { StyledButton } from '@components/Button'
 import { Layout } from '@components/Layout'
 import { Text } from '@components/Text'
 
-const Title = styled(Text)`
-  transform: translateY(-10%);
-  text-align: center;
-  margin-top: 234px;
-  width: 100%;
-  z-index: 5;
-
-  font-size: 33px;
-
-  ${({ theme }) => theme.mediaQueries.sm} {
-    width: 90%;
-    font-size: 50px;
-  }
-
-  ${({ theme }) => theme.mediaQueries.lg} {
-    width: 85%;
-    font-size: 80px;
-  }
-
-  ${({ theme }) => theme.mediaQueries.xl2} {
-    width: 95%;
-    font-size: 110px;
-  }
+const StrollButton = styled(StyledButton)`
+  position: absolute;
+  bottom: 115px;
+  right: 0px;
+  z-index: 3;
 `
 
 const LandingImage = styled(Image)`
@@ -59,21 +42,26 @@ const LandingImageContainer = styled(Flex)`
 
 const TitleContainer = styled(Flex)`
   position: relative;
+  flex-direction: column;
+  align-items: center;
   justify-content: center;
-  /* align-items: center; */
-  font-size: 50px;
+  width: 100%;
 
+  font-size: 33px;
   height: 580px;
 
   ${({ theme }) => theme.mediaQueries.sm} {
+    font-size: 50px;
     height: 650px;
   }
 
   ${({ theme }) => theme.mediaQueries.lg} {
+    font-size: 80px;
     height: 710px;
   }
 
   ${({ theme }) => theme.mediaQueries.xl2} {
+    font-size: 110px;
     height: 780px;
   }
 `
@@ -97,7 +85,7 @@ const TopsContainer = styled(Flex)`
   flex-direction: row;
   flex-wrap: wrap;
   height: 320px;
-  /* overflow: hidden; */
+  overflow: hidden;
 `
 
 interface LandingProps {
@@ -107,18 +95,18 @@ interface LandingProps {
 export default function Landing({ tops }: LandingProps) {
   return (
     <Layout>
+      <LandingImageContainer right="0px" top="253px">
+        <LandingImage
+          src="/assets/images/Home/Landing_2.png"
+          alt=""
+          width={235}
+          height={235}
+        />
+      </LandingImageContainer>
       <TitleContainer>
-        <LandingImageContainer left="45%" top="15px">
+        <LandingImageContainer left="37%" top="55px">
           <LandingImage
             src="/assets/images/Home/Landing_1.png"
-            alt=""
-            width={235}
-            height={235}
-          />
-        </LandingImageContainer>
-        <LandingImageContainer right="-80px" top="63px">
-          <LandingImage
-            src="/assets/images/Home/Landing_2.png"
             alt=""
             width={235}
             height={235}
@@ -140,7 +128,9 @@ export default function Landing({ tops }: LandingProps) {
             height={235}
           />
         </LandingImageContainer>
-        <Title textAlign="center">WHERE ART AND THE FUTURE COLLIDE</Title>
+        <Text>WHERE ART AND</Text>
+        <Text>THE FUTURE COLLIDE</Text>
+        <StrollButton text="Go on a Stroll" />
       </TitleContainer>
       <TopsContainer>
         {tops.map((item) => {

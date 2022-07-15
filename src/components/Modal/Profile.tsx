@@ -63,16 +63,7 @@ interface ProfileProps {
   setShow: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-export default function Profile({
-  name = '',
-  walletAddress = '',
-  emailAddress = '',
-  NFTurl = '',
-  description = '',
-  avatar,
-  show,
-  setShow,
-}: ProfileProps) {
+export default function Profile({ avatar, show, setShow }: ProfileProps) {
   const profileAvatar = avatar || '/assets/images/Avatar/Default.svg'
 
   const closeModal = () => {
