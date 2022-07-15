@@ -1,6 +1,7 @@
 import mongoose, { Schema } from 'mongoose'
 import validator from 'validator'
 import { UserDocument, UserModel, UserSchema } from '../interfaces/mongoose.gen'
+import toJSON from './plugins/toJSON.plugin'
 
 // UserSchema type
 const UserSchema: UserSchema = new Schema({
@@ -45,13 +46,6 @@ UserSchema.virtual('name').get(function (this: UserDocument) {
   return `${this.firstName} ${this.lastName}`
 })
 
-UserSchema.methods = {
-  toJSONObject() {
-    const { _id, __v, ...user } = this.toJSON()
-    return user
-  },
-}
-
 UserSchema.statics = {
   async getNonce(publicKey: string): Promise<string | undefined> {
     const user = await this.findOne({ publicKey }).select('nonce')
@@ -61,5 +55,7 @@ UserSchema.statics = {
     return await this.findOne({ publicKey })
   },
 }
+
+UserSchema.plugin(toJSON)
 
 export const User = mongoose.model<UserDocument, UserModel>('User', UserSchema)

@@ -1,5 +1,4 @@
 {
-  // "extends": "./tsconfig.json",
   "compilerOptions": {
     "target": "es2016",
     "module": "commonjs",
@@ -14,7 +13,8 @@
     "paths": {
       "@server/*": ["server/*"]
     },
-    "allowSyntheticDefaultImports": true
+    "allowSyntheticDefaultImports": true,
+    "resolveJsonModule": true
   },
   "include": ["server"]
 }
