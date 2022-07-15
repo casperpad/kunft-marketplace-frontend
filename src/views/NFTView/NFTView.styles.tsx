@@ -18,12 +18,21 @@ export const ImageContainer = styled(Flex)`
 `
 
 export const RowContainer = styled(Grid)`
-  gap: 105px;
   grid-auto-columns: 1fr;
   grid-auto-flow: column;
-  ${({ theme }) => theme.mediaQueries.xl} {
+
+  ${({ theme }) => theme.mediaQueries.xl2} {
+    gap: 35px;
+  }
+
+  ${({ theme }) => theme.mediaQueries.xl3} {
+    gap: 105px;
     grid-template-columns: repeat(3, 1fr);
   }
+`
+
+export const ColumnContainer = styled(Flex)`
+  flex-direction: column;
 `
 
 export const HistoryContainer = styled(Grid)`

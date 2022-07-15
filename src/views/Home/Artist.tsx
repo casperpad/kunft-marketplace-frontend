@@ -6,7 +6,16 @@ import { Layout } from '@components/Layout'
 import { Text } from '@components/Text'
 
 const Title = styled(Text)`
-  font-size: 70px;
+  font-size: 30px;
+
+  ${({ theme }) => theme.mediaQueries.md} {
+    font-size: 50px;
+  }
+
+  ${({ theme }) => theme.mediaQueries.md} {
+    font-size: 70px;
+  }
+
   ${({ theme }) => theme.mediaQueries.xl} {
     font-size: 90px;
   }
@@ -17,16 +26,26 @@ const Title = styled(Text)`
 `
 
 const DataContainer = styled(Flex)`
+  flex-direction: column;
+  gap: 30px;
   justify-content: space-between;
-  margin-top: 50px;
   align-items: center;
-  font-size: 28px;
+  margin-top: 30px;
+  font-size: 18px;
+
+  ${({ theme }) => theme.mediaQueries.lg} {
+    font-size: 28px;
+    margin-top: 50px;
+    flex-direction: row;
+    justify-content: space-between;
+    .text {
+      width: 67%;
+    }
+  }
 `
 
 const StyledPage = styled(Layout)`
   background-color: ${({ theme }) => theme.colors.backgroundSecondary};
-  position: relative;
-  left: 0;
 `
 
 export default function Artist() {
@@ -35,12 +54,12 @@ export default function Artist() {
       <Flex flexDirection="column">
         <Title color="textSecondary">ARE YOU AN ARTIST?</Title>
         <DataContainer>
-          <Text width="70%" color="textSecondary" fontFamily="Avenir">
+          <Text className="text" color="textSecondary" fontFamily="Avenir">
             Our goal is to serve as a platform for NFT creators to exhibit their
             unique work, & to bridge between creatives and collectors. <br />
             Hop on board, push the boundaries and start creating!
           </Text>
-          <StyledButton text="Create NFTs" />
+          <StyledButton text="Create NFTs" minWidth="max-content" />
         </DataContainer>
       </Flex>
     </StyledPage>

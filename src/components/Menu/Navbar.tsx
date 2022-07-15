@@ -24,10 +24,14 @@ const StyledAvatar = styled(Image)`
 `
 
 const MenuContainer = styled.div`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  gap: 32px;
+  display: none;
+
+  ${({ theme }) => theme.mediaQueries.lg} {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 32px;
+  }
 `
 
 const NavbarContainer = styled.nav`
