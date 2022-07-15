@@ -24,14 +24,13 @@ const Container = styled.div`
   transform: translate(-50%, -50%);
 `
 
-const Filter = styled.filter``
-
 const Circle = styled.circle`
   fill: transparent;
-  stroke: #dd2476;
+  /* stroke: #dd2476; */
+  stroke: ${({ theme }) => theme.colors.primary};
   stroke-width: 7px;
   stroke-linecap: round;
-  filter: url(${Filter});
+  filter: url(#shadow);
 
   transform-origin: center;
   animation-name: ${animation};
@@ -45,14 +44,14 @@ export default function SimpleSpinner() {
     <Container>
       <svg viewBox="0 0 100 100">
         <defs>
-          <Filter>
+          <filter id="shadow">
             <feDropShadow
               dx="0"
               dy="0"
               stdDeviation="1.5"
               floodColor="#fc6767"
             />
-          </Filter>
+          </filter>
         </defs>
         <Circle id="spinner" cx="50" cy="50" r="45" />
       </svg>
