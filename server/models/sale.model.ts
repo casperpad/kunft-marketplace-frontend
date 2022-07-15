@@ -32,6 +32,7 @@ const SaleSchema: SaleSchema = new Schema(
     status: {
       type: String,
       enum: ['pending', 'suceed', 'canceled'],
+      default: 'pending',
       required: true,
     },
   },

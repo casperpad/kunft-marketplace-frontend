@@ -23,6 +23,7 @@ export type Collection = {
   name: string
   description?: string
   verified: boolean
+  promoted?: boolean
   image?: string
   twitter?: string
   discord?: string
@@ -117,6 +118,7 @@ export type CollectionDocument = mongoose.Document<
     name: string
     description?: string
     verified: boolean
+    promoted?: boolean
     image?: string
     twitter?: string
     discord?: string
@@ -138,7 +140,7 @@ export type Offer = {
   payToken?: string
   price: string
   startTime: number
-  buyer?: string
+  owner?: string
   additionalRecipient?: string
   status: 'pending' | 'suceed' | 'canceled'
   _id: mongoose.Types.ObjectId
@@ -222,7 +224,7 @@ export type OfferDocument = mongoose.Document<
     payToken?: string
     price: string
     startTime: number
-    buyer?: string
+    owner?: string
     additionalRecipient?: string
     status: 'pending' | 'suceed' | 'canceled'
     _id: mongoose.Types.ObjectId
@@ -360,9 +362,8 @@ export type TokenMetadata = {
 export type Token = {
   collectionNFT: Collection['_id'] | Collection
   tokenId: string
-  image?: string
-  name: string
-  owner?: string
+  favoritedUsers: (User['_id'] | User)[]
+  viwed?: number
   _id: mongoose.Types.ObjectId
   metadata: TokenMetadata[]
 }
@@ -397,7 +398,9 @@ export type TokenQueries = {}
 
 export type TokenMethods = {}
 
-export type TokenStatics = {}
+export type TokenStatics = {
+  aggregatePaginate: (this: TokenModel, ...args: any[]) => any
+}
 
 /**
  * Mongoose Model type
@@ -451,9 +454,8 @@ export type TokenDocument = mongoose.Document<
   TokenMethods & {
     collectionNFT: CollectionDocument['_id'] | CollectionDocument
     tokenId: string
-    image?: string
-    name: string
-    owner?: string
+    favoritedUsers: mongoose.Types.Array<UserDocument['_id'] | UserDocument>
+    viwed?: number
     _id: mongoose.Types.ObjectId
     metadata: mongoose.Types.DocumentArray<TokenMetadataDocument>
   }

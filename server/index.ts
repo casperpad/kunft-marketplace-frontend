@@ -77,7 +77,14 @@ async function startServer() {
   server.use(Sentry.Handlers.errorHandler())
 
   server.listen(PORT, () => {
-    startMarketplaceEventStream()
+    try {
+      startMarketplaceEventStream()
+    } catch (err: any) {
+      console.error(`***Marketplace EventStream Error***`)
+      console.error(err)
+      console.error(`*** ***`)
+    }
+
     // startCEP47EventStream()
     console.info(`Server is running on ${PORT}`)
   })

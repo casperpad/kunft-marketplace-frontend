@@ -12,16 +12,6 @@ const TokenSchema = new Schema({
     type: String,
     required: true,
   },
-  image: {
-    type: String,
-  },
-  name: {
-    type: String,
-    required: true,
-  },
-  owner: {
-    type: String,
-  },
   metadata: {
     type: [
       {
@@ -30,6 +20,14 @@ const TokenSchema = new Schema({
       },
     ],
     required: true,
+  },
+  favoritedUsers: {
+    type: [Schema.Types.ObjectId],
+    ref: 'User',
+  },
+  viwed: {
+    type: Number,
+    default: 0,
   },
 })
 

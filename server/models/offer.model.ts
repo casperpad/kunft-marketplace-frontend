@@ -27,7 +27,7 @@ const OfferSchema: OfferSchema = new Schema(
       type: Number,
       required: true,
     },
-    buyer: {
+    owner: {
       type: String,
     },
     additionalRecipient: {
@@ -36,6 +36,7 @@ const OfferSchema: OfferSchema = new Schema(
     status: {
       type: String,
       enum: ['pending', 'suceed', 'canceled'],
+      default: 'pending',
       required: true,
     },
   },
