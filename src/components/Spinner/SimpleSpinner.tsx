@@ -26,8 +26,7 @@ const Container = styled.div`
 
 const Circle = styled.circle`
   fill: transparent;
-  /* stroke: #dd2476; */
-  stroke: ${({ theme }) => theme.colors.primary};
+  stroke: #dd2476;
   stroke-width: 7px;
   stroke-linecap: round;
   filter: url(#shadow);
