@@ -7,6 +7,7 @@ import { PersistGate } from 'redux-persist/integration/react'
 import styled, { ThemeProvider } from 'styled-components'
 import { ModalProvider, BaseModalBackground } from 'styled-react-modal'
 
+import { Spinner } from '@components/Spinner'
 import CasperWeb3Provider from './provider/CasperWeb3Provider'
 import { light } from './theme'
 
@@ -28,7 +29,7 @@ export default function Providers({ children, store }: ProvdersProps) {
   const persistor = persistStore(store)
   return (
     <Provider store={store}>
-      <PersistGate persistor={persistor} loading={<div>Loading...</div>}>
+      <PersistGate persistor={persistor} loading={<Spinner />}>
         <CasperWeb3Provider>
           <StyledThemeProvider>
             <ModalProvider backgroundComponent={BlurBackground}>
