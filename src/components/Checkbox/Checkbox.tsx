@@ -1,41 +1,58 @@
 import styled from 'styled-components'
 
-const Checkbox = styled.input.attrs({ type: 'checkbox' })`
-  cursor: pointer;
-  position: relative;
-  display: inline-block;
-  vertical-align: middle;
+const HiddenCheckbox = styled.input.attrs({ type: 'checkbox' })`
   border: 0;
+  clip: rect(0, 0, 0, 0);
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  white-space: nowrap;
+  width: 1px;
+`
 
-  &:after {
-    content: '';
-    position: absolute;
-    background-color: ${({ theme }) => theme.colors.checkbox};
-    border: 1px solid ${({ theme }) => theme.colors.border};
-    left: 0;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 16px;
-    height: 16px;
-  }
+const Icon = styled.div`
+  position: relative;
+  border: 0;
+  width: 4px;
+  height: 4px;
+  left: 3px;
+  top: 3px;
+  background-color: ${({ theme }) => theme.colors.primary};
+`
 
-  &:before {
-    content: '';
-    position: absolute;
-    background-color: ${({ theme }) => theme.colors.primary};
-    border: 0;
-    left: 0;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 6px;
-    height: 6px;
-  }
+const StyledCheckbox = styled.div<{
+  checked: boolean
+}>`
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  border: 1px solid ${({ theme }) => `${theme.colors.border}44`};
+  background-color: ${({ theme }) => theme.colors.checkbox};
 
-  &:checked {
-    &:before {
-      display: block;
-    }
+  ${Icon} {
+    visibility: ${({ checked }) => (checked ? 'visible' : 'hidden')};
   }
 `
 
-export default Checkbox
+const CheckboxContainer = styled.div`
+  display: inline-block;
+  vertical-align: middle;
+`
+
+interface CheckboxProps {
+  checked: boolean
+  onChange: (event: React.ChangeEvent<HTMLInputElement>) => void
+}
+
+export default function Checkbox({ checked, ...props }: CheckboxProps) {
+  return (
+    <CheckboxContainer>
+      <HiddenCheckbox checked={checked} {...props} />
+      <StyledCheckbox checked={checked}>
+        <Icon />
+      </StyledCheckbox>
+    </CheckboxContainer>
+  )
+}

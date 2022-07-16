@@ -1,11 +1,15 @@
+import { useState } from 'react'
+import { Rating } from 'react-simple-star-rating'
+
 import { NFTCard } from '@components/Card/NFT'
 import { ProfileFilter } from '@components/Filter'
 import { Layout } from '@components/Layout'
-import { Text } from '@components/Text'
 
 import {
   StyledImage,
   ImageContainer,
+  Title,
+  Description,
   NameContainer,
   DataContainer,
   NFTContainer,
@@ -21,6 +25,12 @@ export default function Profile({ avatar, NFTs = [] }: ProfileProps) {
     avatar ||
     'https://beta.api.solanalysis.com/images/400x400/filters:frames(,0)/https://arweave.net/eWX3j4ulh4LK8RXC2VSIyF1Lwd-dKZIymXBuGiKsEpY'
 
+  const [rating, setRating] = useState(0)
+
+  const handleRating = (rate: number) => {
+    setRating(rate)
+  }
+
   return (
     <Layout>
       <DataContainer>
@@ -28,7 +38,18 @@ export default function Profile({ avatar, NFTs = [] }: ProfileProps) {
           <StyledImage src={profileAvatar} alt="" width={235} height={235} />
         </ImageContainer>
         <NameContainer>
-          <Text fontSize="27px">Insert Name Here</Text>
+          <Title>Insert Name Here</Title>
+          <Rating
+            transition
+            onClick={handleRating}
+            ratingValue={rating}
+            size={15}
+          />
+          <Description mt="25px">
+            User profile bio here is written here. User profile bio here is
+            written here. User profile bio here is written here. User profile
+            bio here is written here.
+          </Description>
         </NameContainer>
         <ProfileFilter />
       </DataContainer>
