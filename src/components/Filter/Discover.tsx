@@ -2,6 +2,7 @@ import { useState, useCallback } from 'react'
 import styled from 'styled-components'
 
 import { Box, Flex, BoxProps } from '@components/Box'
+import { CheckboxItem } from '@components/Checkbox'
 import { RangeSlider } from '@components/Slider'
 import { Text } from '@components/Text'
 
@@ -22,15 +23,6 @@ const Container = styled(Box)<BoxProps>`
   height: max-content;
 `
 
-function Checkbox({ text }: { text: string }) {
-  return (
-    <Flex mt="3px" flexDirection="row" alignItems="center">
-      <input type="checkbox" value="ForSale" />
-      <Text ml="8px">{text}</Text>
-    </Flex>
-  )
-}
-
 interface FilterProps extends BoxProps {
   min?: number
   max?: number
@@ -46,6 +38,13 @@ export default function Filter({
   const [minValue, setMinValue] = useState(min)
   const [maxValue, setMaxValue] = useState(max)
 
+  const [sale, setSale] = useState(false)
+  const [auction, setAuction] = useState(false)
+
+  const [common, setCommon] = useState(false)
+  const [semi, setSemi] = useState(false)
+  const [rare, setRare] = useState(false)
+
   const handleChange = useCallback((value: any) => {
     setMinValue(value[0])
     setMaxValue(value[1])
@@ -60,8 +59,13 @@ export default function Filter({
             Status
           </Text>
           <Flex flexDirection="column" fontFamily="Avenir" fontSize="20px">
-            <Checkbox text="For Sale" />
-            <Checkbox text="On Auction" />
+            <CheckboxItem text="For Sale" checked={sale} setChecked={setSale} />
+            <CheckboxItem
+              text="On Auction"
+              disabled
+              checked={auction}
+              setChecked={setAuction}
+            />
           </Flex>
         </Box>
         <Box mt="10px">
@@ -69,9 +73,17 @@ export default function Filter({
             Rarity
           </Text>
           <Flex flexDirection="column" fontFamily="Avenir" fontSize="20px">
-            <Checkbox text="Common" />
-            <Checkbox text="Semi-Rare" />
-            <Checkbox text="Rare" />
+            <CheckboxItem
+              text="Common"
+              checked={common}
+              setChecked={setCommon}
+            />
+            <CheckboxItem
+              text="Semi-Rare"
+              checked={semi}
+              setChecked={setSemi}
+            />
+            <CheckboxItem text="Rare" checked={rare} setChecked={setRare} />
           </Flex>
         </Box>
         <Box mt="10px">

@@ -1,7 +1,7 @@
 import Image from 'next/image'
 import styled from 'styled-components'
 
-import { Flex, Grid, Box } from '@components/Box'
+import { Flex, Grid, Box, Text } from '@components/index'
 
 export const ImageContainer = styled(Box)`
   width: 235px;
@@ -18,16 +18,30 @@ export const StyledImage = styled(Image)`
   }
 `
 
-export const NameContainer = styled(Flex)`
+export const Title = styled(Text)`
+  font-size: 27px;
+`
+
+export const Description = styled(Text)`
+  font-family: 'Avenir';
+  font-size: 12px;
+`
+
+export const NameContainer = styled(Box)`
   border: 1px solid ${({ theme }) => theme.colors.border};
   background-color: ${({ theme }) => theme.colors.background};
-  padding: 37px 34px;
+  padding: 34px 34px;
   height: 100%;
+  width: 405px;
 
   display: none;
 
   ${({ theme }) => theme.mediaQueries.xl2} {
     display: block;
+  }
+
+  .star-svg {
+    display: inline;
   }
 `
 

@@ -1,6 +1,7 @@
 export * from './Box'
 export * from './Button'
 export * from './Card'
+export * from './Checkbox'
 export * from './Filter'
 export * from './Input'
 export * from './Layout'
