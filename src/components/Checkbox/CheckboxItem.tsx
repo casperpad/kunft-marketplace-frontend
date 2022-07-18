@@ -7,7 +7,7 @@ import Checkbox from './Checkbox'
 
 const StyledText = styled(Text)<{ disabled: boolean }>`
   color: ${({ disabled, theme }) =>
-    disabled ? theme.colors.checkbox : theme.colors.text};
+    disabled ? theme.colors.checkboxDisabled : theme.colors.text};
 `
 
 const Container = styled.label`

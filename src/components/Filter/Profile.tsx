@@ -81,6 +81,7 @@ export default function Filter({
             <CheckboxItem text="For Sale" checked={sale} setChecked={setSale} />
             <CheckboxItem
               text="On Auction"
+              disabled
               checked={auction}
               setChecked={setAuction}
             />
