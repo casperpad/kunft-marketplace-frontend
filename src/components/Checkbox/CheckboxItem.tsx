@@ -1,19 +1,20 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import styled from 'styled-components'
 
-import { Box, Text } from '@components/index'
+import { Text } from '@components/Text'
 
 import Checkbox from './Checkbox'
 
 const StyledText = styled(Text)<{ disabled: boolean }>`
-  margin-left: 8px;
   color: ${({ disabled, theme }) =>
     disabled ? theme.colors.checkbox : theme.colors.text};
 `
 
-const Container = styled(Box)`
-  display: inline-block;
-  vertical-align: middle;
+const Container = styled.label`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
   cursor: pointer;
 `
 
@@ -32,13 +33,11 @@ export default function CheckboxItem({
 }: CheckboxItemProps) {
   return (
     <Container>
-      <label>
-        <Checkbox
-          checked={checked}
-          onChange={(e) => !disabled && setChecked(e.target.checked)}
-        />
-        <StyledText disabled={disabled}>{text}</StyledText>
-      </label>
+      <Checkbox
+        checked={checked}
+        onChange={(e) => !disabled && setChecked(e.target.checked)}
+      />
+      <StyledText disabled={disabled}>{text}</StyledText>
     </Container>
   )
 }

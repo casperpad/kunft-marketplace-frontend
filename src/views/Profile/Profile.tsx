@@ -2,8 +2,9 @@ import { useState } from 'react'
 import { Rating } from 'react-simple-star-rating'
 
 import { NFTCard } from '@components/Card/NFT'
-import { ProfileFilter } from '@components/Filter'
-import { Layout } from '@components/Layout'
+import useWindowSize from '@hooks/useWindowResize'
+
+import Filter from './Filter'
 
 import {
   StyledImage,
@@ -13,6 +14,7 @@ import {
   NameContainer,
   DataContainer,
   NFTContainer,
+  CustomLayout,
 } from './Profile.styles'
 
 interface ProfileProps {
@@ -26,13 +28,14 @@ export default function Profile({ avatar, NFTs = [] }: ProfileProps) {
     'https://beta.api.solanalysis.com/images/400x400/filters:frames(,0)/https://arweave.net/eWX3j4ulh4LK8RXC2VSIyF1Lwd-dKZIymXBuGiKsEpY'
 
   const [rating, setRating] = useState(0)
+  const size = useWindowSize()
 
   const handleRating = (rate: number) => {
     setRating(rate)
   }
 
   return (
-    <Layout>
+    <CustomLayout>
       <DataContainer>
         <ImageContainer>
           <StyledImage src={profileAvatar} alt="" width={235} height={235} />
@@ -51,8 +54,9 @@ export default function Profile({ avatar, NFTs = [] }: ProfileProps) {
             bio here is written here.
           </Description>
         </NameContainer>
-        <ProfileFilter />
+        {size[0] >= 1280 && <Filter />}
       </DataContainer>
+      {size[0] < 1280 && <Filter />}
       <NFTContainer>
         {NFTs.map((item) => {
           return (
@@ -74,6 +78,6 @@ export default function Profile({ avatar, NFTs = [] }: ProfileProps) {
           )
         })}
       </NFTContainer>
-    </Layout>
+    </CustomLayout>
   )
 }

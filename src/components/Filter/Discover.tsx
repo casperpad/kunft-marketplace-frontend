@@ -17,6 +17,13 @@ const PriceText = styled(Text)`
   border: 1px solid ${({ theme }) => theme.colors.border};
 `
 
+const CheckboxContainer = styled(Flex)`
+  flex-direction: column;
+  gap: 2px;
+  font-family: 'Avenir';
+  font-size: 20px;
+`
+
 const Container = styled(Box)<BoxProps>`
   background-color: ${({ theme }) => theme.colors.background};
   max-width: max-content;
@@ -53,12 +60,12 @@ export default function Filter({
   return (
     <Container {...props}>
       <Text fontSize="27px">FILTER</Text>
-      <Flex flexDirection="column">
+      <Flex flexDirection="column" mt="20px">
         <Box>
           <Text fontFamily="Avenir" fontSize="25px" fontWeight={500} mb="4px">
             Status
           </Text>
-          <Flex flexDirection="column" fontFamily="Avenir" fontSize="20px">
+          <CheckboxContainer>
             <CheckboxItem text="For Sale" checked={sale} setChecked={setSale} />
             <CheckboxItem
               text="On Auction"
@@ -66,13 +73,13 @@ export default function Filter({
               checked={auction}
               setChecked={setAuction}
             />
-          </Flex>
+          </CheckboxContainer>
         </Box>
         <Box mt="10px">
           <Text fontFamily="Avenir" fontSize="25px" fontWeight={500} mb="4px">
             Rarity
           </Text>
-          <Flex flexDirection="column" fontFamily="Avenir" fontSize="20px">
+          <CheckboxContainer>
             <CheckboxItem
               text="Common"
               checked={common}
@@ -84,7 +91,7 @@ export default function Filter({
               setChecked={setSemi}
             />
             <CheckboxItem text="Rare" checked={rare} setChecked={setRare} />
-          </Flex>
+          </CheckboxContainer>
         </Box>
         <Box mt="10px">
           <Text fontFamily="Avenir" fontSize="25px" fontWeight={500} mb="4px">

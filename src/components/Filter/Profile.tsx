@@ -1,7 +1,8 @@
 import { useState, useCallback } from 'react'
 import styled from 'styled-components'
 
-import { Box, Flex, BoxProps } from '@components/Box'
+import { Box, Flex } from '@components/Box'
+import { CheckboxItem } from '@components/Checkbox'
 import { RangeSlider } from '@components/Slider'
 import { Text } from '@components/Text'
 
@@ -16,23 +17,33 @@ const PriceText = styled(Text)`
   border: 1px solid ${({ theme }) => theme.colors.border};
 `
 
-const Container = styled(Box)<BoxProps>`
-  border: 1px solid ${({ theme }) => theme.colors.border};
-  background-color: ${({ theme }) => theme.colors.background};
-  padding: 37px 32px;
-  max-width: 650px;
+const CheckboxContainer = styled(Flex)`
+  flex-direction: column;
+  gap: 2px;
+  font-family: 'Avenir';
+  font-size: 16px;
+
+  ${({ theme }) => theme.mediaQueries.xl} {
+    flex-wrap: wrap;
+    height: 60px;
+    min-width: 240px;
+    justify-content: space-around;
+  }
 `
 
-function Checkbox({ text }: { text: string }) {
-  return (
-    <Flex mt="3px" flexDirection="row" alignItems="center">
-      <input type="checkbox" value="ForSale" />
-      <Text ml="8px">{text}</Text>
-    </Flex>
-  )
-}
+const SliderContainer = styled(Flex)`
+  margin: 28px 30px 3px 7px;
+`
 
-interface FilterProps extends BoxProps {
+const Container = styled(Flex)`
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: space-between;
+  height: max-content;
+`
+
+interface FilterProps {
   min?: number
   max?: number
   step?: number
@@ -42,10 +53,14 @@ export default function Filter({
   min = 0,
   max = 50000,
   step = 10,
-  ...props
 }: FilterProps) {
   const [minValue, setMinValue] = useState(min)
   const [maxValue, setMaxValue] = useState(max)
+
+  const [sale, setSale] = useState(false)
+  const [auction, setAuction] = useState(false)
+  const [created, setCreated] = useState(false)
+  const [owned, setOwned] = useState(false)
 
   const handleChange = useCallback((value: any) => {
     setMinValue(value[0])
@@ -53,36 +68,35 @@ export default function Filter({
   }, [])
 
   return (
-    <Container {...props}>
-      <Text fontSize="27px" mb="20px">
+    <>
+      <Text fontSize="27px" mb="4px">
         FILTER
       </Text>
-      <Flex flexDirection="row" flexWrap="wrap" justifyContent="space-between">
+      <Container>
         <Box>
           <Text fontFamily="Avenir" fontSize="18px" fontWeight={500} mb="4px">
             Status
           </Text>
-          <Flex
-            flexDirection="column"
-            flexWrap="wrap"
-            height="60px"
-            width="240px"
-            alignItems="space-between"
-            justifyContent="space-around"
-            fontFamily="Avenir"
-            fontSize="16px"
-          >
-            <Checkbox text="For Sale" />
-            <Checkbox text="On Auction" />
-            <Checkbox text="Created" />
-            <Checkbox text="Owned" />
-          </Flex>
+          <CheckboxContainer>
+            <CheckboxItem text="For Sale" checked={sale} setChecked={setSale} />
+            <CheckboxItem
+              text="On Auction"
+              checked={auction}
+              setChecked={setAuction}
+            />
+            <CheckboxItem
+              text="Created"
+              checked={created}
+              setChecked={setCreated}
+            />
+            <CheckboxItem text="Owned" checked={owned} setChecked={setOwned} />
+          </CheckboxContainer>
         </Box>
         <Box>
           <Text fontFamily="Avenir" fontSize="18px" fontWeight={500} mb="4px">
             Price
           </Text>
-          <Flex mt="12px">
+          <Flex mt="4px">
             <PriceText>
               <Flex flexDirection="row" justifyContent="space-between" px="8px">
                 KNFT
@@ -92,16 +106,16 @@ export default function Filter({
             <PriceText>{minValue}</PriceText>
             <PriceText>{maxValue}</PriceText>
           </Flex>
-          <Flex mt="28px">
+          <SliderContainer>
             <RangeSlider
               min={min}
               max={max}
               step={step}
               onValueChange={handleChange}
             />
-          </Flex>
+          </SliderContainer>
         </Box>
-      </Flex>
-    </Container>
+      </Container>
+    </>
   )
 }
