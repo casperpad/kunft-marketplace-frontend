@@ -7,6 +7,26 @@ import { Layout } from '@components/Layout'
 
 import Filter from './Filter'
 
+const CustomLayout = styled(Layout)`
+  padding-left: 50px;
+  padding-right: 50px;
+
+  ${({ theme }) => theme.mediaQueries.md} {
+    padding-left: 56px;
+    padding-right: 56px;
+  }
+
+  ${({ theme }) => theme.mediaQueries.xl} {
+    padding-left: 76px;
+    padding-right: 76px;
+  }
+
+  ${({ theme }) => theme.mediaQueries.xl2} {
+    padding-left: 86px;
+    padding-right: 86px;
+  }
+`
+
 const Container = styled(Flex)`
   position: relative;
   flex-direction: row;
@@ -39,7 +59,7 @@ export default function Discover({ NFTs = [] }: DiscoverProps) {
   return (
     <Container>
       <Filter />
-      <Layout>
+      <CustomLayout>
         <DiscoverContainer>
           {NFTs.map((item) => {
             return (
@@ -61,7 +81,7 @@ export default function Discover({ NFTs = [] }: DiscoverProps) {
             )
           })}
         </DiscoverContainer>
-      </Layout>
+      </CustomLayout>
     </Container>
   )
 }
