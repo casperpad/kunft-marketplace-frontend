@@ -23,7 +23,7 @@ export type Collection = {
   name: string
   description?: string
   verified: boolean
-  promoted?: boolean
+  promoted: boolean
   image?: string
   twitter?: string
   discord?: string
@@ -118,7 +118,7 @@ export type CollectionDocument = mongoose.Document<
     name: string
     description?: string
     verified: boolean
-    promoted?: boolean
+    promoted: boolean
     image?: string
     twitter?: string
     discord?: string
@@ -507,9 +507,7 @@ export type UserQuery = mongoose.Query<any, UserDocument, UserQueries> &
  */
 export type UserQueries = {}
 
-export type UserMethods = {
-  toJSONObject: (this: UserDocument) => any
-}
+export type UserMethods = {}
 
 export type UserStatics = {
   getNonce: (this: UserModel, publicKey: string) => Promise<string | undefined>

@@ -18,8 +18,6 @@ export const getTokens = async (
 
   if (collectionDB === null) throw Error(`Not exist ${collection}`)
 
-  console.info(collectionDB._id)
-
   const aggregate = Token.aggregate([
     {
       $match: {

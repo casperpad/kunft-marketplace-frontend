@@ -14,12 +14,13 @@ const defaultRoutes = [
     route: corsRoutes,
   },
   {
-    path: '/collections',
-    route: collectionsRoutes,
-  },
-  {
     path: '/auth',
     route: authRoutes,
+  },
+  // @deprecated Use GraphQL entrypoints
+  {
+    path: '/collections',
+    route: collectionsRoutes,
   },
   {
     path: '/tokens',

@@ -1,7 +1,6 @@
 import mongoose, { Schema } from 'mongoose'
 import validator from 'validator'
 import { UserDocument, UserModel, UserSchema } from '../interfaces/mongoose.gen'
-import toJSON from './plugins/toJSON.plugin'
 
 // UserSchema type
 const UserSchema: UserSchema = new Schema({
@@ -55,7 +54,5 @@ UserSchema.statics = {
     return await this.findOne({ publicKey })
   },
 }
-
-UserSchema.plugin(toJSON)
 
 export const User = mongoose.model<UserDocument, UserModel>('User', UserSchema)

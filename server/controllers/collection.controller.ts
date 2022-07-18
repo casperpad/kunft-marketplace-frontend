@@ -15,11 +15,33 @@ export const getCollections = async (
   // @ts-ignore
   const { page, limit } = req.query
 
-  const aggregate = Collection.aggregate()
+  const aggregate = Collection.aggregate([
+    {
+      $project: {
+        _id: 0,
+        __v: 0,
+      },
+    },
+  ])
+
+  const customLabels = {
+    totalDocs: 'total',
+    docs: 'collections',
+    limit: 'limit',
+    page: 'currentPage',
+    nextPage: 'nextPage',
+    prevPage: 'prevPage',
+    totalPages: 'totalPages',
+    hasPrevPage: 'hasPrev',
+    hasNextPage: 'hasNext',
+    pagingCounter: 'pageCounter',
+    meta: 'paginationInfo',
+  }
 
   const options = {
     page: (page as unknown as number) || 1,
     limit: (limit as unknown as number) || 20,
+    customLabels,
   }
 
   const collectionDB = await Collection.aggregatePaginate(aggregate, options)

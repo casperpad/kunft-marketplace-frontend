@@ -1,15 +1,18 @@
 import * as Sentry from '@sentry/node'
 import * as Tracing from '@sentry/tracing'
-import compression from 'compression'
+import { ApolloServerPluginLandingPageGraphQLPlayground } from 'apollo-server-core'
+import { ApolloServer, gql } from 'apollo-server-express'
 import cookieParser from 'cookie-parser'
 import cors from 'cors'
 import express from 'express'
+
 import mongoose from 'mongoose'
 import morgan from 'morgan'
 import next from 'next'
 import responseTime from 'response-time'
 
 import { MONGODB_URL, PORT, SENTRY_DSN, APP_ENV } from '@server/config'
+import { typeDefs, resolvers } from '@server/graphql'
 import redisClient from '@server/providers/redis'
 import apiRouter from '@server/routes'
 import { authLimiter } from './middlewares'
@@ -54,8 +57,8 @@ async function startServer() {
   // TracingHandler creates a trace for every incoming request
   server.use(Sentry.Handlers.tracingHandler())
 
-  server.use(compression())
-  server.use(cors({ origin: '*' }))
+  // server.use(compression())
+  server.use(cors())
   server.use(express.json({ limit: '25mb' }))
   server.use(express.urlencoded({ limit: '25mb', extended: true }))
   server.use(cookieParser())
@@ -69,6 +72,17 @@ async function startServer() {
   }
 
   server.use('/api', apiRouter)
+
+  const apolloServer = new ApolloServer({
+    typeDefs,
+    resolvers,
+    plugins: [ApolloServerPluginLandingPageGraphQLPlayground({})],
+  })
+  await apolloServer.start()
+  apolloServer.applyMiddleware({
+    app: server,
+    path: '/api/graphql',
+  })
   server.all('*', (req, res) => {
     return handle(req, res)
   })
@@ -83,7 +97,6 @@ async function startServer() {
       console.error(err)
       console.error(`*** ***`)
     }
-
     // startCEP47EventStream()
     console.info(`Server is running on ${PORT}`)
   })
