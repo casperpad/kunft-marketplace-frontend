@@ -15,6 +15,7 @@ import {
   DataContainer,
   NFTContainer,
   CustomLayout,
+  Container,
 } from './Profile.styles'
 
 interface ProfileProps {
@@ -35,49 +36,51 @@ export default function Profile({ avatar, NFTs = [] }: ProfileProps) {
   }
 
   return (
-    <CustomLayout>
-      <DataContainer>
-        <ImageContainer>
-          <StyledImage src={profileAvatar} alt="" width={235} height={235} />
-        </ImageContainer>
-        <NameContainer>
-          <Title>Insert Name Here</Title>
-          <Rating
-            transition
-            onClick={handleRating}
-            ratingValue={rating}
-            size={15}
-          />
-          <Description mt="25px">
-            User profile bio here is written here. User profile bio here is
-            written here. User profile bio here is written here. User profile
-            bio here is written here.
-          </Description>
-        </NameContainer>
-        {size[0] >= 1280 && <Filter />}
-      </DataContainer>
-      {size[0] < 1280 && <Filter />}
-      <NFTContainer>
-        {NFTs.map((item) => {
-          return (
-            <NFTCard
-              key={item}
-              type={
-                Math.random() > 0.5
-                  ? Math.random() > 0.5
-                    ? 'Sale'
-                    : 'NoneSale'
-                  : 'Upcoming'
-              }
-              image={item}
-              name="KUNFT"
-              price={Math.random() * 10000}
-              stars={Math.floor(Math.random() * 100)}
-              userStarred={Math.random() > 0.5}
+    <Container>
+      <CustomLayout>
+        <DataContainer>
+          <ImageContainer>
+            <StyledImage src={profileAvatar} alt="" width={235} height={235} />
+          </ImageContainer>
+          <NameContainer>
+            <Title>Insert Name Here</Title>
+            <Rating
+              onClick={handleRating}
+              ratingValue={rating}
+              size={15}
+              fillColor="#FA5F0C"
             />
-          )
-        })}
-      </NFTContainer>
-    </CustomLayout>
+            <Description mt="25px">
+              User profile bio here is written here. User profile bio here is
+              written here. User profile bio here is written here. User profile
+              bio here is written here.
+            </Description>
+          </NameContainer>
+          {size[0] >= 1280 && <Filter />}
+        </DataContainer>
+        {size[0] < 1280 && <Filter />}
+        <NFTContainer>
+          {NFTs.map((item) => {
+            return (
+              <NFTCard
+                key={item}
+                type={
+                  Math.random() > 0.5
+                    ? Math.random() > 0.5
+                      ? 'Sale'
+                      : 'NoneSale'
+                    : 'Upcoming'
+                }
+                image={item}
+                name="KUNFT"
+                price={Math.random() * 10000}
+                stars={Math.floor(Math.random() * 100)}
+                userStarred={Math.random() > 0.5}
+              />
+            )
+          })}
+        </NFTContainer>
+      </CustomLayout>
+    </Container>
   )
 }

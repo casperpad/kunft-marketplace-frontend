@@ -106,3 +106,7 @@ export const CustomLayout = styled(Layout)`
     padding-right: 86px;
   }
 `
+
+export const Container = styled(Flex)`
+  padding-top: 40px;
+`

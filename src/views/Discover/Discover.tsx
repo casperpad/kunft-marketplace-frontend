@@ -31,6 +31,7 @@ const Container = styled(Flex)`
   position: relative;
   flex-direction: row;
   height: 100%;
+  padding-top: 40px;
 `
 
 const DiscoverContainer = styled(Grid)`

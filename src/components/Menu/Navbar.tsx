@@ -1,13 +1,15 @@
 import { useCallback, useEffect, useState } from 'react'
 import Image from 'next/image'
 import { useRouter } from 'next/router'
+import { HiMenu } from 'react-icons/hi'
 import styled from 'styled-components'
 
 import { Flex } from '@components/Box'
 import { CustomLink } from '@components/Link'
 import { ProfileModal as Modal } from '@components/Modal'
 import { navLinks } from '@config/constants/data'
-import { useCasperWeb3Provider, useAuth } from '@hooks/index'
+import { useCasperWeb3Provider, useAuth, useWindowSize } from '@hooks/index'
+import MobileMenu from './MobileMenu'
 import { UserMenu } from './UserMenu'
 
 const ProfileMenu = styled.div`
@@ -23,15 +25,30 @@ const StyledAvatar = styled(Image)`
   cursor: pointer;
 `
 
-const MenuContainer = styled.div`
+const Menus = styled(Flex)`
+  gap: 32px;
+  flex-direction: column;
   display: none;
 
-  ${({ theme }) => theme.mediaQueries.lg} {
+  ${({ theme }) => theme.mediaQueries.md} {
     display: flex;
     flex-direction: row;
     align-items: center;
-    gap: 32px;
   }
+`
+
+const ShowMenu = styled(Flex)`
+  display: flex;
+
+  ${({ theme }) => theme.mediaQueries.md} {
+    display: none;
+  }
+`
+
+const MenuContainer = styled(Flex)`
+  flex-direction: row;
+  align-items: center;
+  gap: 32px;
 `
 
 const NavbarContainer = styled.nav`
@@ -56,9 +73,11 @@ export default function Navbar() {
   const { signIn, user } = useAuth()
   const { currentAccount, connect } = useCasperWeb3Provider()
   const [requestConnect, setRequestConnect] = useState(false)
+  const size = useWindowSize()
 
   const [modalShow, setModalShow] = useState(false)
   const [show, setShow] = useState(false)
+  const [menuShow, setMenuShow] = useState(false)
   const menuAvatar = user
     ? user.avatar
       ? user.avatar
@@ -73,6 +92,10 @@ export default function Navbar() {
       signIn()
     }
   }, [connect, currentAccount, signIn])
+
+  useEffect(() => {
+    setMenuShow(false)
+  }, [size])
 
   useEffect(() => {
     if (currentAccount !== undefined && requestConnect) {
@@ -94,14 +117,20 @@ export default function Navbar() {
           />
         </CustomLink>
         <MenuContainer>
-          {navLinks.map((item) => {
-            const active = pathname.indexOf(item.path) > -1
-            return (
-              <MenuItem href={item.path} key={item.name} active={active}>
-                {item.name}
-              </MenuItem>
-            )
-          })}
+          <ShowMenu onClick={() => setMenuShow(!menuShow)}>
+            <HiMenu size={25} />
+          </ShowMenu>
+          <MobileMenu show={menuShow} />
+          <Menus>
+            {navLinks.map((item) => {
+              const active = pathname.indexOf(item.path) > -1
+              return (
+                <MenuItem href={item.path} key={item.name} active={active}>
+                  {item.name}
+                </MenuItem>
+              )
+            })}
+          </Menus>
           <Flex
             width="70px"
             height="70px"
@@ -110,6 +139,7 @@ export default function Navbar() {
             ml="-20px"
             onMouseEnter={() => setShow(true)}
             onMouseLeave={() => setShow(false)}
+            onClick={() => setShow(!show)}
           >
             <StyledAvatar
               src={menuAvatar}

@@ -6,21 +6,27 @@ import { Flex } from '@components/Box'
 import { DiscoverFilter } from '@components/Filter'
 import useWindowSize from '@hooks/useWindowResize'
 
-const CustomFilter = styled(DiscoverFilter)`
+const FilterContainer = styled(Flex)`
   position: sticky;
   top: 184px;
+  transition: all 0.3s;
+  height: max-content;
+`
+
+const CustomFilter = styled(DiscoverFilter)`
   overflow: hidden;
 `
 
 const ShowButton = styled.div`
   position: absolute;
   right: 10px;
-  top: 125px;
+  top: 5px;
   opacity: 1;
   z-index: 30;
   font-size: 30px;
   cursor: pointer;
   transition: all 0.3s;
+  background-color: ${({ theme }) => theme.colors.background};
 
   &:hover {
     opacity: 0.8;
@@ -35,7 +41,7 @@ const Container = styled(Flex)`
   position: absolute;
   left: 0;
   top: 0;
-  padding: 120px 0px 120px 46px;
+  padding: 80px 0px 120px 46px;
   z-index: 20;
   background-color: ${({ theme }) => theme.colors.background};
   height: 100%;
@@ -57,15 +63,17 @@ export default function Filter() {
   }, [size])
 
   return (
-    <Container width={show ? '300px' : '20px'}>
-      <ShowButton
-        onClick={() => {
-          if (size[0] < 1080) setShow(!show)
-        }}
-      >
-        {show ? <BsArrowLeftCircle /> : <BsArrowRightCircle />}
-      </ShowButton>
-      <CustomFilter />
+    <Container>
+      <FilterContainer width={show ? '240px' : '0px'}>
+        <ShowButton
+          onClick={() => {
+            if (size[0] < 1080) setShow(!show)
+          }}
+        >
+          {show ? <BsArrowLeftCircle /> : <BsArrowRightCircle />}
+        </ShowButton>
+        <CustomFilter />
+      </FilterContainer>
     </Container>
   )
 }

@@ -20,4 +20,5 @@ export type Colors = {
   border: string
   disabled: string
   checkbox: string
+  checkboxDisabled: string
 }
