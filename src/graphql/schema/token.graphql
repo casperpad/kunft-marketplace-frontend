@@ -1,0 +1,17 @@
+scalar Metadata
+
+type Token {
+  tokenId: String!
+  metadata: Metadata
+  favoritedUsers: [String]
+  viewd: Int!
+}
+
+type GetTokensResponse {
+  tokens: [Token!]
+  paginationInfo: PaginationInfo
+}
+
+type Query {
+  getTokens(slug: String!, page: Int!, limit: Int!): GetTokensResponse
+}

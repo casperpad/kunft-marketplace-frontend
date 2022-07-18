@@ -17,6 +17,14 @@ export const getTokens = async (
       },
     },
     {
+      $lookup: {
+        from: 'Sale',
+        localField: '_id',
+        foreignField: 'token',
+        as: 'sale',
+      },
+    },
+    {
       $project: {
         _id: 0,
         __v: 0,

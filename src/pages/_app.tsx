@@ -6,7 +6,7 @@ import type { AppProps } from 'next/app'
 import { PageMeta } from '@components/Layout'
 import { Navbar, Footer } from '@components/Menu'
 import useAuth from '@hooks/useAuth'
-
+import useMarketplace from '@hooks/useMarketplace'
 import Providers from '../Providers'
 import store from '../store'
 
@@ -43,6 +43,7 @@ function Auth({ children }: { children: React.ReactNode }) {
 }
 
 function MyApp({ Component, pageProps }: AppProps) {
+  const _ = useMarketplace()
   return (
     <Providers store={store}>
       <PageMeta symbol="" />

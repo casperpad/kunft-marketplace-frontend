@@ -3,15 +3,12 @@ import { gql } from 'apollo-server-express'
 import { getTokens } from '@server/services/token'
 
 export const Token = gql`
-  type Metadata {
-    key: String!
-    value: String!
-  }
+  scalar Metadata
 
   type Token {
     collectionNFT: Collection!
     tokenId: String!
-    metadata: [Metadata]
+    metadata: Metadata
     favoritedUsers: [String]
     viewd: Int!
   }

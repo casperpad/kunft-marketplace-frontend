@@ -1,0 +1,17 @@
+fragment TokenFields on Token {
+  tokenId
+  metadata
+  favoritedUsers
+  viewd
+}
+
+query getTokens($slug: String!, $page: Int!, $limit: Int!) {
+  getTokens(slug: $slug, page: $page, limit: $limit) {
+    tokens {
+      ...TokenFields
+    }
+    paginationInfo {
+      ...PaginationFields
+    }
+  }
+}

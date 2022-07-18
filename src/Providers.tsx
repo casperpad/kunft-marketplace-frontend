@@ -1,5 +1,10 @@
 import React from 'react'
-
+import {
+  ApolloClient,
+  InMemoryCache,
+  ApolloProvider,
+  gql,
+} from '@apollo/client'
 import { Provider } from 'react-redux'
 import { Store } from 'redux'
 import { persistStore } from 'redux-persist'
@@ -25,18 +30,25 @@ const BlurBackground = styled(BaseModalBackground)`
   background-color: rgb(0, 0, 0, 0);
 `
 
+const client = new ApolloClient({
+  uri: 'http://localhost:8000/api/graphql/',
+  cache: new InMemoryCache(),
+})
+
 export default function Providers({ children, store }: ProvdersProps) {
   const persistor = persistStore(store)
   return (
     <Provider store={store}>
       <PersistGate persistor={persistor} loading={<Spinner />}>
-        <CasperWeb3Provider>
-          <StyledThemeProvider>
-            <ModalProvider backgroundComponent={BlurBackground}>
-              {children}
-            </ModalProvider>
-          </StyledThemeProvider>
-        </CasperWeb3Provider>
+        <ApolloProvider client={client}>
+          <CasperWeb3Provider>
+            <StyledThemeProvider>
+              <ModalProvider backgroundComponent={BlurBackground}>
+                {children}
+              </ModalProvider>
+            </StyledThemeProvider>
+          </CasperWeb3Provider>
+        </ApolloProvider>
       </PersistGate>
     </Provider>
   )

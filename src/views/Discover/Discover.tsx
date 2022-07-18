@@ -1,10 +1,10 @@
-import React from 'react'
+import React, { useState } from 'react'
 import styled from 'styled-components'
 
 import { Flex, Grid } from '@components/Box'
 import { NFTCard } from '@components/Card/NFT'
 import { Layout } from '@components/Layout'
-
+import useTokens from '@hooks/useTokens'
 import Filter from './Filter'
 
 const CustomLayout = styled(Layout)`
@@ -52,11 +52,11 @@ const DiscoverContainer = styled(Grid)`
   }
 `
 
-interface DiscoverProps {
-  NFTs: string[]
-}
-
-export default function Discover({ NFTs = [] }: DiscoverProps) {
+export default function Discover({ NFTs }: { NFTs: string[] }) {
+  const [page, setPage] = useState(1)
+  const [limit, setLimit] = useState(20)
+  const { data, loading, error } = useTokens('KUNFT', page, limit)
+  const [nfts, setNfts] = useState()
   return (
     <Container>
       <Filter />

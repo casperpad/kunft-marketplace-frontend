@@ -13,17 +13,13 @@ const TokenSchema = new Schema({
     required: true,
   },
   metadata: {
-    type: [
-      {
-        key: String,
-        value: String,
-      },
-    ],
+    type: Map,
     required: true,
   },
   favoritedUsers: {
     type: [Schema.Types.ObjectId],
     ref: 'User',
+    default: [],
   },
   viwed: {
     type: Number,
