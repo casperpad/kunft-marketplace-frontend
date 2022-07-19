@@ -1,9 +1,23 @@
 import { IResolvers } from '@graphql-tools/utils'
 import { gql } from 'apollo-server-express'
+import GraphQLDate from 'graphql-date'
+// @ts-ignore
+import GraphQLLong from 'graphql-type-long'
 import { getTokens, getTokensOwnedBy } from '@server/services/token'
 
 export const Token = gql`
   scalar Metadata
+  scalar GraphQLDate
+  scalar GraphQLLong
+
+  type Sale {
+    creator: String!
+    price: String!
+    startTime: GraphQLLong!
+    status: String!
+    createdAt: GraphQLDate!
+    updatedAt: GraphQLDate!
+  }
 
   type Token {
     collectionNFT: Collection!
@@ -11,6 +25,9 @@ export const Token = gql`
     metadata: Metadata
     favoritedUsers: [String]
     viewed: Int!
+    price: String
+    listed: Boolean!
+    sales: [Sale]
   }
 
   type GetTokensResponse {
@@ -34,4 +51,6 @@ export const tokenResolver: IResolvers = {
       return await getTokensOwnedBy(owner, page, limit)
     },
   },
+  GraphQLDate,
+  GraphQLLong,
 }

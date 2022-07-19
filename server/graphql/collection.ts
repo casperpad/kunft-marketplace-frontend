@@ -1,6 +1,6 @@
 import { IResolvers } from '@graphql-tools/utils'
 import { gql } from 'apollo-server-express'
-import { getCollections } from '@server/services/collection'
+import { getCollections, getCollectionSlugs } from '@server/services/collection'
 
 export const Collection = gql`
   #
@@ -35,8 +35,17 @@ export const Collection = gql`
     paginationInfo: PaginationInfo
   }
 
+  type Slug {
+    slug: String!
+  }
+
+  type GetCollectionSlugsResponse {
+    slugs: [Slug!]
+  }
+
   type Query {
     getCollections(page: Int!, limit: Int!): GetCollectionsResponse
+    getCollectionSlugs: GetCollectionSlugsResponse
   }
 
   type Mutation {
@@ -61,6 +70,10 @@ export const collectionResolver: IResolvers = {
     async getCollections(_, args, __, ___) {
       const { page, limit } = args
       return await getCollections(page, limit)
+    },
+    async getCollectionSlugs(_, __, ___, ____) {
+      const slugs = await getCollectionSlugs()
+      return { slugs }
     },
   },
   Mutation: {

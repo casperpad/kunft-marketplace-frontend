@@ -1,8 +1,21 @@
+fragment SaleFields on Sale {
+  creator
+  price
+  startTime
+  status
+  createdAt
+}
+
 fragment TokenFields on Token {
   tokenId
   metadata
   favoritedUsers
   viewed
+  price
+  listed
+  sales {
+    ...SaleFields
+  }
 }
 
 query getTokens($slug: String!, $page: Int!, $limit: Int!) {

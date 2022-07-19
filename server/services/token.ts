@@ -1,7 +1,6 @@
 import { CEP47Client } from 'casper-cep47-js-client'
 import { StatusCodes } from 'http-status-codes'
 
-import logger from '@server/config/logger'
 import { Token, Collection, User } from '@server/models'
 import { ApiError } from '@server/utils'
 import {
@@ -27,10 +26,29 @@ export const getTokens = async (
     },
     {
       $lookup: {
-        from: 'Sale',
+        from: 'sales',
         localField: '_id',
         foreignField: 'token',
-        as: 'sale',
+        as: 'sales',
+        pipeline: [
+          {
+            $project: {
+              _id: 0,
+              __v: 0,
+              token: 0,
+            },
+          },
+        ],
+      },
+    },
+    {
+      $set: {
+        price: '1000000',
+      },
+    },
+    {
+      $set: {
+        listed: true,
       },
     },
     {
@@ -61,6 +79,7 @@ export const getTokens = async (
   }
 
   const result = await Token.aggregatePaginate(aggregate, options)
+
   return result
 }
 

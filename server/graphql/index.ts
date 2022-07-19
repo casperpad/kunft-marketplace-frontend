@@ -1,4 +1,5 @@
 import { mergeResolvers, mergeTypeDefs } from '@graphql-tools/merge'
+
 import { Collection, collectionResolver } from './collection'
 import { Token, tokenResolver } from './token'
 

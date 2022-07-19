@@ -356,7 +356,7 @@ export type Token = {
     }
   >
   favoritedUsers: (User['_id'] | User)[]
-  viwed?: number
+  viewed?: number
   _id: mongoose.Types.ObjectId
 }
 
@@ -440,7 +440,7 @@ export type TokenDocument = mongoose.Document<
       required: {}
     }>
     favoritedUsers: mongoose.Types.Array<UserDocument['_id'] | UserDocument>
-    viwed?: number
+    viewed?: number
     _id: mongoose.Types.ObjectId
   }
 

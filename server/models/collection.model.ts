@@ -21,6 +21,7 @@ const CollectionSchema = new Schema({
     dropDups: true,
     uppercase: false,
   },
+  deployer: String,
   symbol: { type: String, required: true },
   name: { type: String, required: true },
   description: { type: String },

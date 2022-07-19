@@ -40,6 +40,11 @@ export const getCollections = async (page: number, limit: number) => {
   return result
 }
 
+export const getCollectionSlugs = async () => {
+  const result = await Collection.find().select('slug -_id')
+  return result
+}
+
 export const addCollection = async (
   contractPackageHash: string,
   contractHash: string,
