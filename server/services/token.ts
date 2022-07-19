@@ -1,5 +1,7 @@
 import { CEP47Client } from 'casper-cep47-js-client'
 import { StatusCodes } from 'http-status-codes'
+
+import logger from '@server/config/logger'
 import { Token, Collection, User } from '@server/models'
 import { ApiError } from '@server/utils'
 import {
@@ -105,11 +107,22 @@ export const addToken = async (
   })
   await token.save()
   if (owner) {
-    const user = await User.findOne({ publicKey: owner })
-    if (user === null)
-      throw new ApiError(StatusCodes.NOT_FOUND, `Not exist user`)
-    user.tokens.push(token._id)
-    await user.save()
+    const tokenOwner = await cep47Client.getOwnerOf(tokenId)
+    console.log(tokenOwner, owner)
+
+    if (tokenOwner.endsWith(owner)) {
+      const user = await User.findOne({ publicKey: owner })
+      if (user === null)
+        throw new ApiError(StatusCodes.NOT_FOUND, `Not exist user`)
+      if (!user.tokens.includes(token._id)) {
+        user.tokens.push(token._id)
+        await user.save()
+      } else {
+        throw new ApiError(StatusCodes.CONFLICT, `Already added token`)
+      }
+    } else {
+      throw new ApiError(StatusCodes.NOT_ACCEPTABLE, `Not token owner`)
+    }
   }
   return token
 }

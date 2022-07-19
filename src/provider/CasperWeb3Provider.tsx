@@ -1,8 +1,10 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 
-import { Signer } from 'casper-js-sdk'
+import { CasperClient, Signer } from 'casper-js-sdk'
 
+import { NEXT_PUBLIC_CASPER_NODE_ADDRESS } from '@config/index'
 import CasperWeb3Context from '../context/CasperWeb3'
+import { getDeploy as _getDeploy, signDeploy } from '../web3/utils'
 
 export default function CasperWeb3Provider({
   children,
@@ -29,6 +31,10 @@ export default function CasperWeb3Provider({
   }, [])
   const disconnect = useCallback(() => {
     Signer.disconnectFromSite()
+  }, [])
+
+  const getDeploy = useCallback(async (deployHash: string) => {
+    return await _getDeploy(NEXT_PUBLIC_CASPER_NODE_ADDRESS, deployHash)
   }, [])
 
   useEffect(() => {
@@ -74,8 +80,11 @@ export default function CasperWeb3Provider({
       currentAccount,
       connect,
       disconnect,
+      getDeploy,
+      signDeploy,
+      casperClient: new CasperClient(NEXT_PUBLIC_CASPER_NODE_ADDRESS),
     }),
-    [connect, connected, currentAccount, detected, disconnect],
+    [connect, connected, currentAccount, detected, disconnect, getDeploy],
   )
 
   return (

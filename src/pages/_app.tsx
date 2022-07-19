@@ -3,10 +3,8 @@ import { useRouter } from 'next/router'
 import styled from 'styled-components'
 import type { AppProps } from 'next/app'
 
-import { PageMeta } from '@components/Layout'
-import { Navbar, Footer } from '@components/Menu'
-import useAuth from '@hooks/useAuth'
-import useMarketplace from '@hooks/useMarketplace'
+import { Navbar, Footer, Spinner, PageMeta } from '@components/index'
+import { useAuth, useMarketplace } from '@hooks/index'
 import Providers from '../Providers'
 import store from '../store'
 
@@ -39,7 +37,8 @@ function Auth({ children }: { children: React.ReactNode }) {
   }, [user, router])
 
   // eslint-disable-next-line react/jsx-no-useless-fragment
-  return <>{children}</>
+  if (user) return <>{children}</>
+  return <Spinner />
 }
 
 function MyApp({ Component, pageProps }: AppProps) {

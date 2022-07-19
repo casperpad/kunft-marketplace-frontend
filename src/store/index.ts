@@ -12,10 +12,11 @@ import {
 
 import storage from 'redux-persist/lib/storage'
 
-import { userReducer } from './reducers'
+import { userReducer, transactionReducer } from './reducers'
 
 const rootReducer = combineReducers({
   user: userReducer,
+  transaction: transactionReducer,
 })
 
 const persistConfig = {

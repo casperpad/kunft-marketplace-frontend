@@ -14,14 +14,19 @@ import {
   CLTypeTag,
   CLStringType,
   CLKeyType,
+  encodeBase16,
+  CLU32Type,
+  CLU256Type,
 } from 'casper-js-sdk'
 import { Some, None } from 'ts-results'
+import { signDeploy } from '../utils'
 
 const { Contract } = Contracts
 type RecipientType = types.RecipientType
 
 export interface MarketplaceInstallArgs {
   feeWallet: RecipientType
+  acceptableTokens: Map<string, number>
   contractName: string
 }
 
@@ -104,12 +109,18 @@ export class MarketplaceClient {
     deploySender: CLPublicKey,
     keys?: Keys.AsymmetricKey[],
   ) {
+    const acceptableTokens = new CLMap([new CLStringType(), new CLU32Type()])
+    Array.from(args.acceptableTokens.entries()).forEach((entry) => {
+      acceptableTokens.set(
+        CLValueBuilder.string(entry[0]),
+        CLValueBuilder.u32(entry[1]),
+      )
+    })
     const runtimeArgs = RuntimeArgs.fromMap({
       fee_wallet: args.feeWallet,
-      fee: CLValueBuilder.u8(250),
+      acceptableTokens,
       contract_name: CLValueBuilder.string(args.contractName),
     })
-
     return this.contractClient.install(
       wasm,
       runtimeArgs,
@@ -124,55 +135,56 @@ export class MarketplaceClient {
     this.contractClient.setContractHash(contractHash, contractPackageHash)
   }
 
-  public async balanceOf(account: CLPublicKey) {
-    const result = await this.contractClient.queryContractDictionary(
-      'balances',
-      account.toAccountHashStr().slice(13),
-    )
-
-    const maybeValue = result.value().unwrap()
-
-    return maybeValue.value().toString()
-  }
-
-  public createSellOrder(
+  public async createSellOrder(
     startTime: number,
     collection: string,
-    tokenId: BigNumberish,
-    price: BigNumberish,
-    key: Keys.AsymmetricKey,
+    tokens: Map<BigNumberish, BigNumberish>,
+    publicKeyHex: string,
     paymentAmount: string,
     payToken?: string,
   ) {
+    const tokensMap = new CLMap([new CLU256Type(), new CLU256Type()])
+    Array.from(tokens.entries()).forEach((token) => {
+      tokensMap.set(
+        CLValueBuilder.u256(token[0]),
+        CLValueBuilder.u256(token[1]),
+      )
+    })
+
+    const formatedCollection = `contract-${collection}`
+
     const runtimeArgs = RuntimeArgs.fromMap({
       start_time: CLValueBuilder.u64(startTime),
-      collection: CLValueBuilder.string(collection),
-      token_id: CLValueBuilder.u256(tokenId),
-      price: CLValueBuilder.u256(price),
+      collection: CLValueBuilder.string(formatedCollection),
+      tokens: tokensMap,
       pay_token: payToken
         ? CLValueBuilder.option(Some(CLValueBuilder.string(payToken)))
         : CLValueBuilder.option(None, new CLStringType()),
     })
 
-    return this.contractClient.callEntrypoint(
+    const deploy = this.contractClient.callEntrypoint(
       'create_sell_order',
       runtimeArgs,
-      key.publicKey,
+      CLPublicKey.fromHex(publicKeyHex),
       this.networkName,
       paymentAmount,
-      [key],
     )
+    const signedDeploy = await signDeploy(deploy, publicKeyHex)
+    const deployHash = await this.casperClient.putDeploy(signedDeploy)
+    return deployHash
   }
 
   public cancelSellOrder(
     collection: string,
-    tokenId: BigNumberish,
+    tokenIds: BigNumberish[],
     key: Keys.AsymmetricKey,
     paymentAmount: string,
   ) {
     const runtimeArgs = RuntimeArgs.fromMap({
       collection: CLValueBuilder.string(collection),
-      token_id: CLValueBuilder.u256(tokenId),
+      token_ids: CLValueBuilder.list(
+        tokenIds.map((tokenId) => CLValueBuilder.u256(tokenId)),
+      ),
     })
     return this.contractClient.callEntrypoint(
       'cancel_sell_order',
@@ -201,13 +213,20 @@ export class MarketplaceClient {
         : CLValueBuilder.option(None, new CLKeyType()),
     })
     return this.contractClient.callEntrypoint(
-      'cancel_sell_order',
+      'buy_sell_order',
       runtimeArgs,
       key.publicKey,
       this.networkName,
       paymentAmount,
       [key],
     )
+  }
+
+  public async feeWallet() {
+    const result = (await this.contractClient.queryContractData([
+      'fee_wallet',
+    ])) as CLValue
+    return encodeBase16(result.value())
   }
 
   public createBuyOrder(

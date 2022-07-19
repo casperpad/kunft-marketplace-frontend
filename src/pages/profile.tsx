@@ -6,3 +6,12 @@ const ProfilePage = dynamic<{}>(() => import('@views/Profile'), {
 })
 
 export default ProfilePage
+
+export function getStaticProps() {
+  return {
+    props: {
+      protected: true,
+      role: ['user'],
+    },
+  }
+}

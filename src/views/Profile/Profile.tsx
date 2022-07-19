@@ -56,7 +56,7 @@ export default function Profile({ avatar, NFTs = [] }: ProfileProps) {
     if (data === undefined) return
     const tokens = data.getTokensOwnedBy!.tokens!.map((token) => {
       return {
-        types: 'NoneSale',
+        type: 'Owned',
         name: `${token.collectionNFT!.name} #${token.tokenId}`,
         id: token.tokenId,
         owner: user!.publicKey,
@@ -100,10 +100,12 @@ export default function Profile({ avatar, NFTs = [] }: ProfileProps) {
               <NFTCard
                 key={token.id}
                 type={token.type}
-                image={token.metadata.image || token.collectionImage || ''}
+                image={token.metadata.image || token.collectionImage}
                 name={token.name}
                 price={Math.random() * 10000}
                 stars={token.viewed}
+                contractHash={token.contractHash}
+                tokenId={token.id}
                 userStarred
               />
             )

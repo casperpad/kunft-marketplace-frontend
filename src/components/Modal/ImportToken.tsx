@@ -119,7 +119,7 @@ export default function ImportToken({
             {...register('contractPackageHash', { required: true })}
             readOnly
             backgroundColor="inputSecondary"
-            value={contractPackageHash}
+            value={contractPackageHash || ''}
           />
           {errors.contractPackageHash && (
             <span>Please wait to fetching contract package hash</span>
@@ -133,7 +133,7 @@ export default function ImportToken({
             {...register('contractHash', { required: true })}
             placeholder="Input Contract Hash"
             backgroundColor="inputSecondary"
-            value={contractHash}
+            value={contractHash || ''}
             onChange={(e) => setContractHash(e.target.value)}
           />
           {errors.contractHash && <span>This field is required</span>}
@@ -145,7 +145,7 @@ export default function ImportToken({
           <ModalInput
             {...register('tokenId', { required: true })}
             placeholder="Input Token ID"
-            value={tokenId}
+            value={tokenId || ''}
             onChange={(e) => setTokenId(e.target.value)}
           />
           {errors.tokenId && <span>This field is required</span>}

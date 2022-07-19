@@ -1,13 +1,23 @@
-import React from 'react'
+import React, { useCallback, useMemo } from 'react'
 
 import { BigNumberish } from '@ethersproject/bignumber'
+import {
+  CLPublicKey,
+  CLValueBuilder,
+  decodeBase16,
+  encodeBase16,
+} from 'casper-js-sdk'
 import { BsHeart, BsHeartFill } from 'react-icons/bs'
 
 import { Box, Flex } from '@components/Box'
-import { CustomLink } from '@components/Link'
 import { Text } from '@components/Text'
+import {
+  NEXT_PUBLIC_CASPER_NODE_ADDRESS,
+  NEXT_PUBLIC_MARKETPLACE_CONTRACT_PACKAGE_HASH,
+} from '@config/index'
+import { useCasperWeb3Provider, useCEP47, useMarketplace } from '@hooks/index'
 
-import { NFTType } from '../../../types/nft.types'
+import { TokenType } from '../../../types/nft.types'
 
 import {
   StarsButton,
@@ -20,12 +30,14 @@ import {
 } from './NFTCard.styles'
 
 interface NFTCardProps {
-  image: string
+  image?: string
   name: string
   price: BigNumberish
   stars: number
   userStarred: boolean
-  type: NFTType
+  type: TokenType
+  contractHash: string
+  tokenId: string
   onStarClick?: () => void
   onClick?: () => void
 }
@@ -37,16 +49,92 @@ export default function NFTCard({
   stars,
   userStarred,
   type,
+  contractHash,
+  tokenId,
   onStarClick,
-  ...props
 }: NFTCardProps) {
-  const text = type === 'Sale' ? 'BUY NOW' : 'MAKE OFFER'
+  const buttonText = useMemo(() => {
+    switch (type) {
+      case 'NoneSale':
+        return 'Make Offer'
+      case 'Sale':
+        return 'Buy Now'
+      case 'Owned':
+        return 'Sell'
+      default:
+        return `Unexpected ${type} type`
+    }
+  }, [type])
   const show = type !== 'NoneSale'
+  const { currentAccount, connect, getDeploy, signDeploy } =
+    useCasperWeb3Provider()
+  const { createSellOrder } = useMarketplace()
+  const { approve, getAllowance } = useCEP47(contractHash)
+
+  const handleSaleButtonClick = useCallback(async () => {
+    if (currentAccount === undefined) return
+
+    const allowance = await getAllowance(
+      CLPublicKey.fromHex(currentAccount),
+      tokenId,
+    )
+
+    const parsedAllowance = CLValueBuilder.byteArray(
+      decodeBase16(allowance.slice(13)),
+    )
+    const marketplaceContractPackageHash = CLValueBuilder.byteArray(
+      decodeBase16(NEXT_PUBLIC_MARKETPLACE_CONTRACT_PACKAGE_HASH.slice(5)),
+    )
+    // Approve if allowance is incorrect
+    if (
+      encodeBase16(parsedAllowance.data) !==
+      encodeBase16(marketplaceContractPackageHash.data)
+    ) {
+      const approveDeploy = await approve(
+        CLValueBuilder.byteArray(
+          decodeBase16(NEXT_PUBLIC_MARKETPLACE_CONTRACT_PACKAGE_HASH.slice(5)),
+        ),
+        [tokenId],
+        '500000000',
+        CLPublicKey.fromHex(currentAccount),
+      )
+      const signedApproveDeploy = await signDeploy(
+        approveDeploy,
+        currentAccount,
+      )
+
+      const arppoveDeployHash = await signedApproveDeploy.send(
+        NEXT_PUBLIC_CASPER_NODE_ADDRESS,
+      )
+
+      const _ = await getDeploy(arppoveDeployHash)
+    }
+
+    const tokens = new Map<BigNumberish, BigNumberish>([[tokenId, '1000000']])
+    const deployHash = await createSellOrder(
+      Date.now(),
+      contractHash,
+      tokens,
+      currentAccount!,
+      '5000000000',
+    )
+
+    const _ = await getDeploy(deployHash)
+  }, [
+    approve,
+    contractHash,
+    createSellOrder,
+    currentAccount,
+    getAllowance,
+    getDeploy,
+    signDeploy,
+    tokenId,
+  ])
 
   return (
-    <CustomLink href="/nftview">
-      <Container>
-        <ImageContainer>
+    <Container>
+      <ImageContainer>
+        {image && (
           <StyledImage
             src={image}
             width={320}
@@ -54,24 +142,29 @@ export default function NFTCard({
             layout="responsive"
             alt={name}
           />
-        </ImageContainer>
-        <Box px="28px" py={[14, 17]}>
-          <NameContainer>
-            <Text fontFamily="Castle">{name}</Text>
-            <Text>Price</Text>
-          </NameContainer>
-          <ValueContainer>
-            <Flex flexDirection="row" alignItems="center">
-              <StarsButton color="transparent" onClick={onStarClick}>
-                {userStarred ? <BsHeartFill /> : <BsHeart />}
-              </StarsButton>
-              <Text ml="4px">{stars}</Text>
-            </Flex>
-            <Text color="primary">{price.toLocaleString()}</Text>
-          </ValueContainer>
-        </Box>
-        {show && <SaleButton onClick={props.onClick} text={text} />}
-      </Container>
-    </CustomLink>
+        )}
+      </ImageContainer>
+      <Box px="28px" py={[14, 17]}>
+        <NameContainer>
+          <Text fontFamily="Castle">{name}</Text>
+          <Text>Price</Text>
+        </NameContainer>
+        <ValueContainer>
+          <Flex flexDirection="row" alignItems="center">
+            <StarsButton color="transparent" onClick={onStarClick}>
+              {userStarred ? <BsHeartFill /> : <BsHeart />}
+            </StarsButton>
+            <Text ml="4px">{stars}</Text>
+          </Flex>
+          <Text color="primary">{price.toLocaleString()}</Text>
+        </ValueContainer>
+      </Box>
+      {show && (
+        <SaleButton
+          onClick={currentAccount ? handleSaleButtonClick : connect}
+          text={currentAccount ? buttonText : 'Connect Wallet'}
+        />
+      )}
+    </Container>
   )
 }

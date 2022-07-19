@@ -66,13 +66,6 @@ async function startServer() {
 
   server.use(responseTime())
 
-  // limit repeated failed requests to auth endpoints
-  if (APP_ENV !== 'development') {
-    server.use('/api/v1/auth', authLimiter)
-  }
-
-  server.use('/api', apiRouter)
-
   const apolloServer = new ApolloServer({
     typeDefs,
     resolvers,
@@ -83,6 +76,13 @@ async function startServer() {
     app: server,
     path: '/api/graphql',
   })
+
+  // limit repeated failed requests to auth endpoints
+  if (APP_ENV !== 'development') {
+    server.use('/api/v1/auth', authLimiter)
+  }
+  server.use('/api', apiRouter)
+
   server.all('*', (req, res) => {
     return handle(req, res)
   })

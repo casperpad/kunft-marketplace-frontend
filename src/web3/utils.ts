@@ -1,6 +1,13 @@
 /* eslint-disable no-await-in-loop */
 
-import { CasperClient, CLPublicKey, Keys } from 'casper-js-sdk'
+import {
+  CasperClient,
+  CLPublicKey,
+  DeployUtil,
+  Keys,
+  Signer,
+} from 'casper-js-sdk'
+import { Deploy } from 'casper-js-sdk/dist/lib/DeployUtil'
 import find from 'lodash/find'
 
 export const parseTokenMeta = (str: string): Array<[string, string]> =>
@@ -8,6 +15,17 @@ export const parseTokenMeta = (str: string): Array<[string, string]> =>
     const map = s.split(' ')
     return [map[0], map[1]]
   })
+
+export const signDeploy = async (deploy: Deploy, publicKeyHex: string) => {
+  const deployJSON = DeployUtil.deployToJson(deploy)
+  const signedDeployJSON = await Signer.sign(
+    deployJSON,
+    publicKeyHex,
+    // publicKeyHex,
+  )
+  const signedDeploy = DeployUtil.deployFromJson(signedDeployJSON).unwrap()
+  return signedDeploy
+}
 
 export const sleep = (ms: number) =>
   // eslint-disable-next-line no-promise-executor-return

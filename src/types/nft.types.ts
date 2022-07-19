@@ -1,4 +1,4 @@
-export type TokenType = 'Sale' | 'NoneSale' | 'Upcoming'
+export type TokenType = 'Sale' | 'NoneSale' | 'Owned' | 'Upcoming'
 
 interface Metadata {
   [key: string]: string

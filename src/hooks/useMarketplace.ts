@@ -16,5 +16,7 @@ export default function useMarketplace() {
     contracts.marketplace[NEXT_PUBLIC_CASPER_CHAIN_NAME].contractPackageHash,
   )
 
-  return marketplaceClient
+  return {
+    createSellOrder: marketplaceClient.createSellOrder.bind(marketplaceClient),
+  }
 }
