@@ -1,5 +1,4 @@
 /* eslint-disable no-await-in-loop */
-import * as fs from 'fs'
 
 import { CasperClient, CLPublicKey, Keys } from 'casper-js-sdk'
 import find from 'lodash/find'
@@ -9,9 +8,6 @@ export const parseTokenMeta = (str: string): Array<[string, string]> =>
     const map = s.split(' ')
     return [map[0], map[1]]
   })
-
-export const getBinary = (pathToBinary: string): Uint8Array =>
-  new Uint8Array(fs.readFileSync(pathToBinary, null).buffer)
 
 export const sleep = (ms: number) =>
   // eslint-disable-next-line no-promise-executor-return
@@ -96,4 +92,8 @@ export const getAccountNamedKeyValue = async (
   )
 
   return contractHash
+}
+
+export const isValidHash = (hash: string): boolean => {
+  return hash.length === 64
 }

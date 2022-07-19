@@ -5,6 +5,7 @@ import collectionsRoutes from './collections.routes'
 import corsRoutes from './cors.routes'
 import docsRoutes from './docs.routes'
 import tokensRoutes from './tokens.routes'
+import userRoutes from './user.routes'
 
 const router = express.Router()
 
@@ -16,6 +17,10 @@ const defaultRoutes = [
   {
     path: '/auth',
     route: authRoutes,
+  },
+  {
+    path: '/user',
+    route: userRoutes,
   },
   // @deprecated Use GraphQL entrypoints
   {

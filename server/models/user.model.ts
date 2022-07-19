@@ -1,9 +1,9 @@
 import mongoose, { Schema } from 'mongoose'
 import validator from 'validator'
-import { UserDocument, UserModel, UserSchema } from '../interfaces/mongoose.gen'
+import { UserDocument, UserModel } from '../interfaces/mongoose.gen'
 
 // UserSchema type
-const UserSchema: UserSchema = new Schema({
+const UserSchema = new Schema({
   firstName: {
     type: String,
   },
@@ -37,6 +37,15 @@ const UserSchema: UserSchema = new Schema({
     enum: ['user', 'admin'],
     default: 'user',
   },
+  tokens: {
+    type: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: 'Token',
+      },
+    ],
+    default: [],
+  },
 })
 
 // NOTE: `this: UserDocument` is required for virtual properties to tell TS the type of `this` value using the "fake this" feature
@@ -50,7 +59,7 @@ UserSchema.statics = {
     const user = await this.findOne({ publicKey }).select('nonce')
     return user?.nonce
   },
-  async findByPublicKey(publicKey: string) {
+  async findByPublicKey(publicKey: string): Promise<UserDocument | null> {
     return await this.findOne({ publicKey })
   },
 }

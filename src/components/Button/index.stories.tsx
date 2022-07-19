@@ -2,6 +2,7 @@ import React from 'react'
 
 import Text from '@components/Text/Text'
 
+import AddButton from './AddButton'
 import { Button as ButtonComponent } from './Button'
 import SaleButton from './CardButton'
 import StyledButton from './StyledButton'
@@ -21,6 +22,7 @@ export const Button: React.FC = () => {
       <StyledButton text="Styled Button" />
       <SaleButton text="BUY NOW" />
       <SaleButton text="MAKE OFFER" />
+      <AddButton borderRadius={9999} />
     </div>
   )
 }

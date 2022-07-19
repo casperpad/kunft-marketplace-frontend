@@ -21,7 +21,7 @@ const TokenSchema = new Schema({
     ref: 'User',
     default: [],
   },
-  viwed: {
+  viewed: {
     type: Number,
     default: 0,
   },

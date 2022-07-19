@@ -1,4 +1,10 @@
+import { CEP47Client } from 'casper-cep47-js-client'
 import { Collection } from '@server/models/collection.model'
+
+import {
+  NEXT_PUBLIC_CASPER_NODE_ADDRESS,
+  NEXT_PUBLIC_CASPER_CHAIN_NAME,
+} from '../config'
 
 export const getCollections = async (page: number, limit: number) => {
   const aggregate = Collection.aggregate([
@@ -32,4 +38,41 @@ export const getCollections = async (page: number, limit: number) => {
 
   const result = await Collection.aggregatePaginate(aggregate, options)
   return result
+}
+
+export const addCollection = async (
+  contractPackageHash: string,
+  contractHash: string,
+  verified: boolean,
+  promoted: boolean,
+  slug?: string,
+  image?: string,
+  description?: string,
+  twitter?: string,
+  discord?: string,
+  website?: string,
+) => {
+  const cep47Client = new CEP47Client(
+    NEXT_PUBLIC_CASPER_NODE_ADDRESS!,
+    NEXT_PUBLIC_CASPER_CHAIN_NAME!,
+  )
+  cep47Client.setContractHash(`hash-${contractHash}`)
+  const name = await cep47Client.name()
+  const symbol = await cep47Client.symbol()
+  const collectionDB = new Collection({
+    contractPackageHash,
+    contractHash,
+    slug: slug || contractPackageHash,
+    name,
+    symbol,
+    verified,
+    promoted,
+    image,
+    description,
+    twitter,
+    discord,
+    website,
+  })
+  await collectionDB.save()
+  return collectionDB
 }

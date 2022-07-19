@@ -11,7 +11,9 @@ interface UserState {
   user?: User
 }
 
-const initialState: UserState = {}
+const initialState: UserState = {
+  user: undefined,
+}
 
 export const setUser = createAction<User | undefined>('USER:SET_USER')
 

@@ -99,6 +99,11 @@
             "position": "after"
           },
           {
+            "pattern": "@service/**",
+            "group": "type",
+            "position": "after"
+          },
+          {
             "pattern": "@store/**",
             "group": "type",
             "position": "after"

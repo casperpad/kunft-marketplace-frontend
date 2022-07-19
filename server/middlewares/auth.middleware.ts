@@ -2,6 +2,7 @@ import express from 'express'
 import { StatusCodes } from 'http-status-codes'
 import jwt from 'jsonwebtoken'
 import { JWT_NAME, JWT_SECRET } from '@server/config'
+import { ApiError } from '@server/utils'
 
 export const auth = (
   req: express.Request,
@@ -10,16 +11,12 @@ export const auth = (
 ) => {
   const token = req.cookies[JWT_NAME]
   if (token === undefined) {
-    return res
-      .status(StatusCodes.UNAUTHORIZED)
-      .send({ message: 'Invalid Authentication' })
+    throw new ApiError(StatusCodes.UNAUTHORIZED, 'Invalid Authentication')
   }
   try {
     jwt.verify(token, JWT_SECRET, (error: any, decoded: any) => {
       if (error) {
-        return res
-          .status(StatusCodes.UNAUTHORIZED)
-          .send({ message: 'Invalid authentication' })
+        throw new ApiError(StatusCodes.UNAUTHORIZED, 'Invalid Authentication')
       }
 
       // eslint-disable-next-line no-param-reassign

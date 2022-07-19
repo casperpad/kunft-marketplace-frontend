@@ -9,6 +9,7 @@ import { StatusCodes } from 'http-status-codes'
 import { sign as signJwt } from 'jsonwebtoken'
 import { JWT_SECRET, JWT_EXPIRE, JWT_NAME } from '@server/config'
 import { User } from '@server/models/user.model'
+import { ApiError } from '@server/utils'
 import catchAsync from '@server/utils/catchAsync'
 
 export const generateNonce = () => {
@@ -82,15 +83,22 @@ export const signIn = catchAsync(
 
     const signature = decodeBase16(signatureString)
 
-    const user = await User.findByPublicKey(publicKeyString)
+    const user = await User.findOne({ publicKey: publicKeyString }).populate(
+      'tokens',
+    )
 
-    if (user === null) throw Error(`Not exist user ${publicKeyString}`)
+    if (user === null)
+      throw new ApiError(
+        StatusCodes.NOT_FOUND,
+        `Not exist user ${publicKeyString}`,
+      )
 
     const message = `Signin KUNFT with\n public key: ${publicKeyString}\nnonce: ${user.nonce}`
 
     const verified = verifyMessageSignature(publicKey, message, signature)
 
-    if (!verified) throw Error(`Invalid signature`)
+    if (!verified)
+      throw new ApiError(StatusCodes.UNAUTHORIZED, `Invalid signature`)
 
     user.nonce = generateNonce()
 

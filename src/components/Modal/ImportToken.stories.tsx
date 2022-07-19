@@ -16,7 +16,11 @@ export const ImportTokenModal: React.FC = () => {
       <button type="button" onClick={() => setShow(!show)}>
         click
       </button>
-      <Modal setShow={setShow} show={show} />
+      <Modal
+        setShow={setShow}
+        show={show}
+        onImport={() => console.info(`first`)}
+      />
     </>
   )
 }

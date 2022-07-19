@@ -6,6 +6,8 @@ import { BaseButtonProps } from './types'
 
 interface CardButtonProps extends BaseButtonProps {
   text: string
+  type?: 'button' | 'submit'
+  disabled?: boolean
   onClick?: () => void
 }
 

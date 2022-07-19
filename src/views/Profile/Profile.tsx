@@ -1,9 +1,11 @@
-import { useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { Rating } from 'react-simple-star-rating'
 
-import { NFTCard } from '@components/Card/NFT'
-import useWindowSize from '@hooks/useWindowResize'
-
+import { NFTCard, AddButton, ImportTokenModal } from '@components/index'
+import { useUserTokens, useWindowSize } from '@hooks/index'
+import { userApis } from '@service/index'
+import { useAppSelector } from '@store/index'
+import { Token } from '../../types/nft.types'
 import Filter from './Filter'
 
 import {
@@ -30,10 +32,43 @@ export default function Profile({ avatar, NFTs = [] }: ProfileProps) {
 
   const [rating, setRating] = useState(0)
   const size = useWindowSize()
-
+  const [showImportTokenDialog, setShowImportTokenDialog] = useState(false)
+  const { user } = useAppSelector((state) => state.user)
   const handleRating = (rate: number) => {
     setRating(rate)
   }
+  const [page, setPage] = useState(1)
+  const [limit, setLimit] = useState(20)
+  const { data, loading, error } = useUserTokens(user!.publicKey, page, limit)
+  const [tokens, setTokens] = useState<Token[]>([])
+  const handleImportToken = useCallback(
+    async (
+      contractPackageHash: string,
+      contractHash: string,
+      tokenId: string,
+    ) => {
+      await userApis.addToken(contractPackageHash, contractHash, tokenId)
+    },
+    [],
+  )
+
+  useEffect(() => {
+    if (data === undefined) return
+    const tokens = data.getTokensOwnedBy!.tokens!.map((token) => {
+      return {
+        types: 'NoneSale',
+        name: `${token.collectionNFT!.name} #${token.tokenId}`,
+        id: token.tokenId,
+        owner: user!.publicKey,
+        viewed: token.viewed,
+        metadata: token.metadata,
+        contractHash: token.collectionNFT!.contractHash,
+        collectionImage: token.collectionNFT!.image,
+      } as unknown as Token
+    })
+    // setTokens((prev) => [...prev, tokens])
+    setTokens(tokens)
+  }, [loading, data])
 
   return (
     <Container>
@@ -60,26 +95,26 @@ export default function Profile({ avatar, NFTs = [] }: ProfileProps) {
         </DataContainer>
         {size[0] < 1280 && <Filter />}
         <NFTContainer>
-          {NFTs.map((item) => {
+          {tokens.map((token) => {
             return (
               <NFTCard
-                key={item}
-                type={
-                  Math.random() > 0.5
-                    ? Math.random() > 0.5
-                      ? 'Sale'
-                      : 'NoneSale'
-                    : 'Upcoming'
-                }
-                image={item}
-                name="KUNFT"
+                key={token.id}
+                type={token.type}
+                image={token.metadata.image || token.collectionImage || ''}
+                name={token.name}
                 price={Math.random() * 10000}
-                stars={Math.floor(Math.random() * 100)}
-                userStarred={Math.random() > 0.5}
+                stars={token.viewed}
+                userStarred
               />
             )
           })}
         </NFTContainer>
+        <ImportTokenModal
+          show={showImportTokenDialog}
+          setShow={setShowImportTokenDialog}
+          onImport={handleImportToken}
+        />
+        <AddButton onClick={() => setShowImportTokenDialog(true)} />
       </CustomLayout>
     </Container>
   )

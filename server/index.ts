@@ -1,7 +1,7 @@
 import * as Sentry from '@sentry/node'
 import * as Tracing from '@sentry/tracing'
 import { ApolloServerPluginLandingPageGraphQLPlayground } from 'apollo-server-core'
-import { ApolloServer, gql } from 'apollo-server-express'
+import { ApolloServer } from 'apollo-server-express'
 import cookieParser from 'cookie-parser'
 import cors from 'cors'
 import express from 'express'

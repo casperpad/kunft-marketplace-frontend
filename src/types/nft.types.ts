@@ -1,11 +1,17 @@
-export type NFTType = 'Sale' | 'NoneSale' | 'Upcoming'
+export type TokenType = 'Sale' | 'NoneSale' | 'Upcoming'
 
-export interface NFT {
-  type: NFTType
+interface Metadata {
+  [key: string]: string
+}
+
+export interface Token {
+  type: TokenType
   name: string
+  id: string
+  metadata: Metadata
+  collectionImage?: string
   owner: string
-  description: string
   viewed: number
-  price: number
-  collection: string
+  price?: number
+  contractHash: string
 }

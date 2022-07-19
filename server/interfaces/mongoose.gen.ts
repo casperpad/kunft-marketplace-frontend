@@ -338,20 +338,6 @@ export type SaleDocument = mongoose.Document<
   }
 
 /**
- * Lean version of TokenMetadataDocument
- *
- * This has all Mongoose getters & functions removed. This type will be returned from `TokenDocument.toObject()`.
- * ```
- * const tokenObject = token.toObject();
- * ```
- */
-export type TokenMetadata = {
-  key?: string
-  value?: string
-  _id: mongoose.Types.ObjectId
-}
-
-/**
  * Lean version of TokenDocument
  *
  * This has all Mongoose getters & functions removed. This type will be returned from `TokenDocument.toObject()`. To avoid conflicts with model names, use the type alias `TokenObject`.
@@ -362,10 +348,16 @@ export type TokenMetadata = {
 export type Token = {
   collectionNFT: Collection['_id'] | Collection
   tokenId: string
+  metadata: Map<
+    string,
+    {
+      type: {}
+      required: {}
+    }
+  >
   favoritedUsers: (User['_id'] | User)[]
   viwed?: number
   _id: mongoose.Types.ObjectId
-  metadata: TokenMetadata[]
 }
 
 /**
@@ -429,17 +421,6 @@ export type TokenSchema = mongoose.Schema<
 >
 
 /**
- * Mongoose Subdocument type
- *
- * Type of `TokenDocument["metadata"]` element.
- */
-export type TokenMetadataDocument = mongoose.Types.Subdocument & {
-  key?: string
-  value?: string
-  _id: mongoose.Types.ObjectId
-}
-
-/**
  * Mongoose Document type
  *
  * Pass this type to the Mongoose Model constructor:
@@ -454,10 +435,13 @@ export type TokenDocument = mongoose.Document<
   TokenMethods & {
     collectionNFT: CollectionDocument['_id'] | CollectionDocument
     tokenId: string
+    metadata: mongoose.Types.Map<{
+      type: {}
+      required: {}
+    }>
     favoritedUsers: mongoose.Types.Array<UserDocument['_id'] | UserDocument>
     viwed?: number
     _id: mongoose.Types.ObjectId
-    metadata: mongoose.Types.DocumentArray<TokenMetadataDocument>
   }
 
 /**
@@ -476,6 +460,7 @@ export type User = {
   email?: string
   emailVerified?: boolean
   role?: 'user' | 'admin'
+  tokens: (Token['_id'] | Token)[]
   _id: mongoose.Types.ObjectId
 }
 
@@ -511,7 +496,10 @@ export type UserMethods = {}
 
 export type UserStatics = {
   getNonce: (this: UserModel, publicKey: string) => Promise<string | undefined>
-  findByPublicKey: (this: UserModel, publicKey: string) => Promise<any>
+  findByPublicKey: (
+    this: UserModel,
+    publicKey: string,
+  ) => Promise<UserDocument | null>
 }
 
 /**
@@ -559,6 +547,7 @@ export type UserDocument = mongoose.Document<
     email?: string
     emailVerified?: boolean
     role?: 'user' | 'admin'
+    tokens: mongoose.Types.Array<TokenDocument['_id'] | TokenDocument>
     _id: mongoose.Types.ObjectId
     name: string
   }
