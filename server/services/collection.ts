@@ -6,8 +6,61 @@ import {
   NEXT_PUBLIC_CASPER_CHAIN_NAME,
 } from '../config'
 
-export const getCollections = async (page: number, limit: number) => {
+export const getCollections = async (
+  query: string,
+  page: number,
+  limit: number,
+) => {
   const aggregate = Collection.aggregate([
+    // {
+    //   $search: {
+    //     compound: {
+    //       must: [
+    //         {
+    //           text: {
+    //             query,
+    //             path: 'contractHash',
+    //             score: {
+    //               boost: {
+    //                 value: 9,
+    //               },
+    //             },
+    //           },
+    //         },
+
+    //         {
+    //           text: {
+    //             query,
+    //             path: 'name',
+    //             fuzzy: { maxEdits: 1, prefixLength: 2 },
+    //             score: {
+    //               boost: {
+    //                 value: 9,
+    //               },
+    //             },
+    //           },
+    //         },
+    //         {
+    //           text: {
+    //             query,
+    //             path: 'symbol',
+    //             fuzzy: { maxEdits: 1, prefixLength: 2 },
+    //             score: {
+    //               boost: {
+    //                 value: 5,
+    //               },
+    //             },
+    //           },
+    //         },
+    //       ],
+    //     },
+    //   },
+    // },
+    {
+      $match: {
+        slug: query,
+      },
+    },
     {
       $project: {
         _id: 0,

@@ -46,6 +46,23 @@ export const getTokens = async (
         price: '1000000',
       },
     },
+    // {
+    //   $addFields: {
+    //     result: {
+    //       $eq: [
+    //         {
+    //           $let: {
+    //             vars: {
+    //               sales: '$sales',
+    //             },
+    //             in: '$$sales.status',
+    //           },
+    //         },
+    //         'pending',
+    //       ],
+    //     },
+    //   },
+    // },
     {
       $set: {
         listed: true,

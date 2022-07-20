@@ -30,8 +30,21 @@ type GetCollectionsResponse {
   paginationInfo: PaginationInfo
 }
 
+type Slug {
+  slug: String!
+}
+
+type GetCollectionSlugsResponse {
+  slugs: [Slug!]
+}
+
 type Query {
-  getCollections(page: Int!, limit: Int!): GetCollectionsResponse
+  getCollections(
+    query: String!
+    page: Int!
+    limit: Int!
+  ): GetCollectionsResponse
+  getCollectionSlugs: GetCollectionSlugsResponse
 }
 
 type Mutation {

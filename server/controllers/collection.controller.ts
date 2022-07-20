@@ -1,5 +1,5 @@
 import express from 'express'
-import { Collection } from '@server/models/collection.model'
+import { getCollections as _getCollections } from '@server/services/collection'
 // import redisClient from '@server/providers/redis'
 
 export const getCollections = async (
@@ -13,38 +13,8 @@ export const getCollections = async (
   // }
 
   // @ts-ignore
-  const { page, limit } = req.query
-
-  const aggregate = Collection.aggregate([
-    {
-      $project: {
-        _id: 0,
-        __v: 0,
-      },
-    },
-  ])
-
-  const customLabels = {
-    totalDocs: 'total',
-    docs: 'collections',
-    limit: 'limit',
-    page: 'currentPage',
-    nextPage: 'nextPage',
-    prevPage: 'prevPage',
-    totalPages: 'totalPages',
-    hasPrevPage: 'hasPrev',
-    hasNextPage: 'hasNext',
-    pagingCounter: 'pageCounter',
-    meta: 'paginationInfo',
-  }
-
-  const options = {
-    page: (page as unknown as number) || 1,
-    limit: (limit as unknown as number) || 20,
-    customLabels,
-  }
-
-  const collectionDB = await Collection.aggregatePaginate(aggregate, options)
+  const { query, page, limit } = req.query
+  const collectionDB = await _getCollections(query, page, limit)
   res.json(collectionDB)
 }
 

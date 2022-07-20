@@ -44,7 +44,11 @@ export const Collection = gql`
   }
 
   type Query {
-    getCollections(page: Int!, limit: Int!): GetCollectionsResponse
+    getCollections(
+      query: String!
+      page: Int!
+      limit: Int!
+    ): GetCollectionsResponse
     getCollectionSlugs: GetCollectionSlugsResponse
   }
 
@@ -68,8 +72,8 @@ export const Collection = gql`
 export const collectionResolver: IResolvers = {
   Query: {
     async getCollections(_, args, __, ___) {
-      const { page, limit } = args
-      return await getCollections(page, limit)
+      const { query, page, limit } = args
+      return await getCollections(query, page, limit)
     },
     async getCollectionSlugs(_, __, ___, ____) {
       const slugs = await getCollectionSlugs()
