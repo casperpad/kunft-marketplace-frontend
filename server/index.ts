@@ -30,7 +30,7 @@ async function startServer() {
     console.info(`Connected to ${MONGODB_URL}`)
   })
 
-  await redisClient.connect()
+  // await redisClient.connect()
   await app.prepare().catch((err) => console.error(err))
 
   const server = express()

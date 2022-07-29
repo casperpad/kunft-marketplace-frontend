@@ -31,8 +31,8 @@ export const Collection = gql`
   }
 
   type GetCollectionsResponse {
-    collections: [Collection]
-    paginationInfo: PaginationInfo
+    collections: [Collection!]
+    paginationInfo: PaginationInfo!
   }
 
   type Slug {

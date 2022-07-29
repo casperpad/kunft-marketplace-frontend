@@ -61,6 +61,7 @@ export default function NFTs(props: NFTsProps) {
           {nfts.map((nft) => {
             return (
               <NFTCard
+                id="123123"
                 key={nft}
                 type={
                   Math.random() > 0.5
@@ -69,11 +70,15 @@ export default function NFTs(props: NFTsProps) {
                       : 'NoneSale'
                     : 'Upcoming'
                 }
-                image={nft}
+                collectionImage={nft}
                 name="KUNFT"
-                price={Math.random() * 10000}
-                stars={Math.floor(Math.random() * 100)}
-                userStarred={Math.random() > 0.5}
+                price="34523"
+                favoritedUsers={[]}
+                metadata={{ length: '2' }}
+                listed
+                viewed={221}
+                owner="213423"
+                contractHash="23421321"
               />
             )
           })}

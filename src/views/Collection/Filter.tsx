@@ -2,15 +2,15 @@ import { useState, useEffect } from 'react'
 import { BsArrowLeftCircle, BsArrowRightCircle } from 'react-icons/bs'
 import styled from 'styled-components'
 
-import { Flex } from '@components/Box'
-import { DiscoverFilter } from '@components/Filter'
+import { Flex, DiscoverFilter } from '@components/index'
 import useWindowSize from '@hooks/useWindowResize'
 
 const FilterContainer = styled(Flex)`
   position: sticky;
-  top: 184px;
+  top: 100px;
   transition: all 0.3s;
   height: max-content;
+  padding: 0px 20px 0px 20px;
 `
 
 const CustomFilter = styled(DiscoverFilter)`
@@ -37,21 +37,6 @@ const ShowButton = styled.div`
   }
 `
 
-const Container = styled(Flex)`
-  position: absolute;
-  left: 0;
-  top: 0;
-  padding: 80px 0px 120px 46px;
-  z-index: 20;
-  background-color: ${({ theme }) => theme.colors.background};
-  height: 100%;
-  transition: all 0.3s;
-
-  ${({ theme }) => theme.mediaQueries.xl} {
-    position: relative;
-  }
-`
-
 export default function Filter() {
   const [show, setShow] = useState(true)
   const size = useWindowSize()
@@ -63,17 +48,15 @@ export default function Filter() {
   }, [size])
 
   return (
-    <Container>
-      <FilterContainer width={show ? '240px' : '0px'}>
-        <ShowButton
-          onClick={() => {
-            if (size[0] < 1080) setShow(!show)
-          }}
-        >
-          {show ? <BsArrowLeftCircle /> : <BsArrowRightCircle />}
-        </ShowButton>
-        <CustomFilter />
-      </FilterContainer>
-    </Container>
+    <FilterContainer width={show ? '240px' : '0px'}>
+      <ShowButton
+        onClick={() => {
+          if (size[0] < 1080) setShow(!show)
+        }}
+      >
+        {show ? <BsArrowLeftCircle /> : <BsArrowRightCircle />}
+      </ShowButton>
+      <CustomFilter />
+    </FilterContainer>
   )
 }

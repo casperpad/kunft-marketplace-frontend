@@ -1,6 +1,5 @@
 import React, { useCallback, useMemo } from 'react'
-
-import { BigNumberish } from '@ethersproject/bignumber'
+import { BigNumberish, formatFixed } from '@ethersproject/bignumber'
 import {
   CLPublicKey,
   CLValueBuilder,
@@ -17,42 +16,27 @@ import {
 } from '@config/index'
 import { useCasperWeb3Provider, useCEP47, useMarketplace } from '@hooks/index'
 
-import { TokenType } from '../../../types/nft.types'
+import { Token } from '../../../types/nft.types'
 
 import {
   StarsButton,
   SaleButton,
   StyledImage,
-  ImageContainer,
   Container,
   NameContainer,
   ValueContainer,
 } from './NFTCard.styles'
 
-interface NFTCardProps {
-  image?: string
-  name: string
-  price: BigNumberish
-  stars: number
-  userStarred: boolean
-  type: TokenType
-  contractHash: string
-  tokenId: string
-  onStarClick?: () => void
-  onClick?: () => void
-}
-
 export default function NFTCard({
-  image,
-  name,
-  price,
-  stars,
-  userStarred,
   type,
+  id,
+  name,
+  metadata,
+  collectionImage,
+  favoritedUsers,
+  price,
   contractHash,
-  tokenId,
-  onStarClick,
-}: NFTCardProps) {
+}: Token) {
   const buttonText = useMemo(() => {
     switch (type) {
       case 'NoneSale':
@@ -68,33 +52,38 @@ export default function NFTCard({
   const show = type !== 'NoneSale'
   const { currentAccount, connect, getDeploy, signDeploy } =
     useCasperWeb3Provider()
-  const { createSellOrder } = useMarketplace()
+  const { createSellOrder, buySellOrderCspr } = useMarketplace()
   const { approve, getAllowance } = useCEP47(contractHash)
 
-  const handleSaleButtonClick = useCallback(async () => {
+  const sellToken = useCallback(async () => {
     if (currentAccount === undefined) return
 
-    const allowance = await getAllowance(
-      CLPublicKey.fromHex(currentAccount),
-      tokenId,
-    )
+    let shouldApprove = true
+    try {
+      const allowance = await getAllowance(
+        CLPublicKey.fromHex(currentAccount),
+        id,
+      )
 
-    const parsedAllowance = CLValueBuilder.byteArray(
-      decodeBase16(allowance.slice(13)),
-    )
-    const marketplaceContractPackageHash = CLValueBuilder.byteArray(
-      decodeBase16(NEXT_PUBLIC_MARKETPLACE_CONTRACT_PACKAGE_HASH.slice(5)),
-    )
+      const parsedAllowance = CLValueBuilder.byteArray(
+        decodeBase16(allowance.slice(13)),
+      )
+      const marketplaceContractPackageHash = CLValueBuilder.byteArray(
+        decodeBase16(NEXT_PUBLIC_MARKETPLACE_CONTRACT_PACKAGE_HASH.slice(5)),
+      )
+      shouldApprove =
+        encodeBase16(parsedAllowance.data) !==
+        encodeBase16(marketplaceContractPackageHash.data)
+      // eslint-disable-next-line no-empty
+    } catch (error: any) {}
+
     // Approve if allowance is incorrect
-    if (
-      encodeBase16(parsedAllowance.data) !==
-      encodeBase16(marketplaceContractPackageHash.data)
-    ) {
+    if (shouldApprove) {
       const approveDeploy = await approve(
         CLValueBuilder.byteArray(
           decodeBase16(NEXT_PUBLIC_MARKETPLACE_CONTRACT_PACKAGE_HASH.slice(5)),
         ),
-        [tokenId],
+        [id],
         '500000000',
         CLPublicKey.fromHex(currentAccount),
       )
@@ -110,7 +99,7 @@ export default function NFTCard({
       const _ = await getDeploy(arppoveDeployHash)
     }
 
-    const tokens = new Map<BigNumberish, BigNumberish>([[tokenId, '1000000']])
+    const tokens = new Map<BigNumberish, BigNumberish>([[id, '1000000']])
     const deployHash = await createSellOrder(
       Date.now(),
       contractHash,
@@ -128,22 +117,45 @@ export default function NFTCard({
     getAllowance,
     getDeploy,
     signDeploy,
-    tokenId,
+    id,
   ])
+
+  const buyToken = useCallback(async () => {
+    //
+    if (currentAccount === undefined || price === undefined) return
+    const deployHash = await buySellOrderCspr(
+      contractHash,
+      id,
+      price,
+      '4500000000',
+      currentAccount,
+    )
+    return deployHash
+  }, [currentAccount, price, buySellOrderCspr, contractHash, id])
+
+  const handle = useCallback(async () => {
+    const deployHash = await buyToken()
+    console.log(deployHash)
+    const _ = await getDeploy(deployHash!)
+  }, [getDeploy, buyToken])
+
+  const handleStarClick = useCallback(() => {
+    //
+  }, [])
+
+  const userStarred = useMemo(() => {
+    return true
+  }, [])
 
   return (
     <Container>
-      <ImageContainer>
-        {image && (
-          <StyledImage
-            src={image}
-            width={320}
-            height={320}
-            layout="responsive"
-            alt={name}
-          />
-        )}
-      </ImageContainer>
+      <StyledImage
+        src={metadata?.image || collectionImage || ''}
+        width={320}
+        height={320}
+        layout="responsive"
+        alt={name}
+      />
       <Box px="28px" py={[14, 17]}>
         <NameContainer>
           <Text fontFamily="Castle">{name}</Text>
@@ -151,17 +163,23 @@ export default function NFTCard({
         </NameContainer>
         <ValueContainer>
           <Flex flexDirection="row" alignItems="center">
-            <StarsButton color="transparent" onClick={onStarClick}>
+            <StarsButton color="transparent" onClick={handleStarClick}>
               {userStarred ? <BsHeartFill /> : <BsHeart />}
             </StarsButton>
-            <Text ml="4px">{stars}</Text>
+            <Text ml="4px" color="primary">
+              {favoritedUsers.length}
+            </Text>
           </Flex>
-          <Text color="primary">{price.toLocaleString()}</Text>
+          <Text color="primary">
+            {price
+              ? parseFloat(formatFixed(price, 9)).toLocaleString()
+              : 'Not Available'}
+          </Text>
         </ValueContainer>
       </Box>
       {show && (
         <SaleButton
-          onClick={currentAccount ? handleSaleButtonClick : connect}
+          onClick={currentAccount ? handle : connect}
           text={currentAccount ? buttonText : 'Connect Wallet'}
         />
       )}

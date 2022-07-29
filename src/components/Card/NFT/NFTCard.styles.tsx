@@ -18,14 +18,9 @@ export const SaleButton = styled(CardButton)`
   }
 `
 
-export const ImageContainer = styled.div`
-  border-bottom: 1px solid ${({ theme }) => theme.colors.border};
-`
-
 export const StyledImage = styled(Image)`
-  border-radius: 10px;
-  border-bottom-left-radius: 0px;
-  border-bottom-right-radius: 0px;
+  border-radius: 10px 10px 0px 0px;
+  border-bottom: 1px solid ${({ theme }) => theme.colors.border};
 `
 
 const StyledFlex = styled(Flex)`
@@ -64,7 +59,8 @@ export const Container = styled.div`
   font-weight: lighter;
   transition: all 0.3s;
   cursor: pointer;
-  min-width: min-content;
+  height: max-content;
+  margin-bottom: 40px;
   &:hover {
     box-shadow: ${({ theme }) => theme.shadows.hover};
     border-bottom-left-radius: 0px;

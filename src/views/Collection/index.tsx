@@ -1,30 +1,39 @@
-import { useRouter } from 'next/router'
 import styled from 'styled-components'
 
-import { Flex } from '@components/index'
-
+import { Page, Box } from '@components/index'
+import { Collection as ICollection } from '../../types/nft.types'
 import CollectionExplorer from './CollectionExplorer'
 import Filter from './Filter'
 
-const Container = styled(Flex)`
-  position: relative;
-  flex-direction: row;
-  height: 100%;
-  padding-top: 40px;
+const StyledPage = styled(Page)`
+  padding: 0px 0px 40px 0px;
 `
 
-export default function Collection(props: any) {
-  const router = useRouter()
-  const { slug } = router.query
-  console.log(props)
+const Logo = styled(Box)`
+  padding: 20px 10px;
+`
+
+const Container = styled(Box)`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  height: 100%;
+`
+
+export default function Collection({
+  collection,
+}: {
+  collection: ICollection
+}) {
+  const { name } = collection
+
   return (
-    <Container>
-      <Filter />
-      {typeof slug !== 'string' ? (
-        <div>Error</div>
-      ) : (
-        <CollectionExplorer slug={slug} />
-      )}
-    </Container>
+    <StyledPage>
+      <Logo>{name}</Logo>
+      <Container>
+        <Filter />
+        <CollectionExplorer collection={collection} />
+      </Container>
+    </StyledPage>
   )
 }

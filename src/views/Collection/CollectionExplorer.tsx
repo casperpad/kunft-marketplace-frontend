@@ -1,33 +1,15 @@
-import React, { useState } from 'react'
-
+import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 
-import { Flex, Grid, NFTCard, Layout } from '@components/index'
+import { Grid, NFTCard } from '@components/index'
+
 import useTokens from '@hooks/useTokens'
-
-const CustomLayout = styled(Layout)`
-  padding-left: 50px;
-  padding-right: 50px;
-
-  ${({ theme }) => theme.mediaQueries.md} {
-    padding-left: 56px;
-    padding-right: 56px;
-  }
-
-  ${({ theme }) => theme.mediaQueries.xl} {
-    padding-left: 76px;
-    padding-right: 76px;
-  }
-
-  ${({ theme }) => theme.mediaQueries.xl2} {
-    padding-left: 86px;
-    padding-right: 86px;
-  }
-`
+import { Collection as ICollection, Token } from '../../types/nft.types'
 
 const DiscoverContainer = styled(Grid)`
-  grid-column-gap: 20px;
-  grid-row-gap: 80px;
+  display: grid;
+  gap: 20px;
+  margin: 0px 40px 0px 40px;
   grid-template-columns: repeat(1, 1fr);
 
   ${({ theme }) => theme.mediaQueries.sm} {
@@ -43,18 +25,48 @@ const DiscoverContainer = styled(Grid)`
   }
 `
 
-export default function CollectionExplorer({ slug }: { slug: string }) {
-  // const [page, setPage] = useState(1)
-  // const [limit, setLimit] = useState(20)
-  // const { data, loading, error } = useTokens(slug, page, limit)
-  // const [nfts, setNfts] = useState()
+export default function CollectionExplorer({
+  collection,
+}: {
+  collection: ICollection
+}) {
+  const [page] = useState(1)
+  const [limit] = useState(20)
+  const { data, loading } = useTokens(collection.slug, page, limit)
+  const [tokens, setTokens] = useState<Token[]>([])
+
+  useEffect(() => {
+    if (data === undefined || data === null) return
+    if (data.tokens === undefined || data.tokens === null) return
+    const fetchedTokens = data.tokens
+      .map((t) => {
+        const token: Token = {
+          type: t.listed ? 'Sale' : 'NoneSale',
+          name: `${collection.name} #${t.tokenId}`,
+          id: t.tokenId,
+          metadata: t.metadata,
+          collectionImage: collection.image,
+          owner: '',
+          favoritedUsers: t.favoritedUsers || [],
+          listed: t.listed,
+          viewed: t.viewed,
+          price: t.price ? t.price : undefined,
+          payToken: t.sales ? t.sales[0].payToken : null,
+          contractHash: collection.contractHash,
+        }
+        return token
+      })
+      .filter((token) => tokens.find((t) => t.id === token.id) === undefined)
+    setTokens((prev) => [...prev, ...fetchedTokens])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [data])
 
   return (
-    <CustomLayout>
-      <DiscoverContainer>
-        {/* {hello} */}
-        {/* <div>{slug}</div> */}
-      </DiscoverContainer>
-    </CustomLayout>
+    <DiscoverContainer>
+      {tokens.map((token) => (
+        <NFTCard key={token.id} {...token} />
+      ))}
+      {loading ? 'Loading...' : null}
+    </DiscoverContainer>
   )
 }

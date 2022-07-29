@@ -13,6 +13,7 @@ export const Token = gql`
   type Sale {
     creator: String!
     price: String!
+    payToken: String
     startTime: GraphQLLong!
     status: String!
     createdAt: GraphQLDate!
@@ -22,17 +23,17 @@ export const Token = gql`
   type Token {
     collectionNFT: Collection!
     tokenId: String!
-    metadata: Metadata
-    favoritedUsers: [String]
+    metadata: Metadata!
+    favoritedUsers: [String!]
     viewed: Int!
     price: String
     listed: Boolean!
-    sales: [Sale]
+    sales: [Sale!]
   }
 
   type GetTokensResponse {
     tokens: [Token!]
-    paginationInfo: PaginationInfo
+    paginationInfo: PaginationInfo!
   }
 
   type Query {

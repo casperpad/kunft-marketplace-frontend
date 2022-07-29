@@ -202,14 +202,14 @@ export class MarketplaceClient {
     amount: BigNumberish,
     key: Keys.AsymmetricKey,
     paymentAmount: string,
-    additionalReccipient?: CLKeyParameters,
+    additionalRecipient?: CLKeyParameters,
   ) {
     const runtimeArgs = RuntimeArgs.fromMap({
       collection: CLValueBuilder.string(collection),
       token_id: CLValueBuilder.u256(tokenId),
       amount: CLValueBuilder.u256(amount),
-      additional_recipient: additionalReccipient
-        ? CLValueBuilder.option(Some(additionalReccipient))
+      additional_recipient: additionalRecipient
+        ? CLValueBuilder.option(Some(additionalRecipient))
         : CLValueBuilder.option(None, new CLKeyType()),
     })
     return this.contractClient.callEntrypoint(
@@ -220,6 +220,49 @@ export class MarketplaceClient {
       paymentAmount,
       [key],
     )
+  }
+
+  public async buySellOrderCspr(
+    collection: string,
+    tokenId: string,
+    amount: string,
+    paymentAmount: string,
+    publicKeyHex: string,
+    additionalRecipient?: CLKeyParameters,
+  ) {
+    //
+    if (this.contractClient.contractHash === undefined) {
+      throw Error('Invalid Marketplace contract hash')
+    }
+    const preBuySellOrder = new Contract(this.casperClient)
+
+    const runtimeArgs = RuntimeArgs.fromMap({
+      marketplace_contract: CLValueBuilder.string(
+        `contract-${this.contractClient.contractHash.slice(5)}`,
+      ),
+      entrypoint: CLValueBuilder.string('buy_sell_order_cspr'),
+      collection: CLValueBuilder.string(`contract-${collection}`),
+      token_id: CLValueBuilder.u256(tokenId),
+      amount: CLValueBuilder.u512(amount),
+      additional_recipient: additionalRecipient
+        ? CLValueBuilder.option(Some(additionalRecipient))
+        : CLValueBuilder.option(None, new CLKeyType()),
+    })
+
+    const file = await fetch('/pre_buy_sell_order_cspr.wasm')
+    const bytes = await file.arrayBuffer()
+    const contractContent = new Uint8Array(bytes)
+
+    const deploy = preBuySellOrder.install(
+      contractContent,
+      runtimeArgs,
+      paymentAmount,
+      CLPublicKey.fromHex(publicKeyHex),
+      this.networkName,
+    )
+    const signedDeploy = await signDeploy(deploy, publicKeyHex)
+    const deployHash = await this.casperClient.putDeploy(signedDeploy)
+    return deployHash
   }
 
   public async feeWallet() {
@@ -236,14 +279,14 @@ export class MarketplaceClient {
     payToken: string,
     key: Keys.AsymmetricKey,
     paymentAmount: string,
-    additionalReccipient?: CLKeyParameters,
+    additionalRecipient?: CLKeyParameters,
   ) {
     const runtimeArgs = RuntimeArgs.fromMap({
       collection: CLValueBuilder.string(collection),
       token_id: CLValueBuilder.u256(tokenId),
       amount: CLValueBuilder.u256(amount),
-      additional_recipient: additionalReccipient
-        ? CLValueBuilder.option(Some(additionalReccipient))
+      additional_recipient: additionalRecipient
+        ? CLValueBuilder.option(Some(additionalRecipient))
         : CLValueBuilder.option(None, new CLKeyType()),
     })
     return this.contractClient.callEntrypoint(

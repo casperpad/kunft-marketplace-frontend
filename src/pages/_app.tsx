@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react'
 import { useRouter } from 'next/router'
-import styled from 'styled-components'
 import type { AppProps } from 'next/app'
 
 import { Navbar, Footer, Spinner, PageMeta } from '@components/index'
@@ -11,20 +10,6 @@ import store from '../store'
 // eslint-disable-next-line import/order
 import '../assets/scss/main.scss'
 import '../styles/globals.css'
-
-const Page = styled.div`
-  background-color: ${({ theme }) => theme.colors.background};
-  margin-top: 65px;
-  display: flex;
-  justify-content: center;
-  min-height: calc(100vh - 65px);
-`
-
-const Layout = styled.div`
-  ${({ theme }) => theme.mediaQueries.xxl} {
-    width: 1512px;
-  }
-`
 
 function Auth({ children }: { children: React.ReactNode }) {
   const { user } = useAuth()
@@ -47,17 +32,14 @@ function MyApp({ Component, pageProps }: AppProps) {
     <Providers store={store}>
       <PageMeta symbol="" />
       <Navbar />
-      <Page>
-        <Layout>
-          {pageProps.protected ? (
-            <Auth>
-              <Component {...pageProps} />
-            </Auth>
-          ) : (
-            <Component {...pageProps} />
-          )}
-        </Layout>
-      </Page>
+      {pageProps.protected ? (
+        <Auth>
+          <Component {...pageProps} />
+        </Auth>
+      ) : (
+        <Component {...pageProps} />
+      )}
+
       <Footer />
     </Providers>
   )

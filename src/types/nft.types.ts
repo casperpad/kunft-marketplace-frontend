@@ -9,9 +9,25 @@ export interface Token {
   name: string
   id: string
   metadata: Metadata
-  collectionImage?: string
+  collectionImage: string | null
   owner: string
+  listed: boolean
   viewed: number
-  price?: number
+  price?: string
+  payToken?: string | null
+  favoritedUsers: string[]
   contractHash: string
+}
+
+export interface Collection {
+  __typename: string
+  contractPackageHash: string
+  contractHash: string
+  name: string
+  description: string | null
+  symbol: string
+  slug: string
+  image: string | null
+  verified: boolean
+  promoted: boolean
 }

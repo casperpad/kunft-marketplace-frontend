@@ -1,6 +1,7 @@
 fragment SaleFields on Sale {
   creator
   price
+  payToken
   startTime
   status
   createdAt
