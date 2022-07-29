@@ -1,6 +1,6 @@
 import * as Sentry from '@sentry/node'
 import * as Tracing from '@sentry/tracing'
-import { ApolloServerPluginLandingPageGraphQLPlayground } from 'apollo-server-core'
+
 import { ApolloServer } from 'apollo-server-express'
 import cookieParser from 'cookie-parser'
 import cors from 'cors'
@@ -12,7 +12,7 @@ import next from 'next'
 import responseTime from 'response-time'
 
 import { MONGODB_URL, PORT, SENTRY_DSN, APP_ENV } from '@server/config'
-import { typeDefs, resolvers } from '@server/graphql'
+import config from '@server/graphql'
 import redisClient from '@server/providers/redis'
 import apiRouter from '@server/routes'
 import { authLimiter } from './middlewares'
@@ -66,11 +66,7 @@ async function startServer() {
 
   server.use(responseTime())
 
-  const apolloServer = new ApolloServer({
-    typeDefs,
-    resolvers,
-    plugins: [ApolloServerPluginLandingPageGraphQLPlayground({})],
-  })
+  const apolloServer = new ApolloServer(config)
   await apolloServer.start()
   apolloServer.applyMiddleware({
     app: server,

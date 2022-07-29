@@ -25,6 +25,10 @@ const TokenSchema = new Schema({
     type: Number,
     default: 0,
   },
+  // account hash hex string (not formatted)
+  owner: {
+    type: String,
+  },
 })
 
 TokenSchema.plugin(mongooseAggregatePaginate)

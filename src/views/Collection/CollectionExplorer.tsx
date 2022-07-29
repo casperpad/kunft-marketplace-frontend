@@ -32,7 +32,7 @@ export default function CollectionExplorer({
 }) {
   const [page] = useState(1)
   const [limit] = useState(20)
-  const { data, loading } = useTokens(collection.slug, page, limit)
+  const { data, loading } = useTokens({ slug: collection.slug }, page, limit)
   const [tokens, setTokens] = useState<Token[]>([])
 
   useEffect(() => {

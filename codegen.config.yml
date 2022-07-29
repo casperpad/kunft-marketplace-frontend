@@ -1,9 +1,9 @@
 overwrite: true
 
-schema: './src/**/schema/*.graphql'
+schema: './src/**/schema/*.gql'
 
 documents:
-  - './src/**/queries/**/*.graphql'
+  - './src/**/queries/**/*.gql'
 
 config:
   scalars:

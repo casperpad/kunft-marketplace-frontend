@@ -1,0 +1,31 @@
+fragment SaleFields on Sale {
+  creator
+  price
+  payToken
+  startTime
+  status
+  createdAt
+}
+
+fragment TokenFields on Token {
+  tokenId
+  metadata
+  favoritedUsers
+  viewed
+  price
+  listed
+  sales {
+    ...SaleFields
+  }
+}
+
+query getTokens($where: GetTokensInput!, $page: Int, $limit: Int) {
+  getTokens(where: $where, page: $page, limit: $limit) {
+    tokens {
+      ...TokenFields
+    }
+    paginationInfo {
+      ...PaginationFields
+    }
+  }
+}

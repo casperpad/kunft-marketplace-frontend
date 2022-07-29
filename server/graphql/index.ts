@@ -1,7 +1,19 @@
-import { mergeResolvers, mergeTypeDefs } from '@graphql-tools/merge'
+import { GraphQLFileLoader } from '@graphql-tools/graphql-file-loader'
+import { loadSchemaSync } from '@graphql-tools/load'
+import { mergeResolvers } from '@graphql-tools/merge'
+import { addResolversToSchema } from '@graphql-tools/schema'
+import { ApolloServerPluginLandingPageGraphQLPlayground } from 'apollo-server-core'
 
-import { Collection, collectionResolver } from './collection'
-import { Token, tokenResolver } from './token'
+import { collectionResolver } from './collection'
+import { tokenResolver } from './token'
 
-export const resolvers = mergeResolvers([collectionResolver, tokenResolver])
-export const typeDefs = mergeTypeDefs([Collection, Token])
+const schema = loadSchemaSync('./server/graphql/*.gql', {
+  loaders: [new GraphQLFileLoader()],
+})
+
+const resolvers = mergeResolvers([collectionResolver, tokenResolver])
+const config = {
+  schema: addResolversToSchema({ schema, resolvers }),
+  plugins: [ApolloServerPluginLandingPageGraphQLPlayground({})],
+}
+export default config

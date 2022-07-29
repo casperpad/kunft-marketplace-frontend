@@ -1,4 +1,5 @@
 import { CEP47Client } from 'casper-cep47-js-client'
+import { CLPublicKey } from 'casper-js-sdk'
 import { StatusCodes } from 'http-status-codes'
 
 import { Token, Collection, User } from '@server/models'
@@ -9,19 +10,36 @@ import {
 } from '../config'
 import { addCollection } from './collection'
 
-export const getTokens = async (
-  collection: string,
-  page: number,
-  limit: number,
-) => {
-  const collectionDB = await Collection.findOne({ slug: collection })
+interface GetTokensInput {
+  slug?: string
+  owner?: string
+}
 
-  if (collectionDB === null) throw Error(`Not exist ${collection}`)
+export const getTokens = async ({
+  where,
+  page = 1,
+  limit = 20,
+}: {
+  where: GetTokensInput
+  page?: number
+  limit?: number
+}) => {
+  const { slug, owner } = where
+  let collectionNFTId: string | undefined
+  const matchQuery = {} as any
+  if (slug) {
+    const collectionDB = await Collection.findOne({ slug })
+
+    if (collectionDB === null) throw Error(`Not exist ${slug}`)
+
+    matchQuery.collectionNFT = collectionDB._id
+  }
 
   const aggregate = Token.aggregate([
     {
       $match: {
-        collectionNFT: collectionDB._id,
+        ...matchQuery,
+        owner,
       },
     },
     {
@@ -100,25 +118,10 @@ export const getTokens = async (
   return result
 }
 
-export const getTokensOwnedBy = async (
-  owner: string,
-  page: number,
-  limit: number,
-) => {
-  const user = await User.findOne({ publicKey: owner }).populate({
-    path: 'tokens',
-    populate: { path: 'collectionNFT', model: 'Collection' },
-  })
-  // .populate({ path: 'tokens.collectionNFT' })
-  if (user === null) throw new ApiError(StatusCodes.NOT_FOUND, `Not exist user`)
-  return { tokens: user.tokens }
-}
-
 export const addToken = async (
   contractPackageHash: string,
   contractHash: string,
   tokenId: string,
-  owner?: string,
 ) => {
   let collectionNFT = await Collection.findOne({ contractPackageHash })
   if (collectionNFT === null) {
@@ -136,29 +139,19 @@ export const addToken = async (
   )
   cep47Client.setContractHash(`hash-${contractHash}`)
   const metadata = await cep47Client.getTokenMeta(tokenId)
-  const token = new Token({
-    collectionNFT,
-    tokenId,
-    metadata,
-  })
-  await token.save()
-  if (owner) {
-    const tokenOwner = await cep47Client.getOwnerOf(tokenId)
-    console.log(tokenOwner, owner)
+  const owner = (await cep47Client.getOwnerOf(tokenId)).slice(13)
+  const token = await Token.findOneAndUpdate(
+    { collectionNFT, tokenId },
+    {
+      collectionNFT,
+      tokenId,
+      metadata,
+      owner,
+    },
+    {
+      upsert: true,
+    },
+  )
 
-    if (tokenOwner.endsWith(owner)) {
-      const user = await User.findOne({ publicKey: owner })
-      if (user === null)
-        throw new ApiError(StatusCodes.NOT_FOUND, `Not exist user`)
-      if (!user.tokens.includes(token._id)) {
-        user.tokens.push(token._id)
-        await user.save()
-      } else {
-        throw new ApiError(StatusCodes.CONFLICT, `Already added token`)
-      }
-    } else {
-      throw new ApiError(StatusCodes.NOT_ACCEPTABLE, `Not token owner`)
-    }
-  }
   return token
 }

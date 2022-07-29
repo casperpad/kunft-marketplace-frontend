@@ -42,15 +42,6 @@ const UserSchema = new Schema({
     enum: ['user', 'admin'],
     default: 'user',
   },
-  tokens: {
-    type: [
-      {
-        type: Schema.Types.ObjectId,
-        ref: 'Token',
-      },
-    ],
-    default: [],
-  },
 })
 
 // NOTE: `this: UserDocument` is required for virtual properties to tell TS the type of `this` value using the "fake this" feature

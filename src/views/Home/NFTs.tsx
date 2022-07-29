@@ -63,13 +63,7 @@ export default function NFTs(props: NFTsProps) {
               <NFTCard
                 id="123123"
                 key={nft}
-                type={
-                  Math.random() > 0.5
-                    ? Math.random() > 0.5
-                      ? 'Sale'
-                      : 'NoneSale'
-                    : 'Upcoming'
-                }
+                type="Sale"
                 collectionImage={nft}
                 name="KUNFT"
                 price="34523"
