@@ -97,9 +97,12 @@ export class MarketplaceClient {
 
   contractClient: Contracts.Contract
 
-  constructor(public _nodeAddress: string, public networkName: string) {
+  chainName: string
+
+  constructor(_nodeAddress: string, _chainName: string) {
     this.casperClient = new CasperClient(_nodeAddress)
     this.contractClient = new Contract(this.casperClient)
+    this.chainName = _chainName
   }
 
   public install(
@@ -126,7 +129,7 @@ export class MarketplaceClient {
       runtimeArgs,
       paymentAmount,
       deploySender,
-      this.networkName,
+      this.chainName,
       keys || [],
     )
   }
@@ -166,7 +169,7 @@ export class MarketplaceClient {
       'create_sell_order',
       runtimeArgs,
       CLPublicKey.fromHex(publicKeyHex),
-      this.networkName,
+      this.chainName,
       paymentAmount,
     )
     const signedDeploy = await signDeploy(deploy, publicKeyHex)
@@ -190,7 +193,7 @@ export class MarketplaceClient {
       'cancel_sell_order',
       runtimeArgs,
       key.publicKey,
-      this.networkName,
+      this.chainName,
       paymentAmount,
       [key],
     )
@@ -216,7 +219,7 @@ export class MarketplaceClient {
       'buy_sell_order',
       runtimeArgs,
       key.publicKey,
-      this.networkName,
+      this.chainName,
       paymentAmount,
       [key],
     )
@@ -258,7 +261,7 @@ export class MarketplaceClient {
       runtimeArgs,
       paymentAmount,
       CLPublicKey.fromHex(publicKeyHex),
-      this.networkName,
+      this.chainName,
     )
     const signedDeploy = await signDeploy(deploy, publicKeyHex)
     const deployHash = await this.casperClient.putDeploy(signedDeploy)
@@ -293,7 +296,7 @@ export class MarketplaceClient {
       'cancel_sell_order',
       runtimeArgs,
       key.publicKey,
-      this.networkName,
+      this.chainName,
       paymentAmount,
       [key],
     )
