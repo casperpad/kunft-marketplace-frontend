@@ -51,7 +51,7 @@ export default function CollectionExplorer({
           listed: t.listed,
           viewed: t.viewed,
           price: t.price ? t.price : undefined,
-          payToken: t.sales ? t.sales[0].payToken : null,
+          payToken: t.sales && t.sales.length > 0 ? t.sales[0].payToken : null,
           contractHash: collection.contractHash,
         }
         return token
