@@ -8,13 +8,13 @@ import {
 } from 'casper-js-sdk'
 import { BsHeart, BsHeartFill } from 'react-icons/bs'
 
-import { Box, Flex } from '@components/Box'
-import { Text } from '@components/Text'
+import { Box, Flex } from '@/components/Box'
+import { Text } from '@/components/Text'
 import {
   NEXT_PUBLIC_CASPER_NODE_ADDRESS,
   NEXT_PUBLIC_MARKETPLACE_CONTRACT_PACKAGE_HASH,
-} from '@config/index'
-import { useCasperWeb3Provider, useCEP47, useMarketplace } from '@hooks/index'
+} from '@/config/index'
+import { useCasperWeb3Provider, useCEP47, useMarketplace } from '@/hooks/index'
 
 import { Token } from '../../../types/nft.types'
 

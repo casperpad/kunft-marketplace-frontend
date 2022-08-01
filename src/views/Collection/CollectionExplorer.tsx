@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 
-import { Grid, NFTCard } from '@components/index'
+import { Grid, NFTCard } from '@/components'
 
-import useTokens from '@hooks/useTokens'
+import useTokens from '@/hooks/useTokens'
 import { Collection as ICollection, Token } from '../../types/nft.types'
 
 const DiscoverContainer = styled(Grid)`

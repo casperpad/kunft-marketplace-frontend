@@ -1,6 +1,6 @@
 import React from 'react'
 
-import Text from '@components/Text/Text'
+import { Text } from '@/components/Text'
 
 import AddButton from './AddButton'
 import { Button as ButtonComponent } from './Button'

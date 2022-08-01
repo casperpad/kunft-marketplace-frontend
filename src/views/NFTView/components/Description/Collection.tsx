@@ -1,6 +1,6 @@
 import styled from 'styled-components'
 
-import { Text } from '@components/Text'
+import { Text } from '@/components'
 
 import {
   Container as DefaultContainer,

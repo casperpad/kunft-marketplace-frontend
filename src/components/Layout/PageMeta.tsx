@@ -1,6 +1,6 @@
 import Head from 'next/head'
 import { useRouter } from 'next/router'
-import { DEFAULT_META, getCustomMeta } from '@config/constants/meta'
+import { DEFAULT_META, getCustomMeta } from '@/config/constants/meta'
 
 const PageMeta: React.FC<{ symbol?: string }> = ({ symbol }) => {
   const { pathname } = useRouter()

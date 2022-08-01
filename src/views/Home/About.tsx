@@ -1,9 +1,7 @@
 import Image from 'next/image'
 import styled from 'styled-components'
 
-import { Flex } from '@components/Box'
-import { Layout } from '@components/Layout'
-import { Text } from '@components/Text'
+import { Flex, Layout, Text } from '@/components'
 
 const Title = styled(Text)`
   text-align: center;

@@ -1,9 +1,6 @@
 import styled from 'styled-components'
 
-import { Flex } from '@components/Box'
-import { StyledButton } from '@components/Button'
-import { Layout } from '@components/Layout'
-import { Text } from '@components/Text'
+import { Flex, StyledButton, Layout, Text } from '@/components'
 
 const Title = styled(Text)`
   font-size: 30px;

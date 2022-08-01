@@ -1,8 +1,7 @@
 import Image from 'next/image'
 import styled from 'styled-components'
 
-import { Flex, Grid, Box, Text } from '@components/index'
-import { Layout } from '@components/Layout'
+import { Flex, Grid, Box, Text, Layout } from '@/components'
 
 export const ImageContainer = styled(Box)`
   min-width: 235px;

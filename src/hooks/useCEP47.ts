@@ -7,7 +7,7 @@ import { CLKeyParameters, CLPublicKey, Keys } from 'casper-js-sdk'
 import {
   NEXT_PUBLIC_CASPER_NODE_ADDRESS,
   NEXT_PUBLIC_CASPER_CHAIN_NAME,
-} from '@config/index'
+} from '@/config'
 
 export default function useCEP47(
   contractHash?: string,

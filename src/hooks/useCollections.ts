@@ -1,4 +1,4 @@
-import { useGetCollectionsQuery } from '@graphql/queries/__generated__/collection.generated'
+import { useGetCollectionsQuery } from '@/graphql/queries/__generated__/collection.generated'
 
 export default function useCollections(
   query: string,

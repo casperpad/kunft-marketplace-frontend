@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import styled from 'styled-components'
 
-import { Box } from '@components/Box'
+import { Box } from '@/components'
 
 import Collection from './Collection'
 import Detail from './Detail'

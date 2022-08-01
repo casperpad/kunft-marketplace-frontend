@@ -1,6 +1,6 @@
 import React from 'react'
 
-import Text from '@components/Text/Text'
+import { Text } from '@/components/Text'
 
 import BoxComponent from './Box'
 import FlexComponent from './Flex'

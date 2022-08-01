@@ -4,11 +4,11 @@ import { useForm } from 'react-hook-form'
 import styled from 'styled-components'
 import Modal from 'styled-react-modal'
 
-import { Box } from '@components/Box'
-import { CardButton } from '@components/Button'
-import { ModalInput } from '@components/Input'
-import { Text } from '@components/Text'
-import { NEXT_PUBLIC_CASPER_NODE_ADDRESS } from '@config/index'
+import { Box } from '@/components/Box'
+import { CardButton } from '@/components/Button'
+import { ModalInput } from '@/components/Input'
+import { Text } from '@/components/Text'
+import { NEXT_PUBLIC_CASPER_NODE_ADDRESS } from '@/config/index'
 import { isValidHash } from '../../web3/utils'
 
 const InputContainer = styled(Box)`

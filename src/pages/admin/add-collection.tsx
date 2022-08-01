@@ -1,4 +1,4 @@
-import AddCollection from '@views/Admin/AddCollection'
+import AddCollection from '@/views/Admin/AddCollection'
 
 export default AddCollection
 

@@ -1,8 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 
-import { Flex } from '@components/Box'
-import { Text } from '@components/Text'
+import { Flex, Text } from '@/components'
 
 import { StyledText, NameContainer } from './styles'
 

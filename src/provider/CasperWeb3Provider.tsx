@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react'
 
 import { CasperClient, Signer } from 'casper-js-sdk'
 
-import { NEXT_PUBLIC_CASPER_NODE_ADDRESS } from '@config/index'
+import { NEXT_PUBLIC_CASPER_NODE_ADDRESS } from '@/config/index'
 import CasperWeb3Context from '../context/CasperWeb3'
 import { getDeploy as _getDeploy, signDeploy } from '../web3/utils'
 

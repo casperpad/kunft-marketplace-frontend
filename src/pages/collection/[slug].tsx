@@ -1,6 +1,6 @@
 import { gql } from '@apollo/client'
 import { GetStaticProps, GetStaticPaths } from 'next'
-import Collection from '@views/Collection'
+import Collection from '@/views/Collection'
 import { client } from '../../Providers'
 
 export default Collection

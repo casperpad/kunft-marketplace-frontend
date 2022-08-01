@@ -1,5 +1,5 @@
-import { Flex } from '@components/Box'
-import { Text } from '@components/Text'
+import { Flex } from '@/components/Box'
+import { Text } from '@/components/Text'
 
 import { Button } from './Button'
 import { BaseButtonProps } from './types'

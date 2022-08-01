@@ -1,9 +1,6 @@
 import styled from 'styled-components'
 
-import { Flex } from '@components/Box'
-import { StyledButton } from '@components/Button'
-import { Input } from '@components/Input'
-import { Text } from '@components/Text'
+import { Flex, StyledButton, Input, Text } from '@/components'
 
 const CustomInput = styled(Input)`
   width: 150px;

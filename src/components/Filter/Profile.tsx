@@ -1,10 +1,10 @@
 import { useState, useCallback } from 'react'
 import styled from 'styled-components'
 
-import { Box, Flex } from '@components/Box'
-import { CheckboxItem } from '@components/Checkbox'
-import { RangeSlider } from '@components/Slider'
-import { Text } from '@components/Text'
+import { Box, Flex } from '@/components/Box'
+import { CheckboxItem } from '@/components/Checkbox'
+import { RangeSlider } from '@/components/Slider'
+import { Text } from '@/components/Text'
 
 const PriceText = styled(Text)`
   width: 65px;

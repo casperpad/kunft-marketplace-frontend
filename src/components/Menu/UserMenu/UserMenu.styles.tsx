@@ -1,8 +1,8 @@
 import Image from 'next/image'
 import styled from 'styled-components'
 
-import { Box, Flex } from '@components/Box'
-import { Text } from '@components/Text'
+import { Box, Flex } from '@/components/Box'
+import { Text } from '@/components/Text'
 
 export const UserMenuDivider = styled.div`
   border-top: 1px solid ${({ theme }) => theme.colors.background};

@@ -1,8 +1,3 @@
-import dynamic from 'next/dynamic'
+import Collection from '@/views/Collection'
 
-// eslint-disable-next-line @typescript-eslint/ban-types
-const DiscoverPage = dynamic<{}>(() => import('@views/Collection'), {
-  ssr: false,
-})
-
-export default DiscoverPage
+export default Collection

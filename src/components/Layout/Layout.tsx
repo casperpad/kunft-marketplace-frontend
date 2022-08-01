@@ -1,6 +1,6 @@
 import styled from 'styled-components'
 
-import { Box, BoxProps } from '@components/Box'
+import { Box, BoxProps } from '@/components/Box'
 
 const Layout = styled(Box)<BoxProps>`
   width: 100%;

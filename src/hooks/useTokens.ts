@@ -1,4 +1,4 @@
-import { useGetTokensQuery } from '@graphql/queries/__generated__/token.generated'
+import { useGetTokensQuery } from '@/graphql/queries/__generated__/token.generated'
 
 interface GetTokensInput {
   slug?: string

@@ -2,8 +2,8 @@ import React, { useEffect } from 'react'
 import { useRouter } from 'next/router'
 import type { AppProps } from 'next/app'
 
-import { Navbar, Footer, Spinner, PageMeta } from '@components/index'
-import { useAuth, useMarketplace } from '@hooks/index'
+import { Navbar, Footer, Spinner, PageMeta } from '@/components'
+import { useAuth, useMarketplace } from '@/hooks'
 import Providers from '../Providers'
 import store from '../store'
 

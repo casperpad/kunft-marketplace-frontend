@@ -1,10 +1,10 @@
 import { useCallback, useEffect, useState } from 'react'
 import { Rating } from 'react-simple-star-rating'
 
-import { NFTCard, AddButton, ImportTokenModal } from '@components/index'
-import { useUserTokens, useWindowSize } from '@hooks/index'
-import { userApis } from '@service/index'
-import { useAppSelector } from '@store/index'
+import { NFTCard, AddButton, ImportTokenModal } from '@/components'
+import { useWindowSize, useTokens } from '@/hooks'
+import { userApis } from '@/service'
+import { useAppSelector } from '@/store'
 import { Token } from '../../types/nft.types'
 import Filter from './Filter'
 
@@ -39,7 +39,13 @@ export default function Profile({ avatar, NFTs = [] }: ProfileProps) {
   }
   const [page, setPage] = useState(1)
   const [limit, setLimit] = useState(20)
-  const { data, loading, error } = useUserTokens(user!.publicKey, page, limit)
+  const { data, loading, error } = useTokens(
+    {
+      owner: user!.publicKey,
+    },
+    page,
+    limit,
+  )
   const [tokens, setTokens] = useState<Token[]>([])
   const handleImportToken = useCallback(
     async (
@@ -53,21 +59,21 @@ export default function Profile({ avatar, NFTs = [] }: ProfileProps) {
   )
 
   useEffect(() => {
-    if (data === undefined) return
-    const tokens = data.getTokensOwnedBy!.tokens!.map((token) => {
-      return {
-        type: 'Owned',
-        name: `${token.collectionNFT!.name} #${token.tokenId}`,
-        id: token.tokenId,
-        owner: user!.publicKey,
-        viewed: token.viewed,
-        metadata: token.metadata,
-        contractHash: token.collectionNFT!.contractHash,
-        collectionImage: token.collectionNFT!.image,
-      } as unknown as Token
-    })
-    // setTokens((prev) => [...prev, tokens])
-    setTokens(tokens)
+    // if (data === undefined) return
+    // const tokens = data.getTokensOwnedBy!.tokens!.map((token) => {
+    //   return {
+    //     type: 'Owned',
+    //     name: `${token.collectionNFT!.name} #${token.tokenId}`,
+    //     id: token.tokenId,
+    //     owner: user!.publicKey,
+    //     viewed: token.viewed,
+    //     metadata: token.metadata,
+    //     contractHash: token.collectionNFT!.contractHash,
+    //     collectionImage: token.collectionNFT!.image,
+    //   } as unknown as Token
+    // })
+    // // setTokens((prev) => [...prev, tokens])
+    // setTokens(tokens)
   }, [loading, data])
 
   return (
@@ -95,7 +101,7 @@ export default function Profile({ avatar, NFTs = [] }: ProfileProps) {
         </DataContainer>
         {size[0] < 1280 && <Filter />}
         <NFTContainer>
-          {tokens.map((token) => {
+          {/* {tokens.map((token) => {
             return (
               <NFTCard
                 key={token.id}
@@ -109,7 +115,7 @@ export default function Profile({ avatar, NFTs = [] }: ProfileProps) {
                 userStarred
               />
             )
-          })}
+          })} */}
         </NFTContainer>
         <ImportTokenModal
           show={showImportTokenDialog}

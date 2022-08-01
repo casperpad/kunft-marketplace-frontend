@@ -1,7 +1,6 @@
 import styled from 'styled-components'
 
-import { Flex } from '@components/Box'
-import { Text } from '@components/Text'
+import { Flex, Text } from '@/components'
 
 export const Container = styled(Flex)`
   flex-direction: column;

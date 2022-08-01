@@ -1,8 +1,6 @@
 import styled from 'styled-components'
 
-import { Flex } from '@components/Box'
-import { StyledButton } from '@components/Button'
-import { Text } from '@components/Text'
+import { Flex, StyledButton, Text } from '@/components'
 
 const PriceContainer = styled(Flex)`
   flex-direction: column;

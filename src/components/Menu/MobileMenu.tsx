@@ -1,10 +1,10 @@
 import { useRouter } from 'next/router'
 import styled from 'styled-components'
 
-import { Flex } from '@components/Box'
-import { CustomLink } from '@components/Link'
-import { Text } from '@components/Text'
-import { navLinks } from '@config/constants/data'
+import { Flex } from '@/components/Box'
+import { CustomLink } from '@/components/Link'
+import { Text } from '@/components/Text'
+import { navLinks } from '@/config/constants/data'
 
 const StyledText = styled(Text)<{ active: boolean }>`
   color: ${({ theme, active }) =>

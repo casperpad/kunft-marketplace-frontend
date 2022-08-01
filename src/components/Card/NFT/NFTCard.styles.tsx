@@ -1,8 +1,8 @@
 import Image from 'next/image'
 import styled from 'styled-components'
 
-import { Box, Flex } from '@components/Box'
-import { DefaultButton, CardButton } from '@components/Button'
+import { Box, Flex } from '@/components/Box'
+import { DefaultButton, CardButton } from '@/components/Button'
 
 export const StarsButton = styled(DefaultButton)`
   color: ${({ theme }) => theme.colors.primary};

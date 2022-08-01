@@ -2,9 +2,9 @@ import { useState, useEffect } from 'react'
 import { BsArrowLeftCircle, BsArrowRightCircle } from 'react-icons/bs'
 import styled from 'styled-components'
 
-import { Flex } from '@components/Box'
-import { ProfileFilter } from '@components/Filter'
-import useWindowSize from '@hooks/useWindowResize'
+import { Flex, ProfileFilter } from '@/components'
+
+import useWindowSize from '@/hooks/useWindowResize'
 
 const FilterContainer = styled(Flex)`
   position: sticky;

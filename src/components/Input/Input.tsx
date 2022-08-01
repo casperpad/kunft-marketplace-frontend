@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import styled, { DefaultTheme } from 'styled-components'
-import getThemeValue from '@utils/getThemeValue'
+import getThemeValue from '@/utils/getThemeValue'
 import { InputProps } from './types'
 
 interface StyledInputProps extends InputProps {

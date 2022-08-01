@@ -1,6 +1,6 @@
 import styled, { DefaultTheme } from 'styled-components'
 import { border, layout, space, typography } from 'styled-system'
-import getThemeValue from '@utils/getThemeValue'
+import getThemeValue from '@/utils/getThemeValue'
 
 import { BaseButtonProps } from './types'
 

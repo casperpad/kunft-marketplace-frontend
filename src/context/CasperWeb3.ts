@@ -1,6 +1,6 @@
 import React from 'react'
 import { CasperClient, DeployUtil } from 'casper-js-sdk'
-import { NEXT_PUBLIC_CASPER_NODE_ADDRESS } from '@config/index'
+import { NEXT_PUBLIC_CASPER_NODE_ADDRESS } from '@/config'
 import { signDeploy } from '../web3/utils'
 
 interface CasperWeb3ContextProps {

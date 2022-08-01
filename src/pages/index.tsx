@@ -1,9 +1,9 @@
 import dynamic from 'next/dynamic'
 import type { NextPage } from 'next'
-import HomeView from '@views/Home'
+import HomeView from '@/views/Home'
 
 // eslint-disable-next-line @typescript-eslint/ban-types
-// const HomeView = dynamic<{}>(() => import('@views/Home'), {
+// const HomeView = dynamic<{}>(() => import('@/viewsHome'), {
 //   ssr: false,
 // })
 

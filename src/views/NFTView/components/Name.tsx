@@ -1,8 +1,7 @@
 import { BsHeart, BsEye } from 'react-icons/bs'
 import styled from 'styled-components'
 
-import { Flex } from '@components/Box'
-import { Text } from '@components/Text'
+import { Flex, Text } from '@/components'
 
 const NameText = styled(Text)`
   font-size: 40px;

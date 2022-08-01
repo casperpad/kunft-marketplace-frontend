@@ -4,11 +4,11 @@ import { FiCopy } from 'react-icons/fi'
 import { IoSettingsOutline } from 'react-icons/io5'
 import { RiLogoutBoxRLine } from 'react-icons/ri'
 
-import { Box, Flex } from '@components/Box'
-import { CustomLink } from '@components/Link'
-import { Text } from '@components/Text'
+import { Box, Flex } from '@/components/Box'
+import { CustomLink } from '@/components/Link'
+import { Text } from '@/components/Text'
 
-import useAuth from '@hooks/useAuth'
+import useAuth from '@/hooks/useAuth'
 import {
   UserMenuContainer,
   UserProfile,

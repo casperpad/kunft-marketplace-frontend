@@ -1,5 +1,4 @@
-import { Flex } from '@components/Box'
-import { Layout } from '@components/Layout'
+import { Flex, Layout } from '@/components'
 
 import {
   Title,

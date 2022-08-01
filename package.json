@@ -4,15 +4,13 @@
   "private": true,
   "main": "dist/index.js",
   "scripts": {
-    "dev": "tsnd --respawn --project tsconfig.server.json --transpile-only --watch ./server --ignore-watch=.next -r tsconfig-paths/register server/index.ts ",
-    "build:next": "next build",
-    "build:server": "tsc --p tsconfig.server.json && tsc-alias -p tsconfig.server.json",
-    "build": "pnpm run build:next && pnpm run build:server",
-    "start": "set APP_ENV=production && node .",
-    "lint": "next lint",
-    "prepare": "husky install",
+    "dev": "next dev",
     "storybook": "start-storybook -p 6006",
-    "build-storybook": "build-storybook -o docs-build",
+    "build:server": "tsc --p tsconfig.server.json && tsc-alias -p tsconfig.server.json",
+    "build:storybook": "build-storybook -o docs-build",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
     "lint:style": "npx stylelint \"**/*.{ts,tsx,scss}\"",
     "format:check": "prettier --check \"**/*.{js,jsx,ts,tsx,json}\"",
     "format:check:staged": "lint-staged",
@@ -21,9 +19,7 @@
     "test": "jest",
     "test:watch": "jest --watch",
     "test:config": "jest src/config/__tests__/ --testPathIgnorePatterns",
-    "queries:generate": "graphql-codegen --config codegen.config.yml",
-    "generate-types": "mtgen ./server/models -p tsconfig.server.json -o ./server/interfaces",
-    "postinstall": "pnpm run queries:generate"
+    "prepare": "husky install"
   },
   "dependencies": {
     "@apollo/client": "^3.6.9",

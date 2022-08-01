@@ -74,37 +74,7 @@
             "position": "after"
           },
           {
-            "pattern": "@components/**",
-            "group": "type",
-            "position": "after"
-          },
-          {
-            "pattern": "@views/**",
-            "group": "type",
-            "position": "after"
-          },
-          {
-            "pattern": "@utils/**",
-            "group": "type",
-            "position": "after"
-          },
-          {
-            "pattern": "@config/**",
-            "group": "type",
-            "position": "after"
-          },
-          {
-            "pattern": "@hooks/**",
-            "group": "type",
-            "position": "after"
-          },
-          {
-            "pattern": "@service/**",
-            "group": "type",
-            "position": "after"
-          },
-          {
-            "pattern": "@store/**",
+            "pattern": "@/**",
             "group": "type",
             "position": "after"
           }
@@ -132,17 +102,7 @@
     "react/prop-types": 0,
     "react/jsx-props-no-spreading": 0,
     "react/no-multi-comp": 0,
-    "import/extensions": [
-      "error",
-      "ignorePackages",
-      {
-        "js": "never",
-        "mjs": "never",
-        "jsx": "never",
-        "ts": "never",
-        "tsx": "never"
-      }
-    ],
+    "import/extensions": 0,
     "import/no-unresolved": 0,
     "lodash/import-scope": [2, "method"],
     "@next/next/no-img-element": 0,

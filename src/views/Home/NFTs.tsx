@@ -1,9 +1,6 @@
 import styled from 'styled-components'
 
-import { Box, Grid } from '@components/Box'
-import { NFTCard } from '@components/Card/NFT'
-import { Layout } from '@components/Layout'
-import { Text } from '@components/Text'
+import { Box, Grid, NFTCard, Layout, Text } from '@/components'
 
 const Title = styled(Text)`
   font-size: 40px;

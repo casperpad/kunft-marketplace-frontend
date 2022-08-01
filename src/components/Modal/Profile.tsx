@@ -3,10 +3,10 @@ import Image from 'next/image'
 import styled from 'styled-components'
 import Modal from 'styled-react-modal'
 
-import { Box, Flex } from '@components/Box'
-import { CardButton } from '@components/Button'
-import { ModalInput } from '@components/Input'
-import { Text } from '@components/Text'
+import { Box, Flex } from '@/components/Box'
+import { CardButton } from '@/components/Button'
+import { ModalInput } from '@/components/Input'
+import { Text } from '@/components/Text'
 
 const StyledImage = styled(Image)`
   border-radius: 100%;

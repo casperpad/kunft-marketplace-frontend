@@ -1,6 +1,4 @@
-import { Flex } from '@components/Box'
-import { Layout } from '@components/Layout'
-import { Text } from '@components/Text'
+import { Flex, Layout, Text } from '@/components'
 
 export default function Create() {
   return (

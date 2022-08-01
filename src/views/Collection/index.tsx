@@ -1,6 +1,6 @@
 import styled from 'styled-components'
 
-import { Page, Box } from '@components/index'
+import { Page, Box } from '@/components'
 import { Collection as ICollection } from '../../types/nft.types'
 import CollectionExplorer from './CollectionExplorer'
 import Filter from './Filter'

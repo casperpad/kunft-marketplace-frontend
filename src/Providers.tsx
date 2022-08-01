@@ -7,7 +7,7 @@ import { PersistGate } from 'redux-persist/integration/react'
 import styled, { ThemeProvider } from 'styled-components'
 import { ModalProvider, BaseModalBackground } from 'styled-react-modal'
 
-import { Spinner } from '@components/Spinner'
+import { Spinner } from '@/components'
 import CasperWeb3Provider from './provider/CasperWeb3Provider'
 import { light } from './theme'
 
@@ -26,7 +26,7 @@ const BlurBackground = styled(BaseModalBackground)`
 `
 
 export const client = new ApolloClient({
-  uri: 'http://localhost:8000/api/graphql/',
+  uri: process.env.NEXT_PUBLIC_GRAPHQL_API,
   cache: new InMemoryCache(),
 })
 

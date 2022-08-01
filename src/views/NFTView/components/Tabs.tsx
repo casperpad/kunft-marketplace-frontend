@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import styled from 'styled-components'
 
-import { Flex } from '@components/Box'
+import { Flex } from '@/components'
 
 const Row = styled(Flex)`
   position: relative;

@@ -1,6 +1,5 @@
 import styled from 'styled-components'
-import { CustomLink } from '@components/Link'
-import { Text } from '@components/Text'
+import { CustomLink, Text } from '@/components'
 
 const StyledNotFound = styled.div`
   align-items: center;

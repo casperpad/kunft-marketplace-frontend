@@ -2,7 +2,7 @@ import { useCallback } from 'react'
 import axios, { AxiosError } from 'axios'
 import { Signer } from 'casper-js-sdk'
 
-import { userActions } from '@store/actions'
+import { userActions } from '@/store/actions'
 import { useCasperWeb3Provider } from '../provider/CasperWeb3Provider'
 import { auth } from '../service'
 import { useAppSelector, useAppDispatch } from '../store'

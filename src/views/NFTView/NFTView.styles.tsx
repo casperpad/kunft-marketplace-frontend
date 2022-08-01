@@ -1,8 +1,7 @@
 import Image from 'next/image'
 import styled from 'styled-components'
 
-import { Box, Flex } from '@components/Box'
-import { Layout as _Layout } from '@components/Layout'
+import { Box, Flex, Layout as _Layout } from '@/components'
 
 export const PriceContainer = styled(Flex)`
   grid-column: 1/3;

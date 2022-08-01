@@ -1,8 +1,7 @@
 import Image from 'next/image'
 import styled from 'styled-components'
 
-import { Box, Flex } from '@components/Box'
-import { Text } from '@components/Text'
+import { Box, Flex, Text } from '@/components'
 
 export const Title = styled(Text)`
   font-size: 30px;

@@ -1,10 +1,8 @@
 import React, { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import styled from 'styled-components'
-import { Button } from '@components/Button'
-import { Input } from '@components/Input'
-import { Text } from '@components/Text'
-import useCEP47 from '@hooks/useCEP47'
+import { Button, Input, Text } from '@/components'
+import useCEP47 from '@/hooks/useCEP47'
 
 const StyledContainer = styled.form`
   display: flex;

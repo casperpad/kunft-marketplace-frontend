@@ -1,7 +1,7 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import styled from 'styled-components'
 
-import { Text } from '@components/Text'
+import { Text } from '@/components/Text'
 
 import Checkbox from './Checkbox'
 

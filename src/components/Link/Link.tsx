@@ -2,7 +2,7 @@
 import React from 'react'
 import NextLink from 'next/link'
 import styled from 'styled-components'
-import { Text } from '@components/Text'
+import { Text } from '@/components/Text'
 
 const StyledText = styled(Text)`
   cursor: pointer;

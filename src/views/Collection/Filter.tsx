@@ -2,8 +2,8 @@ import { useState, useEffect } from 'react'
 import { BsArrowLeftCircle, BsArrowRightCircle } from 'react-icons/bs'
 import styled from 'styled-components'
 
-import { Flex, DiscoverFilter } from '@components/index'
-import useWindowSize from '@hooks/useWindowResize'
+import { Flex, DiscoverFilter } from '@/components'
+import useWindowSize from '@/hooks/useWindowResize'
 
 const FilterContainer = styled(Flex)`
   position: sticky;
