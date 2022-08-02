@@ -1,11 +1,6 @@
-import dynamic from 'next/dynamic'
+import Profile from '@/views/Profile'
 
-// eslint-disable-next-line @typescript-eslint/ban-types
-const ProfilePage = dynamic<{}>(() => import('@/views/Profile'), {
-  ssr: false,
-})
-
-export default ProfilePage
+export default Profile
 
 export function getStaticProps() {
   return {

@@ -1,7 +1,7 @@
 import styled from 'styled-components'
 
-import { Page, Box } from '@/components'
-import { Collection as ICollection } from '../../types/nft.types'
+import { Page, Box, Flex } from '@/components'
+import { Collection as ICollection } from '@/types'
 import CollectionExplorer from './CollectionExplorer'
 import Filter from './Filter'
 
@@ -13,8 +13,7 @@ const Logo = styled(Box)`
   padding: 20px 10px;
 `
 
-const Container = styled(Box)`
-  display: flex;
+const Container = styled(Flex)`
   flex-direction: row;
   justify-content: space-between;
   height: 100%;

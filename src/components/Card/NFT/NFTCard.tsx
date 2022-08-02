@@ -16,7 +16,7 @@ import {
 } from '@/config/index'
 import { useCasperWeb3Provider, useCEP47, useMarketplace } from '@/hooks/index'
 
-import { Token } from '../../../types/nft.types'
+import { Token } from '@/types'
 
 import {
   StarsButton,
@@ -32,10 +32,9 @@ export default function NFTCard({
   id,
   name,
   metadata,
-  collectionImage,
   favoritedUsers,
   price,
-  contractHash,
+  collection: { contractHash, image: collectionImage },
 }: Token) {
   const buttonText = useMemo(() => {
     switch (type) {

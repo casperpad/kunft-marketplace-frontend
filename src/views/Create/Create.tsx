@@ -7,10 +7,10 @@ export default function Create() {
         justifyContent="center"
         alignItems="center"
         width="100%"
-        height="100%"
+        height="100vh"
       >
         <Text fontSize="90px" textAlign="center">
-          Create Page Coming Soon!
+          Coming Soon!
         </Text>
       </Flex>
     </Layout>

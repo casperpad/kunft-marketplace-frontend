@@ -3,11 +3,12 @@ import styled from 'styled-components'
 
 import { Grid, NFTCard } from '@/components'
 
-import useTokens from '@/hooks/useTokens'
-import { Collection as ICollection, Token } from '../../types/nft.types'
+import useGetTokens from '@/hooks/useGetTokens'
+import { Collection as ICollection, Token } from '@/types'
 
 const DiscoverContainer = styled(Grid)`
   display: grid;
+  width: 100%;
   gap: 20px;
   margin: 0px 40px 0px 40px;
   grid-template-columns: repeat(1, 1fr);
@@ -32,34 +33,16 @@ export default function CollectionExplorer({
 }) {
   const [page] = useState(1)
   const [limit] = useState(20)
-  const { data, loading } = useTokens({ slug: collection.slug }, page, limit)
+  const { data, loading } = useGetTokens({ slug: collection.slug }, page, limit)
   const [tokens, setTokens] = useState<Token[]>([])
 
   useEffect(() => {
-    if (data === undefined || data === null) return
-    if (data.tokens === undefined || data.tokens === null) return
-    const fetchedTokens = data.tokens
-      .map((t) => {
-        const token: Token = {
-          type: t.listed ? 'Sale' : 'NoneSale',
-          name: `${collection.name} #${t.tokenId}`,
-          id: t.tokenId,
-          metadata: t.metadata,
-          collectionImage: collection.image,
-          owner: '',
-          favoritedUsers: t.favoritedUsers || [],
-          listed: t.listed,
-          viewed: t.viewed,
-          price: t.price ? t.price : undefined,
-          payToken: t.sales && t.sales.length > 0 ? t.sales[0].payToken : null,
-          contractHash: collection.contractHash,
-        }
-        return token
-      })
-      .filter((token) => tokens.find((t) => t.id === token.id) === undefined)
-    setTokens((prev) => [...prev, ...fetchedTokens])
+    if (loading || !data) return
+
+    setTokens((prev) => [...prev, ...data.tokens])
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [data])
+  }, [loading])
 
   return (
     <DiscoverContainer>

@@ -5,7 +5,7 @@ import type { AppProps } from 'next/app'
 import { Navbar, Footer, Spinner, PageMeta } from '@/components'
 import { useAuth, useMarketplace } from '@/hooks'
 import Providers from '../Providers'
-import store from '../store'
+import { useStore } from '../store'
 
 // eslint-disable-next-line import/order
 import '../assets/scss/main.scss'
@@ -28,6 +28,7 @@ function Auth({ children }: { children: React.ReactNode }) {
 
 function MyApp({ Component, pageProps }: AppProps) {
   const _ = useMarketplace()
+  const store = useStore(pageProps.initialReduxState)
   return (
     <Providers store={store}>
       <PageMeta symbol="" />

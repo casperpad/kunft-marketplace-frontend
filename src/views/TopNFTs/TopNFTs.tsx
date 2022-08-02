@@ -7,10 +7,10 @@ export default function TopNFTs() {
         justifyContent="center"
         alignItems="center"
         width="100%"
-        height="100%"
+        height="100vh"
       >
         <Text fontSize="90px" textAlign="center">
-          TOP NFTs Page Coming Soon!
+          Coming Soon!
         </Text>
       </Flex>
     </Layout>

@@ -8,6 +8,9 @@ fragment SaleFields on Sale {
 }
 
 fragment TokenFields on Token {
+  collection {
+    ...CollectionFields
+  }
   tokenId
   metadata
   favoritedUsers

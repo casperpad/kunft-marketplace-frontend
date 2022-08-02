@@ -55,7 +55,7 @@ export default function NFTs(props: NFTsProps) {
           This is a short and brief description about the featured collection.
         </Description>
         <Container>
-          {nfts.map((nft) => {
+          {/* {nfts.map((nft) => {
             return (
               <NFTCard
                 id="123123"
@@ -72,7 +72,7 @@ export default function NFTs(props: NFTsProps) {
                 contractHash="23421321"
               />
             )
-          })}
+          })} */}
         </Container>
       </Box>
     </Layout>
