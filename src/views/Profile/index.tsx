@@ -48,12 +48,8 @@ export default function Profile({ avatar }: ProfileProps) {
     limit,
   )
   const handleImportToken = useCallback(
-    async (
-      contractPackageHash: string,
-      contractHash: string,
-      tokenId: string,
-    ) => {
-      await userApis.addToken(contractPackageHash, contractHash, tokenId)
+    async (contractHash: string, tokenId: string) => {
+      await userApis.addToken(contractHash, tokenId)
     },
     [],
   )

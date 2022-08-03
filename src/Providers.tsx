@@ -26,7 +26,7 @@ const BlurBackground = styled(BaseModalBackground)`
 `
 
 export const client = new ApolloClient({
-  uri: process.env.NEXT_PUBLIC_GRAPHQL_API,
+  uri: '/api/graphql',
   cache: new InMemoryCache(),
 })
 

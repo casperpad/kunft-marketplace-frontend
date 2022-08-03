@@ -1,5 +1,7 @@
 import React, { useEffect } from 'react'
+
 import { useRouter } from 'next/router'
+import { ToastContainer } from 'react-toastify'
 import type { AppProps } from 'next/app'
 
 import { Navbar, Footer, Spinner, PageMeta } from '@/components'
@@ -10,6 +12,8 @@ import { useStore } from '../store'
 // eslint-disable-next-line import/order
 import '../assets/scss/main.scss'
 import '../styles/globals.css'
+// eslint-disable-next-line import/order
+import 'react-toastify/dist/ReactToastify.css'
 
 function Auth({ children }: { children: React.ReactNode }) {
   const { user } = useAuth()
@@ -42,6 +46,15 @@ function MyApp({ Component, pageProps }: AppProps) {
       )}
 
       <Footer />
+      <ToastContainer
+        position="top-right"
+        autoClose={8000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        draggable={false}
+        closeOnClick
+        pauseOnHover
+      />
     </Providers>
   )
 }

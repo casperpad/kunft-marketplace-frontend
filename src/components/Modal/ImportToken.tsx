@@ -68,9 +68,6 @@ export default function ImportToken({
   onImport,
 }: ImportTokenProps) {
   const [contractHash, setContractHash] = useState<string | undefined>()
-  const [contractPackageHash, setContractPackageHash] = useState<
-    string | undefined
-  >()
   const [tokenId, setTokenId] = useState<string | undefined>()
   const [loading, setLoading] = useState(false)
 
@@ -80,28 +77,12 @@ export default function ImportToken({
     formState: { errors },
   } = useForm<SubmitProps>()
 
-  useEffect(() => {
-    async function fetchData() {
-      setLoading(true)
-      const casperClient = new CasperClient(NEXT_PUBLIC_CASPER_NODE_ADDRESS)
-      const stateRootHash = await casperClient.nodeClient.getStateRootHash()
-      const { Contract } = await casperClient.nodeClient.getBlockState(
-        stateRootHash,
-        `hash-${contractHash!}`,
-        [],
-      )
-      setContractPackageHash(Contract?.contractPackageHash.slice(21))
-      setLoading(false)
-    }
-    if (contractHash && isValidHash(contractHash)) fetchData()
-  }, [contractHash])
-
   const closeModal = () => {
     setShow(false)
   }
 
   const onSubmit = handleSubmit(() => {
-    onImport(contractPackageHash, contractHash, tokenId)
+    onImport(contractHash, tokenId)
   })
 
   return (
@@ -111,20 +92,6 @@ export default function ImportToken({
       onEscapeKeydown={closeModal}
     >
       <form onSubmit={onSubmit}>
-        <InputContainer>
-          <Text fontSize="15px" color="background">
-            CONTRACT PACKAGE HASH
-          </Text>
-          <ModalInput
-            {...register('contractPackageHash', { required: true })}
-            readOnly
-            backgroundColor="inputSecondary"
-            value={contractPackageHash || ''}
-          />
-          {errors.contractPackageHash && (
-            <span>Please wait to fetching contract package hash</span>
-          )}
-        </InputContainer>
         <InputContainer>
           <Text fontSize="15px" color="background">
             CONTRACT HASH

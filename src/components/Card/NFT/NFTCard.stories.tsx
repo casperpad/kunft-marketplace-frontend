@@ -20,6 +20,4 @@ Sale.args = {
       'https://beta.api.solanalysis.com/images/200x200/filters:frames(,0)/https://nftstorage.link/ipfs/QmcvLNTddgxTaZB9y3ZXauUyXP6wZsPW2u5ihpJuFupJa7/0.png',
   },
   name: 'KUNFT',
-  price: '4.23',
-  type: 'Sale',
 }

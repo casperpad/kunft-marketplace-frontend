@@ -1,34 +1,34 @@
 import { TokenFieldsFragment } from '@/graphql/queries/__generated__/token.generated'
 import { asCollection, Collection } from './Collection'
+import { asSale, Sale } from './Sale'
 
-export type TokenType = 'Sale' | 'NoneSale' | 'Owned' | 'Upcoming'
+export type TokenType = 'Listed' | 'NotListed' | 'Upcoming'
 
 interface Metadata {
   [key: string]: string
 }
 
 export interface Token {
-  type: TokenType
   name: string
   id: string
   metadata: Metadata
-  owner?: string
-  listed: boolean
+  owner: string
   viewed: number
-  price?: string
   payToken?: string
   favoritedUsers: string[]
   collection: Collection
+  pendingSale?: Sale
+  sales: Sale[]
 }
 
 export const asToken = (fields: TokenFieldsFragment): Token => ({
-  type: fields.listed ? 'Sale' : 'NoneSale',
   name: `${fields.collection.name} #${fields.tokenId}`,
   id: fields.tokenId,
   metadata: fields.metadata,
-  listed: fields.listed,
+  owner: fields.owner,
   viewed: fields.viewed,
-  price: fields.price ? fields.price : undefined,
   favoritedUsers: fields.favoritedUsers ? fields.favoritedUsers : [],
   collection: asCollection(fields.collection),
+  pendingSale: fields.pendingSale ? asSale(fields.pendingSale) : undefined,
+  sales: fields.sales ? fields.sales.map(asSale) : [],
 })

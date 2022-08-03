@@ -1,9 +1,14 @@
-import { gql } from '@apollo/client'
+import { ApolloClient, gql, InMemoryCache } from '@apollo/client'
 import { GetStaticProps, GetStaticPaths } from 'next'
 import Collection from '@/views/Collection'
-import { client } from '../../Providers'
+// import { client } from '../../Providers'
 
 export default Collection
+
+export const client = new ApolloClient({
+  uri: 'http://localhost:8001/graphql',
+  cache: new InMemoryCache(),
+})
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
   try {

@@ -15,8 +15,10 @@ fragment TokenFields on Token {
   metadata
   favoritedUsers
   viewed
-  price
-  listed
+  owner
+  pendingSale {
+    ...SaleFields
+  }
   sales {
     ...SaleFields
   }
@@ -29,6 +31,22 @@ query getTokens($where: GetTokensInput!, $page: Int, $limit: Int) {
     }
     paginationInfo {
       ...PaginationFields
+    }
+  }
+}
+
+mutation addOrUpdateToken($contractHash: String!, $tokenId: String!) {
+  addToken(contractHash: $contractHash, tokenId: $tokenId) {
+    token {
+      ...TokenFields
+    }
+  }
+}
+
+mutation favoriteToken($slug: String!, $tokenId: String!, $publicKey: String!) {
+  favoriteToken(slug: $slug, tokenId: $tokenId, publicKey: $publicKey) {
+    token {
+      ...TokenFields
     }
   }
 }

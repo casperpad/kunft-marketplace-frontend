@@ -1,9 +1,7 @@
 import { useState } from 'react'
-
 import { Box, Text } from '@/components'
-
 import useWindowSize from '@/hooks/useWindowResize'
-
+import { Token as IToken } from '@/types'
 import {
   Buy,
   Name,
@@ -24,7 +22,7 @@ import {
   Layout,
 } from './NFTView.styles'
 
-export default function NFTView() {
+export default function Token({ token }: { token: IToken }) {
   const [sales] = useState<string[]>([])
   const [offers] = useState<string[]>([])
   const [active, setActive] = useState(0)
@@ -37,11 +35,16 @@ export default function NFTView() {
         <PriceContainer>
           <Box mb="36px">
             <Text fontSize="20px" color="primary">
-              NFT COLLECTION NAME
+              {token.collection.name}
             </Text>
           </Box>
           <Box mb="40px">
-            <Name />
+            <Name
+              name={token.name}
+              owner={token.owner}
+              favoritedUsers={token.favoritedUsers}
+              viewed={token.viewed}
+            />
           </Box>
           <Box mb="10px">
             <Offer />
@@ -50,8 +53,8 @@ export default function NFTView() {
         </PriceContainer>
         <ImageContainer>
           <StyledImage
-            src="https://beta.api.solanalysis.com/images/400x400/filters:frames(,0)/https://arweave.net/eWX3j4ulh4LK8RXC2VSIyF1Lwd-dKZIymXBuGiKsEpY"
-            alt=""
+            src={token.metadata.image || token.collection.image || ''}
+            alt={token.name}
             width={405}
             height={405}
           />
@@ -66,7 +69,7 @@ export default function NFTView() {
               <OfferListing lists={offers} />
             </HistoryContainer>
             <DescriptionContainer>
-              <Description />
+              <Description token={token} />
             </DescriptionContainer>
           </>
         )) || (
@@ -80,7 +83,7 @@ export default function NFTView() {
               </HistoryContainer>
             )) || (
               <DescriptionContainer>
-                <Description />
+                <Description token={token} />
               </DescriptionContainer>
             )}
           </>

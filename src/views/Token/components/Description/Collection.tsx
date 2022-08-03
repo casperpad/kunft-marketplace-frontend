@@ -12,15 +12,16 @@ const Container = styled(DefaultContainer)`
   border-bottom: 0;
 `
 
-export default function Collection() {
+interface CollecitonProps {
+  description?: string
+}
+
+export default function Collection({ description }: CollecitonProps) {
   return (
     <Container>
       <StyledText>About This Collection</StyledText>
       <NameContainer>
-        <Text>
-          Here comes a description of the collection. The collection is very
-          cool! description of the collection. The collection is very cool!
-        </Text>
+        <Text>{description}</Text>
       </NameContainer>
     </Container>
   )

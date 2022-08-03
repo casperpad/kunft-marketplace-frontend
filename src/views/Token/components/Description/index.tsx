@@ -2,6 +2,7 @@ import { useState } from 'react'
 import styled from 'styled-components'
 
 import { Box } from '@/components'
+import { Token } from '@/types'
 
 import Collection from './Collection'
 import Detail from './Detail'
@@ -10,7 +11,11 @@ import Properties from './Properties'
 
 const Container = styled(Box)``
 
-export default function Description() {
+interface DescriptionProps {
+  token: Token
+}
+
+export default function Description({ token }: DescriptionProps) {
   const [properties] = useState<string[]>([
     'Property 1',
     'Property 2',
