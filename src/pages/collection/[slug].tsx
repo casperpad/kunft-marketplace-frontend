@@ -6,7 +6,7 @@ import Collection from '@/views/Collection'
 export default Collection
 
 export const client = new ApolloClient({
-  uri: 'http://localhost:8001/graphql',
+  uri: process.env.NEXT_PUBLIC_GRAPHQL_API,
   cache: new InMemoryCache(),
 })
 
