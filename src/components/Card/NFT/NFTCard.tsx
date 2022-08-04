@@ -37,7 +37,8 @@ export default function NFTCard(_token: Token) {
     pendingSale,
   } = token
   const { currentAccount, connect } = useCasperWeb3Provider()
-  const { buyToken, sellToken } = useMarketplaceTransaction(contractHash)
+  const { buyToken, sellToken, offerToken } =
+    useMarketplaceTransaction(contractHash)
   const { getOwnerOf } = useCEP47(contractHash)
 
   const {
@@ -67,7 +68,7 @@ export default function NFTCard(_token: Token) {
         }
       }
       if (pendingSale) return buyToken(id, pendingSale.price)
-      return 'Make Offer'
+      return offerToken(id, '2000000000')
     } catch (error: any) {
       console.error(error)
     }
@@ -81,6 +82,7 @@ export default function NFTCard(_token: Token) {
     contractHash,
     owner,
     sellToken,
+    offerToken,
   ])
 
   const buttonText = useMemo(() => {

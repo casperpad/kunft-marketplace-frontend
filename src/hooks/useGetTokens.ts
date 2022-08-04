@@ -5,6 +5,7 @@ import { asToken } from '@/types/Token'
 interface GetTokensInput {
   slug?: string
   owner?: string
+  promoted?: boolean
 }
 
 export default function useGetTokens(

@@ -1,6 +1,7 @@
 import styled from 'styled-components'
 
 import { Box, Grid, NFTCard, Layout, Text } from '@/components'
+import { useGetTokens } from '@/hooks'
 
 const Title = styled(Text)`
   font-size: 40px;
@@ -40,39 +41,29 @@ const Container = styled(Grid)`
   }
 `
 
-interface NFTsProps {
-  nfts: string[]
-}
-
-export default function NFTs(props: NFTsProps) {
-  const { nfts } = props
-
+export default function NFTs() {
+  const { data, loading } = useGetTokens({ promoted: true })
   return (
     <Layout mt="60px">
       <Box>
-        <Title>COLLECTION XYZ</Title>
+        <Title>
+          {loading ? <div>Loading</div> : data?.tokens[0].collection.name}
+        </Title>
         <Description>
-          This is a short and brief description about the featured collection.
+          {loading ? (
+            <div>Loading</div>
+          ) : (
+            data?.tokens[0].collection.description
+          )}
         </Description>
         <Container>
-          {/* {nfts.map((nft) => {
-            return (
-              <NFTCard
-                id="123123"
-                key={nft}
-                type="Sale"
-                collectionImage={nft}
-                name="KUNFT"
-                price="34523"
-                favoritedUsers={[]}
-                metadata={{ length: '2' }}
-                listed
-                viewed={221}
-                owner="213423"
-                contractHash="23421321"
-              />
-            )
-          })} */}
+          {loading ? (
+            <div>Loading...</div>
+          ) : (
+            data?.tokens.map((token) => {
+              return <NFTCard key={token.id} {...token} />
+            })
+          )}
         </Container>
       </Box>
     </Layout>

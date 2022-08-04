@@ -32,6 +32,7 @@ input GetTokensInput {
   slug: String
   owner: String
   tokenId: String
+  promoted: Boolean
 }
 
 type Query {

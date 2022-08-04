@@ -17,9 +17,10 @@ import {
   encodeBase16,
   CLU32Type,
   CLU256Type,
+  CLKey,
 } from 'casper-js-sdk'
 import { Some, None } from 'ts-results'
-import { signDeploy } from '../utils'
+import { isValidHash, signDeploy } from '../utils'
 
 const { Contract } = Contracts
 type RecipientType = types.RecipientType
@@ -120,7 +121,7 @@ export class MarketplaceClient {
       )
     })
     const runtimeArgs = RuntimeArgs.fromMap({
-      fee_wallet: args.feeWallet,
+      fee_wallet: new CLKey(args.feeWallet),
       acceptableTokens,
       contract_name: CLValueBuilder.string(args.contractName),
     })
@@ -268,11 +269,51 @@ export class MarketplaceClient {
     return deployHash
   }
 
-  public async feeWallet() {
-    const result = (await this.contractClient.queryContractData([
-      'fee_wallet',
-    ])) as CLValue
-    return encodeBase16(result.value())
+  public async createBuyOrderCspr(
+    collection: string,
+    tokenId: BigNumberish,
+    amount: BigNumberish,
+    paymentAmount: string,
+    sender: CLPublicKey,
+    additionalRecipient?: CLKeyParameters,
+    signingKeys?: Keys.AsymmetricKey[],
+  ) {
+    if (this.contractClient.contractHash === undefined) {
+      throw Error('Invalid Marketplace contract hash')
+    }
+    if (!isValidHash(collection)) {
+      throw Error('Invalid contractHash')
+    }
+    const preCreateBuyOrderCspr = new Contract(this.casperClient)
+    const runtimeArgs = RuntimeArgs.fromMap({
+      marketplace_contract: CLValueBuilder.string(
+        `contract-${this.contractClient.contractHash.slice(5)}`,
+      ),
+      entrypoint: CLValueBuilder.string('create_buy_order_cspr'),
+      collection: CLValueBuilder.string(`contract-${collection}`),
+      token_id: CLValueBuilder.u256(tokenId),
+      amount: CLValueBuilder.u512(amount),
+      additional_recipient: additionalRecipient
+        ? CLValueBuilder.option(Some(additionalRecipient))
+        : CLValueBuilder.option(None, new CLKeyType()),
+    })
+
+    const file = await fetch('/pre_order_cspr.wasm')
+    const bytes = await file.arrayBuffer()
+    const contractContent = new Uint8Array(bytes)
+
+    const deploy = preCreateBuyOrderCspr.install(
+      contractContent,
+      runtimeArgs,
+      paymentAmount,
+      sender,
+      this.chainName,
+      signingKeys,
+    )
+
+    const signedDeploy = await signDeploy(deploy, sender.toHex())
+    const deployHash = await this.casperClient.putDeploy(signedDeploy)
+    return deployHash
   }
 
   public createBuyOrder(
@@ -300,5 +341,12 @@ export class MarketplaceClient {
       paymentAmount,
       [key],
     )
+  }
+
+  public async feeWallet() {
+    const result = (await this.contractClient.queryContractData([
+      'fee_wallet',
+    ])) as CLValue
+    return encodeBase16(result.value())
   }
 }

@@ -13,13 +13,15 @@ import {
   NEXT_PUBLIC_CASPER_NODE_ADDRESS,
   contracts,
 } from '@/config'
+import { openCsprExplorer } from '@/utils/hash'
 import { useCasperWeb3Provider } from '../provider/CasperWeb3Provider'
 import useCEP47 from './useCEP47'
 import useMarketplace from './useMarketplace'
 
 export default function useMarketplaceTransaction(contractHash: string) {
   const { currentAccount, getDeploy, signDeploy } = useCasperWeb3Provider()
-  const { createSellOrder, buySellOrderCspr } = useMarketplace()
+  const { createSellOrder, buySellOrderCspr, createBuyOrderCspr } =
+    useMarketplace()
   const { approve, getAllowance } = useCEP47(contractHash)
 
   const sellToken = useCallback(
@@ -122,8 +124,30 @@ export default function useMarketplaceTransaction(contractHash: string) {
     [contractHash, currentAccount, buySellOrderCspr, getDeploy],
   )
 
+  const offerToken = useCallback(
+    async (id: string, amount: BigNumberish) => {
+      // TODO Check token owner is not caller and marketplace
+      if (!currentAccount) throw Error('')
+      const deployHash = await createBuyOrderCspr(
+        contractHash,
+        id,
+        amount,
+        '1000000000',
+        CLPublicKey.fromHex(currentAccount),
+      )
+      toast.info(`Transaction created: ${deployHash}`, {
+        autoClose: false,
+        onClick: () => openCsprExplorer(deployHash),
+      })
+      const _ = await getDeploy(deployHash)
+      toast.success(`Transaction confirmed`)
+    },
+    [contractHash, createBuyOrderCspr, currentAccount, getDeploy],
+  )
+
   return {
     sellToken,
     buyToken,
+    offerToken,
   }
 }
