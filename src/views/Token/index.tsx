@@ -22,8 +22,10 @@ import {
   Layout,
 } from './NFTView.styles'
 
-export default function Token({ token }: { token: IToken }) {
+export default function Token({ token: _token }: { token: IToken }) {
+  const [token, setToken] = useState(_token)
   const [offers] = useState<string[]>([])
+
   const [active, setActive] = useState(0)
 
   const size = useWindowSize()
@@ -38,17 +40,12 @@ export default function Token({ token }: { token: IToken }) {
             </Text>
           </Box>
           <Box mb="40px">
-            <Name
-              name={token.name}
-              owner={token.owner}
-              favoritedUsers={token.favoritedUsers}
-              viewed={token.viewed}
-            />
+            <Name token={token} setToken={setToken} />
           </Box>
           <Box mb="10px">
             <Offer />
           </Box>
-          <Buy />
+          <Buy token={token} setToken={setToken} />
         </PriceContainer>
         <ImageContainer>
           <StyledImage
