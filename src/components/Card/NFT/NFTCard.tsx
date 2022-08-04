@@ -3,24 +3,20 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { formatFixed } from '@ethersproject/bignumber'
 import { CLPublicKey } from 'casper-js-sdk'
 import NextLink from 'next/link'
-import { BsHeart, BsHeartFill } from 'react-icons/bs'
 import { toast } from 'react-toastify'
 
-import { Box, Flex } from '@/components/Box'
+import { Box } from '@/components/Box'
 import { Text } from '@/components/Text'
 import {
   useAddOrUpdateTokenMutation,
-  useAuth,
   useCasperWeb3Provider,
   useCEP47,
-  useFavoriteToken,
   useMarketplaceTransaction,
 } from '@/hooks'
-
 import { Token } from '@/types'
 
+import FavoriteToken from '../../FavoriteToken'
 import {
-  StarsButton,
   SaleButton,
   StyledImage,
   Container,
@@ -35,20 +31,15 @@ export default function NFTCard(_token: Token) {
     id,
     name,
     metadata,
-    favoritedUsers,
+
     collection: { contractHash, image: collectionImage, slug },
     owner,
     pendingSale,
   } = token
   const { currentAccount, connect } = useCasperWeb3Provider()
-  const { user } = useAuth()
   const { buyToken, sellToken } = useMarketplaceTransaction(contractHash)
   const { getOwnerOf } = useCEP47(contractHash)
-  const {
-    favoriteTokenMutation,
-    data: favoriteTokenMutationData,
-    loading: favoriteTokenMutationLoading,
-  } = useFavoriteToken()
+
   const {
     addOrUpdateTokenMutation,
     data: addOrUpdateTokenMutationData,
@@ -92,22 +83,6 @@ export default function NFTCard(_token: Token) {
     sellToken,
   ])
 
-  const handleStarClick = useCallback(() => {
-    if (!user) return
-    favoriteTokenMutation({
-      variables: {
-        slug,
-        tokenId: id,
-        publicKey: user.publicKey,
-      },
-    })
-  }, [favoriteTokenMutation, slug, id, user])
-
-  const userStarred = useMemo(() => {
-    if (!user) return false
-    return favoritedUsers.includes(user.id)
-  }, [user, favoritedUsers])
-
   const buttonText = useMemo(() => {
     if (currentAccount) {
       const currentAccountHash = CLPublicKey.fromHex(currentAccount)
@@ -121,12 +96,6 @@ export default function NFTCard(_token: Token) {
     if (pendingSale) return 'Buy Now'
     return 'Make Offer'
   }, [pendingSale, owner, currentAccount])
-
-  useEffect(() => {
-    if (favoriteTokenMutationLoading || !favoriteTokenMutationData) return
-    setToken(favoriteTokenMutationData)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [favoriteTokenMutationLoading])
 
   useEffect(() => {
     if (addOrUpdateTokenMutationLoading || !addOrUpdateTokenMutationData) return
@@ -149,14 +118,7 @@ export default function NFTCard(_token: Token) {
           <Text>Price</Text>
         </NameContainer>
         <ValueContainer>
-          <Flex flexDirection="row" alignItems="center">
-            <StarsButton color="transparent" onClick={handleStarClick}>
-              {userStarred ? <BsHeartFill /> : <BsHeart />}
-            </StarsButton>
-            <Text ml="4px" color="primary">
-              {favoritedUsers.length}
-            </Text>
-          </Flex>
+          <FavoriteToken token={token} setToken={setToken} />
           <Text color="primary">
             {pendingSale
               ? parseFloat(formatFixed(pendingSale.price, 9)).toLocaleString()

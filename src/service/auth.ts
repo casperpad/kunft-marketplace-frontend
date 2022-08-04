@@ -1,16 +1,12 @@
+import { User } from '@/types'
 import api from './api'
 
 interface GetNonceResponse {
   nonce: string
 }
 
-interface SignInResponse {
-  emailVerified: boolean
+interface SignInResponse extends User {
   expire: number
-  publicKey: string
-  role: 'user' | 'admin'
-  name?: string
-  avatar?: string
 }
 
 export const getNonce = async (publicKey: string) => {

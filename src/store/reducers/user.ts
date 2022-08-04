@@ -1,6 +1,6 @@
 import { createAction, createReducer } from '@reduxjs/toolkit'
 
-interface User {
+export interface User {
   id: string
   verified: boolean
   emailVerified: boolean
