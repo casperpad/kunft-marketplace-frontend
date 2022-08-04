@@ -18,7 +18,8 @@ export const HeadTr = styled.tr`
 `
 
 export const Td = styled.td`
-  width: calc(100% / 3);
+  text-align: center;
+  margin-left: auto;
 `
 
 export const TitleContainer = styled(Flex)`

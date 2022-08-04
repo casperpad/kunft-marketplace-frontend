@@ -16,14 +16,11 @@ export const StyledText = styled(Text)`
 `
 
 export const DataContainer = styled(Flex)`
-  flex-direction: row;
+  flex-direction: column;
   justify-content: space-between;
 `
 
 export const NameContainer = styled(Flex)`
-  flex-direction: column;
-  justify-content: space-around;
-  gap: 5px;
   font-size: 17px;
   ${({ theme }) => theme.mediaQueries.sm} {
     font-size: 20px;
@@ -31,9 +28,6 @@ export const NameContainer = styled(Flex)`
 `
 
 export const ValueContainer = styled(Flex)`
-  flex-direction: column;
-  justify-content: space-around;
-  gap: 5px;
   font-size: 12px;
   ${({ theme }) => theme.mediaQueries.sm} {
     font-size: 14px;

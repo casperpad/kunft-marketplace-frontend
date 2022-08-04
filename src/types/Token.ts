@@ -4,7 +4,7 @@ import { asSale, Sale } from './Sale'
 
 export type TokenType = 'Listed' | 'NotListed' | 'Upcoming'
 
-interface Metadata {
+export interface Metadata {
   [key: string]: string
 }
 

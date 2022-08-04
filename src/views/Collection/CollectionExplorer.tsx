@@ -21,9 +21,9 @@ const DiscoverContainer = styled(Grid)`
     grid-template-columns: repeat(3, 1fr);
   }
 
-  ${({ theme }) => theme.mediaQueries.xl2} {
+  /* ${({ theme }) => theme.mediaQueries.xl2} {
     grid-template-columns: repeat(4, 1fr);
-  }
+  } */
 `
 
 export default function CollectionExplorer({

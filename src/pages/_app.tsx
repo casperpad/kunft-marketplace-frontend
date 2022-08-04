@@ -5,7 +5,7 @@ import { ToastContainer } from 'react-toastify'
 import type { AppProps } from 'next/app'
 
 import { Navbar, Footer, Spinner, PageMeta } from '@/components'
-import { useAuth, useMarketplace } from '@/hooks'
+import { useAuth } from '@/hooks'
 import Providers from '../Providers'
 import { useStore } from '../store'
 
@@ -31,7 +31,6 @@ function Auth({ children }: { children: React.ReactNode }) {
 }
 
 function MyApp({ Component, pageProps }: AppProps) {
-  const _ = useMarketplace()
   const store = useStore(pageProps.initialReduxState)
   return (
     <Providers store={store}>

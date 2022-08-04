@@ -1,12 +1,7 @@
-import React, { useCallback, useEffect, useMemo } from 'react'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
 
-import { BigNumberish, formatFixed } from '@ethersproject/bignumber'
-import {
-  CLPublicKey,
-  CLValueBuilder,
-  decodeBase16,
-  encodeBase16,
-} from 'casper-js-sdk'
+import { formatFixed } from '@ethersproject/bignumber'
+import { CLPublicKey } from 'casper-js-sdk'
 import NextLink from 'next/link'
 import { BsHeart, BsHeartFill } from 'react-icons/bs'
 import { toast } from 'react-toastify'
@@ -14,15 +9,12 @@ import { toast } from 'react-toastify'
 import { Box, Flex } from '@/components/Box'
 import { Text } from '@/components/Text'
 import {
-  NEXT_PUBLIC_CASPER_CHAIN_NAME,
-  NEXT_PUBLIC_CASPER_NODE_ADDRESS,
-  contracts,
-} from '@/config'
-import {
+  useAddOrUpdateTokenMutation,
+  useAuth,
   useCasperWeb3Provider,
   useCEP47,
   useFavoriteToken,
-  useMarketplace,
+  useMarketplaceTransaction,
 } from '@/hooks'
 
 import { Token } from '@/types'
@@ -36,132 +28,85 @@ import {
   ValueContainer,
 } from './NFTCard.styles'
 
-export default function NFTCard({
-  id,
-  name,
-  metadata,
-  favoritedUsers,
-  collection: { contractHash, image: collectionImage, slug },
-  owner,
-  pendingSale,
-}: Token) {
-  const { currentAccount, connect, getDeploy, signDeploy } =
-    useCasperWeb3Provider()
-  const { createSellOrder, buySellOrderCspr } = useMarketplace()
-  const { approve, getAllowance } = useCEP47(contractHash)
-  const { favoriteTokenMutation, data } = useFavoriteToken()
+export default function NFTCard(_token: Token) {
+  const [token, setToken] = useState<Token>(_token)
 
-  const sellToken = useCallback(async () => {
-    if (currentAccount === undefined) return
-
-    toast.info('Checking allownace')
-    let shouldApprove = true
-    try {
-      const allowance = await getAllowance(
-        CLPublicKey.fromHex(currentAccount),
-        id,
-      )
-
-      const parsedAllowance = CLValueBuilder.byteArray(
-        decodeBase16(allowance.slice(13)),
-      )
-      const marketplaceContractPackageHash = CLValueBuilder.byteArray(
-        decodeBase16(
-          contracts.marketplace[
-            NEXT_PUBLIC_CASPER_CHAIN_NAME
-          ].contractPackageHash.slice(5),
-        ),
-      )
-      shouldApprove =
-        encodeBase16(parsedAllowance.data) !==
-        encodeBase16(marketplaceContractPackageHash.data)
-      // eslint-disable-next-line no-empty
-    } catch (error: any) {}
-
-    // Approve if allowance is incorrect
-    if (shouldApprove) {
-      toast.info('Approve request submitted.')
-      const approveDeploy = await approve(
-        CLValueBuilder.byteArray(
-          decodeBase16(
-            contracts.marketplace[
-              NEXT_PUBLIC_CASPER_CHAIN_NAME
-            ].contractPackageHash.slice(5),
-          ),
-        ),
-        [id],
-        '500000000',
-        CLPublicKey.fromHex(currentAccount),
-      )
-      const signedApproveDeploy = await signDeploy(
-        approveDeploy,
-        currentAccount,
-      )
-
-      const arppoveDeployHash = await signedApproveDeploy.send(
-        NEXT_PUBLIC_CASPER_NODE_ADDRESS,
-      )
-
-      const _ = await getDeploy(arppoveDeployHash)
-    }
-
-    const tokens = new Map<BigNumberish, BigNumberish>([[id, '1000000']])
-    toast.info('Sign sell request transaction')
-    const deployHash = await createSellOrder(
-      Date.now(),
-      contractHash,
-      tokens,
-      currentAccount!,
-      '5000000000',
-    )
-
-    const _ = await getDeploy(deployHash)
-  }, [
-    approve,
-    contractHash,
-    createSellOrder,
-    currentAccount,
-    getAllowance,
-    getDeploy,
-    signDeploy,
+  const {
     id,
-  ])
-
-  const buyToken = useCallback(async () => {
-    //
-    if (currentAccount === undefined || pendingSale === undefined) return
-    const deployHash = await buySellOrderCspr(
-      contractHash,
-      id,
-      pendingSale.price,
-      '4500000000',
-      currentAccount,
-    )
-    return deployHash
-  }, [currentAccount, pendingSale, buySellOrderCspr, contractHash, id])
+    name,
+    metadata,
+    favoritedUsers,
+    collection: { contractHash, image: collectionImage, slug },
+    owner,
+    pendingSale,
+  } = token
+  const { currentAccount, connect } = useCasperWeb3Provider()
+  const { user } = useAuth()
+  const { buyToken, sellToken } = useMarketplaceTransaction(contractHash)
+  const { getOwnerOf } = useCEP47(contractHash)
+  const {
+    favoriteTokenMutation,
+    data: favoriteTokenMutationData,
+    loading: favoriteTokenMutationLoading,
+  } = useFavoriteToken()
+  const {
+    addOrUpdateTokenMutation,
+    data: addOrUpdateTokenMutationData,
+    loading: addOrUpdateTokenMutationLoading,
+  } = useAddOrUpdateTokenMutation()
 
   const handle = useCallback(async () => {
-    const deployHash = await sellToken()
-    console.log(deployHash)
-    const _ = await getDeploy(deployHash!)
-  }, [getDeploy, buyToken, sellToken])
+    try {
+      const _owner = await getOwnerOf(id)
+      // DB data is outdated
+      if (owner !== _owner.slice(13)) {
+        toast.error('Invalid token')
+        await addOrUpdateTokenMutation({
+          variables: { contractHash, tokenId: id },
+        })
+        return
+      }
+      if (currentAccount) {
+        const currentAccountHash = CLPublicKey.fromHex(currentAccount)
+          .toAccountHashStr()
+          .slice(13)
+        if (currentAccountHash === owner) {
+          // if (pendingSale) return 'Cancel Listing'
+          return sellToken(id)
+        }
+      }
+      if (pendingSale) return buyToken(id, pendingSale.price)
+      return 'Make Offer'
+    } catch (error: any) {
+      console.error(error)
+    }
+  }, [
+    currentAccount,
+    pendingSale,
+    buyToken,
+    getOwnerOf,
+    id,
+    addOrUpdateTokenMutation,
+    contractHash,
+    owner,
+    sellToken,
+  ])
 
   const handleStarClick = useCallback(() => {
-    if (!currentAccount) return
+    if (!user) return
     favoriteTokenMutation({
       variables: {
         slug,
         tokenId: id,
-        publicKey: currentAccount,
+        publicKey: user.publicKey,
       },
     })
-  }, [favoriteTokenMutation, slug, id, currentAccount])
+  }, [favoriteTokenMutation, slug, id, user])
 
   const userStarred = useMemo(() => {
-    return true
-  }, [])
-
-  console.log(data)
+    if (!user) return false
+    return favoritedUsers.includes(user.id)
+  }, [user, favoritedUsers])
 
   const buttonText = useMemo(() => {
     if (currentAccount) {
@@ -169,14 +114,25 @@ export default function NFTCard({
         .toAccountHashStr()
         .slice(13)
       if (currentAccountHash === owner) {
-        if (pendingSale) return 'Cancel Listing'
+        // if (pendingSale) return 'Cancel Listing'
         return 'Sell'
       }
     }
     if (pendingSale) return 'Buy Now'
     return 'Make Offer'
   }, [pendingSale, owner, currentAccount])
-  const show = true
+
+  useEffect(() => {
+    if (favoriteTokenMutationLoading || !favoriteTokenMutationData) return
+    setToken(favoriteTokenMutationData)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [favoriteTokenMutationLoading])
+
+  useEffect(() => {
+    if (addOrUpdateTokenMutationLoading || !addOrUpdateTokenMutationData) return
+    setToken(addOrUpdateTokenMutationData)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [addOrUpdateTokenMutationLoading])
 
   return (
     <Container>
@@ -209,12 +165,10 @@ export default function NFTCard({
         </ValueContainer>
         <NextLink href={`/token/${slug}/${id}`}>Details</NextLink>
       </Box>
-      {show && (
-        <SaleButton
-          onClick={currentAccount ? handle : connect}
-          text={currentAccount ? buttonText : 'Connect Wallet'}
-        />
-      )}
+      <SaleButton
+        onClick={currentAccount ? handle : connect}
+        text={currentAccount ? buttonText : 'Connect Wallet'}
+      />
     </Container>
   )
 }

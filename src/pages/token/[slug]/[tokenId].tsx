@@ -1,18 +1,13 @@
 import { ApolloClient, gql, InMemoryCache } from '@apollo/client'
-import { CEP47Client } from 'casper-cep47-js-client'
-import { GetStaticProps, GetServerSideProps } from 'next'
+import { GetServerSideProps } from 'next'
 
-import {
-  NEXT_PUBLIC_CASPER_NODE_ADDRESS,
-  NEXT_PUBLIC_CASPER_CHAIN_NAME,
-} from '@/config'
 import { asToken } from '@/types'
 import TokenViews from '@/views/Token'
 // import { client } from '../../../Providers'
 
 export default TokenViews
 
-export const client = new ApolloClient({
+const client = new ApolloClient({
   uri: process.env.NEXT_PUBLIC_GRAPHQL_API,
   cache: new InMemoryCache(),
 })
@@ -84,54 +79,3 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
     // console.dir(error.networkError?.result, { depth: null })
   }
 }
-
-// export const getStaticPaths: GetStaticPaths = async () => {
-//   const { data } = await client.query({
-//     query: gql`
-//       {
-//         getCollectionSlugs {
-//           data {
-//             slug
-//             contractHash
-//           }
-//         }
-//       }
-//     `,
-//   })
-//   const slugs: { slug: string; contractHash: string }[] =
-//     data.getCollectionSlugs.data.map(
-//       ({ slug, contractHash }: { slug: string; contractHash: string }) => {
-//         return { slug, contractHash }
-//       },
-//     )
-
-//   const paths: {
-//     params: {
-//       slug: string
-//       tokenId: string
-//     }
-//   }[] = []
-//   await Promise.all(
-//     slugs.map(async ({ slug, contractHash }) => {
-//       const cep47Client = new CEP47Client(
-//         NEXT_PUBLIC_CASPER_NODE_ADDRESS!,
-//         NEXT_PUBLIC_CASPER_CHAIN_NAME!,
-//       )
-//       const preferContractHash = contractHash.startsWith('hash-')
-//         ? contractHash
-//         : `hash-${contractHash}`
-//       cep47Client.setContractHash(preferContractHash)
-//       const totalSupply = await cep47Client.totalSupply()
-//       let i = 0
-//       for (i = 0; i < totalSupply; i++) {
-//         paths.push({
-//           params: { slug, tokenId: i.toString() },
-//         })
-//       }
-//     }),
-//   )
-//   return {
-//     paths,
-//     fallback: false,
-//   }
-// }

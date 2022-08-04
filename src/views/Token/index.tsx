@@ -23,7 +23,6 @@ import {
 } from './NFTView.styles'
 
 export default function Token({ token }: { token: IToken }) {
-  const [sales] = useState<string[]>([])
   const [offers] = useState<string[]>([])
   const [active, setActive] = useState(0)
 
@@ -65,7 +64,7 @@ export default function Token({ token }: { token: IToken }) {
           <>
             <HistoryContainer>
               <PriceHistory />
-              <SaleListing lists={sales} />
+              <SaleListing sales={token.sales} />
               <OfferListing lists={offers} />
             </HistoryContainer>
             <DescriptionContainer>
@@ -78,7 +77,7 @@ export default function Token({ token }: { token: IToken }) {
             {(active === 0 && (
               <HistoryContainer>
                 <PriceHistory />
-                <SaleListing lists={sales} />
+                <SaleListing sales={token.sales} />
                 <OfferListing lists={offers} />
               </HistoryContainer>
             )) || (

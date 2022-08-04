@@ -1,6 +1,9 @@
 import { createAction, createReducer } from '@reduxjs/toolkit'
 
 interface User {
+  id: string
+  verified: boolean
+  emailVerified: boolean
   name?: string
   publicKey: string
   avatar?: string
