@@ -1,3 +1,4 @@
+import { ProfileSubmitProps } from '@/components'
 import { User } from '@/types'
 import api from './api'
 
@@ -38,5 +39,11 @@ export const checkAuth = async () => {
 
 export const signOut = async () => {
   const result = await api.post('/auth/signout')
+  return result.data
+}
+
+export const updateInfo = async (info: ProfileSubmitProps) => {
+  if (info.description?.length === 0) delete info.description
+  const result = await api.patch('/auth', info)
   return result.data
 }

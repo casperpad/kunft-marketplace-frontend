@@ -2,11 +2,13 @@ import { createAction, createReducer } from '@reduxjs/toolkit'
 
 export interface User {
   id: string
-  verified: boolean
-  emailVerified: boolean
-  name?: string
   publicKey: string
+  verified: boolean
+  name?: string
   avatar?: string
+  description?: string
+  email?: string
+  emailVerified: boolean
   role: 'user' | 'admin'
 }
 

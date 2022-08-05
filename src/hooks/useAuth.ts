@@ -3,14 +3,23 @@ import axios, { AxiosError } from 'axios'
 import { Signer } from 'casper-js-sdk'
 
 import { userActions } from '@/store/actions'
+import { User } from '@/types'
 import { useCasperWeb3Provider } from '../provider/CasperWeb3Provider'
-import { auth } from '../service'
+import { authApis } from '../service'
 import { useAppSelector, useAppDispatch } from '../store'
 
 export default function useAuth() {
   const { currentAccount, connect } = useCasperWeb3Provider()
   const dispatch = useAppDispatch()
   const { user } = useAppSelector((state) => state.user)
+
+  const setUser = useCallback(
+    (user?: User) => {
+      if (user) dispatch(userActions.setUser(user))
+      else dispatch(userActions.setUser())
+    },
+    [dispatch],
+  )
 
   const signUp = useCallback(async () => {
     if (currentAccount === undefined) {
@@ -20,12 +29,12 @@ export default function useAuth() {
     const message = `Signup with KUNFT with ${currentAccount}`
 
     const signature = await Signer.signMessage(message, currentAccount)
-    const { expire: _, ...newUser } = await auth.signUp(
+    const { expire: _, ...newUser } = await authApis.signUp(
       currentAccount,
       signature,
     )
-    dispatch(userActions.setUser(newUser))
-  }, [currentAccount, dispatch, connect])
+    setUser(newUser)
+  }, [currentAccount, connect, setUser])
 
   const signIn = useCallback(async () => {
     if (currentAccount === undefined) {
@@ -33,16 +42,16 @@ export default function useAuth() {
       throw Error(`Wallet not connected`)
     }
     try {
-      const nonce = await auth.getNonce(currentAccount)
+      const nonce = await authApis.getNonce(currentAccount)
 
       const message = `Signin KUNFT with\n public key: ${currentAccount}\nnonce: ${nonce}`
       const signature = await Signer.signMessage(message, currentAccount)
 
-      const { expire: _, ...newUser } = await auth.signIn(
+      const { expire: _, ...newUser } = await authApis.signIn(
         currentAccount,
         signature,
       )
-      dispatch(userActions.setUser(newUser))
+      setUser(newUser)
     } catch (error: any) {
       if (axios.isAxiosError(error)) {
         const parsedError = error as AxiosError<{ message: string }>
@@ -51,21 +60,21 @@ export default function useAuth() {
         }
       }
     }
-  }, [currentAccount, dispatch, connect, signUp])
+  }, [currentAccount, connect, signUp, setUser])
 
   const checkAuth = useCallback(async () => {
-    const result = await auth.checkAuth()
+    const result = await authApis.checkAuth()
     return result
   }, [])
 
   const signOut = useCallback(async () => {
     try {
-      await auth.signOut()
-      dispatch(userActions.setUser())
+      await authApis.signOut()
+      setUser()
     } catch (err: any) {
       console.error(err)
     }
-  }, [dispatch])
+  }, [setUser])
 
-  return { signUp, signIn, signOut, checkAuth, user }
+  return { signUp, signIn, signOut, checkAuth, setUser, user }
 }

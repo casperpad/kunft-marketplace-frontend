@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react'
-import { CasperClient } from 'casper-js-sdk'
+import React, { useState } from 'react'
 import { useForm } from 'react-hook-form'
+import { toast } from 'react-toastify'
 import styled from 'styled-components'
 import Modal from 'styled-react-modal'
 
@@ -8,7 +8,6 @@ import { Box } from '@/components/Box'
 import { CardButton } from '@/components/Button'
 import { ModalInput } from '@/components/Input'
 import { Text } from '@/components/Text'
-import { NEXT_PUBLIC_CASPER_NODE_ADDRESS } from '@/config/index'
 import { isValidHash } from '../../web3/utils'
 
 const InputContainer = styled(Box)`
@@ -69,7 +68,7 @@ export default function ImportToken({
 }: ImportTokenProps) {
   const [contractHash, setContractHash] = useState<string | undefined>()
   const [tokenId, setTokenId] = useState<string | undefined>()
-  const [loading, setLoading] = useState(false)
+  const [loading] = useState(false)
 
   const {
     register,
@@ -82,7 +81,8 @@ export default function ImportToken({
   }
 
   const onSubmit = handleSubmit(() => {
-    onImport(contractHash, tokenId)
+    if (isValidHash(contractHash!)) onImport(contractHash, tokenId)
+    else toast.error('Invalid hash')
   })
 
   return (

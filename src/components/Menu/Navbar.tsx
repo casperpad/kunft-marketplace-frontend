@@ -2,13 +2,16 @@ import { useCallback, useEffect, useState } from 'react'
 import Image from 'next/image'
 import { useRouter } from 'next/router'
 import { HiMenu } from 'react-icons/hi'
+import { toast } from 'react-toastify'
 import styled from 'styled-components'
 
 import { Flex } from '@/components/Box'
 import { CustomLink } from '@/components/Link'
-import { ProfileModal as Modal } from '@/components/Modal'
+import { ProfileModal as Modal, ProfileSubmitProps } from '@/components/Modal'
 import { navLinks } from '@/config/constants/data'
-import { useCasperWeb3Provider, useAuth, useWindowSize } from '@/hooks/index'
+import { useCasperWeb3Provider, useAuth, useWindowSize } from '@/hooks'
+import { authApis } from '@/service'
+
 import MobileMenu from './MobileMenu'
 import { UserMenu } from './UserMenu'
 
@@ -70,7 +73,7 @@ const NavbarContainer = styled.nav`
 
 export default function Navbar() {
   const { pathname } = useRouter()
-  const { signIn, user } = useAuth()
+  const { signIn, user, setUser } = useAuth()
   const { currentAccount, connect } = useCasperWeb3Provider()
   const [requestConnect, setRequestConnect] = useState(false)
   const size = useWindowSize()
@@ -104,6 +107,16 @@ export default function Navbar() {
       })
     }
   }, [currentAccount, requestConnect, signIn])
+
+  const onSave = useCallback(
+    async (info: ProfileSubmitProps) => {
+      const user = await authApis.updateInfo(info)
+      setUser(user)
+      toast.success('User info updated successfully')
+      setModalShow(false)
+    },
+    [setUser],
+  )
 
   return (
     <>
@@ -159,7 +172,14 @@ export default function Navbar() {
           </ProfileMenu>
         )}
       </NavbarContainer>
-      <Modal setShow={setModalShow} show={modalShow} />
+      {user && (
+        <Modal
+          setShow={setModalShow}
+          show={modalShow}
+          onSave={onSave}
+          {...user}
+        />
+      )}
     </>
   )
 }
