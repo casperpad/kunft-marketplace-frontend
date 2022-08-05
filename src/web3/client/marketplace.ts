@@ -343,6 +343,33 @@ export class MarketplaceClient {
     )
   }
 
+  public async acceptBuyOrder(
+    collection: string,
+    tokenId: string,
+    bidder: CLKeyParameters,
+    paymentAmount: string,
+    sender: CLPublicKey,
+    signingKeys?: Keys.AsymmetricKey[],
+  ) {
+    const runtimeArgs = RuntimeArgs.fromMap({
+      collection: CLValueBuilder.string(`contract-${collection}`),
+      token_id: CLValueBuilder.u256(tokenId),
+      bidder: new CLKey(bidder),
+    })
+
+    const deploy = this.contractClient.callEntrypoint(
+      'accept_buy_order',
+      runtimeArgs,
+      sender,
+      this.chainName,
+      paymentAmount,
+      signingKeys,
+    )
+    const signedDeploy = await signDeploy(deploy, sender.toHex())
+    const deployHash = await this.casperClient.putDeploy(signedDeploy)
+    return deployHash
+  }
+
   public async feeWallet() {
     const result = (await this.contractClient.queryContractData([
       'fee_wallet',

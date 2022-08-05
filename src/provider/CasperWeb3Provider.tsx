@@ -50,11 +50,11 @@ export default function CasperWeb3Provider({
       }
     })
     window.addEventListener('signer:disconnected', () => {
-      setCurrentAccount(undefined)
+      // setCurrentAccount(undefined)
       setConnected(false)
     })
     window.addEventListener('signer:locked', () => {
-      setCurrentAccount(undefined)
+      // setCurrentAccount(undefined)
       setConnected(false)
     })
     window.addEventListener('signer:connected', handleWalletStateChange)

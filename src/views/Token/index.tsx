@@ -60,7 +60,7 @@ export default function Token({ token: _token }: { token: IToken }) {
             <HistoryContainer>
               <PriceHistory />
               <SaleListing sales={token.sales} />
-              <OfferListing offers={token.offers} />
+              <OfferListing token={token} />
             </HistoryContainer>
             <DescriptionContainer>
               <Description token={token} />
@@ -73,7 +73,7 @@ export default function Token({ token: _token }: { token: IToken }) {
               <HistoryContainer>
                 <PriceHistory />
                 <SaleListing sales={token.sales} />
-                <OfferListing offers={token.offers} />
+                <OfferListing token={token} />
               </HistoryContainer>
             )) || (
               <DescriptionContainer>

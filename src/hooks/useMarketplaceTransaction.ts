@@ -5,6 +5,7 @@ import {
   CLValueBuilder,
   decodeBase16,
   encodeBase16,
+  CLKeyParameters,
 } from 'casper-js-sdk'
 import { toast } from 'react-toastify'
 
@@ -20,8 +21,12 @@ import useMarketplace from './useMarketplace'
 
 export default function useMarketplaceTransaction(contractHash: string) {
   const { currentAccount, getDeploy, signDeploy } = useCasperWeb3Provider()
-  const { createSellOrder, buySellOrderCspr, createBuyOrderCspr } =
-    useMarketplace()
+  const {
+    acceptBuyOrder,
+    buySellOrderCspr,
+    createBuyOrderCspr,
+    createSellOrder,
+  } = useMarketplace()
   const { approve, getAllowance } = useCEP47(contractHash)
 
   const sellToken = useCallback(
@@ -145,7 +150,24 @@ export default function useMarketplaceTransaction(contractHash: string) {
     [contractHash, createBuyOrderCspr, currentAccount, getDeploy],
   )
 
+  const acceptOffer = useCallback(
+    async (id: string, bidder: CLKeyParameters) => {
+      if (!currentAccount) throw Error('')
+      const deployHash = await acceptBuyOrder(
+        contractHash,
+        id,
+        bidder,
+        '1000000000',
+        CLPublicKey.fromHex(currentAccount),
+      )
+      const _ = await getDeploy(deployHash)
+      toast.success(`Transaction confirmed`)
+    },
+    [acceptBuyOrder, contractHash, currentAccount, getDeploy],
+  )
+
   return {
+    acceptOffer,
     sellToken,
     buyToken,
     offerToken,
