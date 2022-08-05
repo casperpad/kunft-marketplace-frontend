@@ -27,28 +27,34 @@ function TableView({ sales }: SaleListingProps) {
         </HeadTr>
       </thead>
       <tbody>
-        {sales.map((sale) => {
-          return (
-            <tr key={sale.startTime}>
-              <Td>{sale.price}</Td>
-              <Td>{sale.price}</Td>
-              <Td>{new Date(sale.createdAt).toLocaleDateString('en-US')}</Td>
-              <Td>{shortenHash(sale.creator)}</Td>
-              <Td>
-                {sale.status === 'pending' ? (
-                  <StyledButton
-                    text="Buy Now"
-                    link={false}
-                    fontSize="20px"
-                    height={44}
-                  />
-                ) : (
-                  ''
-                )}
-              </Td>
-            </tr>
+        {sales
+          .sort(
+            (a, b) =>
+              new Date(a.createdAt).getUTCMilliseconds() -
+              new Date(b.createdAt).getUTCMilliseconds(),
           )
-        })}
+          .map((sale) => {
+            return (
+              <tr key={sale.startTime}>
+                <Td>{sale.price}</Td>
+                <Td>{sale.price}</Td>
+                <Td>{new Date(sale.createdAt).toLocaleDateString('en-US')}</Td>
+                <Td>{shortenHash(sale.creator)}</Td>
+                <Td>
+                  {sale.status === 'pending' ? (
+                    <StyledButton
+                      text="Buy Now"
+                      link={false}
+                      fontSize="20px"
+                      height={44}
+                    />
+                  ) : (
+                    ''
+                  )}
+                </Td>
+              </tr>
+            )
+          })}
       </tbody>
     </StyledTable>
   )

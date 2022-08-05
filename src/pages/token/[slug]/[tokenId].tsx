@@ -54,6 +54,16 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
                 status
                 createdAt
               }
+              offers {
+                creator
+                payToken
+                price
+                startTime
+                owner
+                additionalRecipient
+                status
+                createdAt
+              }
             }
           }
         }

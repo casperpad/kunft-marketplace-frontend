@@ -31,10 +31,10 @@ export default function NFTCard(_token: Token) {
     id,
     name,
     metadata,
-
     collection: { contractHash, image: collectionImage, slug },
     owner,
     pendingSale,
+    offers,
   } = token
   const { currentAccount, connect } = useCasperWeb3Provider()
   const { buyToken, sellToken, offerToken } =
@@ -91,13 +91,13 @@ export default function NFTCard(_token: Token) {
         .toAccountHashStr()
         .slice(13)
       if (currentAccountHash === owner) {
-        // if (pendingSale) return 'Cancel Listing'
+        if (offers.find((o) => o.status === 'pending')) return 'Accep Offer'
         return 'Sell'
       }
     }
     if (pendingSale) return 'Buy Now'
     return 'Make Offer'
-  }, [pendingSale, owner, currentAccount])
+  }, [pendingSale, owner, offers, currentAccount])
 
   useEffect(() => {
     if (addOrUpdateTokenMutationLoading || !addOrUpdateTokenMutationData) return

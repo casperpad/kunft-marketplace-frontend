@@ -1,15 +1,16 @@
 import { Flex, Text } from '@/components'
-
-import { Container, Td, HeadTr, TitleContainer } from './styles'
+import { Offer } from '@/types'
+import { shortenHash } from '@/utils/hash'
+import { Container, StyledTable, Td, HeadTr, TitleContainer } from './styles'
 
 interface OfferListingProps {
-  lists: string[]
+  offers: Offer[]
 }
 
-function TableView({ lists }: { lists: string[] }) {
-  if (lists.length) {
+function TableView({ offers }: OfferListingProps) {
+  if (offers.length) {
     return (
-      <table>
+      <StyledTable>
         <thead>
           <HeadTr>
             <Td>Price</Td>
@@ -17,7 +18,18 @@ function TableView({ lists }: { lists: string[] }) {
             <Td>From</Td>
           </HeadTr>
         </thead>
-      </table>
+        <tbody>
+          {offers.map((offer) => {
+            return (
+              <tr key={offer.startTime}>
+                <Td>{offer.price}</Td>
+                <Td>{offer.price}</Td>
+                <Td>{shortenHash(offer.creator)}</Td>
+              </tr>
+            )
+          })}
+        </tbody>
+      </StyledTable>
     )
   }
   return (
@@ -34,13 +46,13 @@ function TableView({ lists }: { lists: string[] }) {
   )
 }
 
-export default function OfferListing({ lists = [] }: OfferListingProps) {
+export default function OfferListing({ offers }: OfferListingProps) {
   return (
     <Container>
       <TitleContainer>
         <Text fontWeight={500}>Offers</Text>
       </TitleContainer>
-      <TableView lists={lists} />
+      <TableView offers={offers} />
     </Container>
   )
 }

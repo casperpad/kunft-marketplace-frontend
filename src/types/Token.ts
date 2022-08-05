@@ -1,5 +1,6 @@
 import { TokenFieldsFragment } from '@/graphql/queries/__generated__/token.generated'
 import { asCollection, Collection } from './Collection'
+import { asOffer, Offer } from './Offer'
 import { asSale, Sale } from './Sale'
 
 export type TokenType = 'Listed' | 'NotListed' | 'Upcoming'
@@ -19,6 +20,7 @@ export interface Token {
   collection: Collection
   pendingSale?: Sale
   sales: Sale[]
+  offers: Offer[]
 }
 
 export const asToken = (fields: TokenFieldsFragment): Token => ({
@@ -30,5 +32,6 @@ export const asToken = (fields: TokenFieldsFragment): Token => ({
   favoritedUsers: fields.favoritedUsers ? fields.favoritedUsers : [],
   collection: asCollection(fields.collection),
   pendingSale: fields.pendingSale ? asSale(fields.pendingSale) : undefined,
-  sales: fields.sales ? fields.sales.map(asSale) : [],
+  sales: fields.sales.map(asSale),
+  offers: fields.offers.map(asOffer),
 })

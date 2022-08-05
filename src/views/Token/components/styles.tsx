@@ -13,6 +13,11 @@ export const Container = styled(Flex)`
   font-family: 'Avenir';
 `
 
+export const StyledTable = styled.table`
+  table-layout: fixed;
+  width: 100%;
+`
+
 export const HeadTr = styled.tr`
   font-size: 15px;
 `

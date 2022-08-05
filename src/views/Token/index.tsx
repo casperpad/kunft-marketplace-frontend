@@ -24,8 +24,6 @@ import {
 
 export default function Token({ token: _token }: { token: IToken }) {
   const [token, setToken] = useState(_token)
-  const [offers] = useState<string[]>([])
-
   const [active, setActive] = useState(0)
 
   const size = useWindowSize()
@@ -62,7 +60,7 @@ export default function Token({ token: _token }: { token: IToken }) {
             <HistoryContainer>
               <PriceHistory />
               <SaleListing sales={token.sales} />
-              <OfferListing lists={offers} />
+              <OfferListing offers={token.offers} />
             </HistoryContainer>
             <DescriptionContainer>
               <Description token={token} />
@@ -75,7 +73,7 @@ export default function Token({ token: _token }: { token: IToken }) {
               <HistoryContainer>
                 <PriceHistory />
                 <SaleListing sales={token.sales} />
-                <OfferListing lists={offers} />
+                <OfferListing offers={token.offers} />
               </HistoryContainer>
             )) || (
               <DescriptionContainer>

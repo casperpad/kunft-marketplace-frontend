@@ -7,6 +7,17 @@ fragment SaleFields on Sale {
   createdAt
 }
 
+fragment OfferFields on Offer {
+  creator
+  payToken
+  price
+  startTime
+  owner
+  additionalRecipient
+  status
+  createdAt
+}
+
 fragment TokenFields on Token {
   collection {
     ...CollectionFields
@@ -21,6 +32,9 @@ fragment TokenFields on Token {
   }
   sales {
     ...SaleFields
+  }
+  offers {
+    ...OfferFields
   }
 }
 
