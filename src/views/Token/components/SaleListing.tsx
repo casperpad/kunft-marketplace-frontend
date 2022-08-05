@@ -1,20 +1,47 @@
-import styled from 'styled-components'
-import { Flex, StyledButton, Text } from '@/components'
-import { Sale } from '@/types'
+import { useCallback, useEffect, useState } from 'react'
+import { CLPublicKey } from 'casper-js-sdk'
+import { Flex, TransactionButton, Text } from '@/components'
+import {
+  useCasperWeb3Provider,
+  useCEP47,
+  useMarketplaceTransaction,
+} from '@/hooks'
+import { Token } from '@/types'
 import { shortenHash } from '@/utils/hash'
 
-import { Container, HeadTr, Td, TitleContainer } from './styles'
+import { Container, StyledTable, HeadTr, Td, TitleContainer } from './styles'
 
 interface SaleListingProps {
-  sales: Sale[]
+  token: Token
 }
 
-const StyledTable = styled.table`
-  table-layout: fixed;
-  width: 100%;
-`
+function TableView({ token: { sales, collection, id } }: SaleListingProps) {
+  const [isOwner, setIsOwner] = useState(false)
+  const [loading, setLoading] = useState(true)
+  const { currentAccount } = useCasperWeb3Provider()
+  const { buyToken } = useMarketplaceTransaction(collection.contractHash)
+  const { getOwnerOf } = useCEP47(collection.contractHash)
+  const buy = useCallback(
+    async (price: string) => {
+      const _ = await buyToken(id, price)
+    },
+    [buyToken, id],
+  )
 
-function TableView({ sales }: SaleListingProps) {
+  useEffect(() => {
+    async function fetchData() {
+      if (sales.length > 0 && currentAccount) {
+        const owner = await getOwnerOf(id)
+        if (CLPublicKey.fromHex(currentAccount).toAccountHashStr() === owner)
+          setIsOwner(true)
+        setLoading(false)
+      } else {
+        setLoading(false)
+      }
+    }
+    fetchData()
+  }, [sales.length, currentAccount, getOwnerOf, id])
+
   return (
     <StyledTable>
       <thead>
@@ -40,18 +67,20 @@ function TableView({ sales }: SaleListingProps) {
                 <Td>{sale.price}</Td>
                 <Td>{new Date(sale.createdAt).toLocaleDateString('en-US')}</Td>
                 <Td>{shortenHash(sale.creator)}</Td>
-                <Td>
-                  {sale.status === 'pending' ? (
-                    <StyledButton
-                      text="Buy Now"
-                      link={false}
-                      fontSize="20px"
-                      height={44}
-                    />
-                  ) : (
-                    ''
-                  )}
-                </Td>
+                {loading ? (
+                  <Td>Loading...</Td>
+                ) : (
+                  <Td>
+                    {sale.status === 'pending' && !isOwner ? (
+                      <TransactionButton
+                        title="Buy Now"
+                        onClick={() => buy(sale.price)}
+                      />
+                    ) : (
+                      ''
+                    )}
+                  </Td>
+                )}
               </tr>
             )
           })}
@@ -60,14 +89,14 @@ function TableView({ sales }: SaleListingProps) {
   )
 }
 
-export default function SaleListing({ sales }: SaleListingProps) {
+export default function SaleListing({ token }: SaleListingProps) {
   return (
     <Container>
       <TitleContainer>
         <Text fontWeight={500}>Sales Listings</Text>
       </TitleContainer>
-      {sales.length > 0 ? (
-        <TableView sales={sales} />
+      {token.sales.length > 0 ? (
+        <TableView token={token} />
       ) : (
         <Flex margin="auto">
           <Text

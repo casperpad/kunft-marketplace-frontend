@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react'
-import { CLByteArray, CLPublicKey, decodeBase16 } from 'casper-js-sdk'
+import { CLAccountHash, CLPublicKey, decodeBase16 } from 'casper-js-sdk'
 import { Flex, Text, TransactionButton } from '@/components'
 import {
   useCasperWeb3Provider,
@@ -23,7 +23,7 @@ function TableView({ token: { collection, offers, id } }: OfferListingProps) {
   const { getOwnerOf } = useCEP47(collection.contractHash)
   const accept = useCallback(
     async (bidder: string) => {
-      const _ = await acceptOffer(id, new CLByteArray(decodeBase16(bidder)))
+      const _ = await acceptOffer(id, new CLAccountHash(decodeBase16(bidder)))
     },
     [acceptOffer, id],
   )

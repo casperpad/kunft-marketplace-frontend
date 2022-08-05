@@ -59,42 +59,51 @@ export default function useMarketplaceTransaction(contractHash: string) {
 
       // Approve if allowance is incorrect
       if (shouldApprove) {
-        toast.info('Approve request submitted.')
-        const approveDeploy = await approve(
-          CLValueBuilder.byteArray(
-            decodeBase16(
-              contracts.marketplace[
-                NEXT_PUBLIC_CASPER_CHAIN_NAME
-              ].contractPackageHash.slice(5),
+        try {
+          toast.info('Approve request submitted.')
+          const approveDeploy = await approve(
+            CLValueBuilder.byteArray(
+              decodeBase16(
+                contracts.marketplace[
+                  NEXT_PUBLIC_CASPER_CHAIN_NAME
+                ].contractPackageHash.slice(5),
+              ),
             ),
-          ),
-          [id],
-          '500000000',
-          CLPublicKey.fromHex(currentAccount),
-        )
-        const signedApproveDeploy = await signDeploy(
-          approveDeploy,
-          currentAccount,
-        )
+            [id],
+            '500000000',
+            CLPublicKey.fromHex(currentAccount),
+          )
+          const signedApproveDeploy = await signDeploy(
+            approveDeploy,
+            currentAccount,
+          )
 
-        const arppoveDeployHash = await signedApproveDeploy.send(
-          NEXT_PUBLIC_CASPER_NODE_ADDRESS,
-        )
+          const arppoveDeployHash = await signedApproveDeploy.send(
+            NEXT_PUBLIC_CASPER_NODE_ADDRESS,
+          )
 
-        const _ = await getDeploy(arppoveDeployHash)
+          const _ = await getDeploy(arppoveDeployHash)
+        } catch (error: any) {
+          console.error('Approve Error:', error)
+        }
+      } else {
+        toast.info('Already approved')
       }
+      try {
+        const tokens = new Map<BigNumberish, BigNumberish>([[id, '1000000']])
+        toast.info('Sign sell request transaction')
+        const deployHash = await createSellOrder(
+          Date.now(),
+          contractHash,
+          tokens,
+          currentAccount!,
+          '5000000000',
+        )
 
-      const tokens = new Map<BigNumberish, BigNumberish>([[id, '1000000']])
-      toast.info('Sign sell request transaction')
-      const deployHash = await createSellOrder(
-        Date.now(),
-        contractHash,
-        tokens,
-        currentAccount!,
-        '5000000000',
-      )
-
-      const _ = await getDeploy(deployHash)
+        const _ = await getDeploy(deployHash)
+      } catch (error: any) {
+        console.error('createSellOrder Error', error.message)
+      }
     },
     [
       contractHash,
@@ -119,7 +128,10 @@ export default function useMarketplaceTransaction(contractHash: string) {
           '8000000000',
           currentAccount,
         )
-        toast.info('Transaction submitted')
+        toast.info(`Transaction created: ${deployHash}`, {
+          autoClose: false,
+          onClick: () => openCsprExplorer(deployHash),
+        })
         const _ = await getDeploy(deployHash)
         toast.success('Transaction confirmed')
       } catch (error: any) {
@@ -153,17 +165,96 @@ export default function useMarketplaceTransaction(contractHash: string) {
   const acceptOffer = useCallback(
     async (id: string, bidder: CLKeyParameters) => {
       if (!currentAccount) throw Error('')
-      const deployHash = await acceptBuyOrder(
-        contractHash,
-        id,
-        bidder,
-        '1000000000',
-        CLPublicKey.fromHex(currentAccount),
-      )
-      const _ = await getDeploy(deployHash)
-      toast.success(`Transaction confirmed`)
+
+      toast.info('Checking allownace')
+      let shouldApprove = true
+      try {
+        const allowance = await getAllowance(
+          CLPublicKey.fromHex(currentAccount),
+          id,
+        )
+
+        const parsedAllowance = CLValueBuilder.byteArray(
+          decodeBase16(allowance.slice(13)),
+        )
+        const marketplaceContractPackageHash = CLValueBuilder.byteArray(
+          decodeBase16(
+            contracts.marketplace[
+              NEXT_PUBLIC_CASPER_CHAIN_NAME
+            ].contractPackageHash.slice(5),
+          ),
+        )
+        shouldApprove =
+          encodeBase16(parsedAllowance.data) !==
+          encodeBase16(marketplaceContractPackageHash.data)
+        // eslint-disable-next-line no-empty
+      } catch (error: any) {}
+
+      // Approve if allowance is incorrect
+      if (shouldApprove) {
+        try {
+          toast.info('Approve request submitted.')
+          const approveDeploy = await approve(
+            CLValueBuilder.byteArray(
+              decodeBase16(
+                contracts.marketplace[
+                  NEXT_PUBLIC_CASPER_CHAIN_NAME
+                ].contractPackageHash.slice(5),
+              ),
+            ),
+            [id],
+            '500000000',
+            CLPublicKey.fromHex(currentAccount),
+          )
+          const signedApproveDeploy = await signDeploy(
+            approveDeploy,
+            currentAccount,
+          )
+
+          const arppoveDeployHash = await signedApproveDeploy.send(
+            NEXT_PUBLIC_CASPER_NODE_ADDRESS,
+          )
+
+          toast.info(`Approve transaction created: ${arppoveDeployHash}`, {
+            autoClose: false,
+            onClick: () => openCsprExplorer(arppoveDeployHash),
+          })
+
+          const _ = await getDeploy(arppoveDeployHash)
+        } catch (error: any) {
+          console.error('acceptBuyOrder Error', error)
+          toast.error(error.message)
+        }
+      }
+
+      try {
+        const deployHash = await acceptBuyOrder(
+          contractHash,
+          id,
+          bidder,
+          '7000000000',
+          CLPublicKey.fromHex(currentAccount),
+        )
+        toast.info(`Transaction created: ${deployHash}`, {
+          autoClose: false,
+          onClick: () => openCsprExplorer(deployHash),
+        })
+        const _ = await getDeploy(deployHash)
+        toast.success(`Transaction confirmed`)
+      } catch (error: any) {
+        console.error('acceptBuyOrder Error', error)
+        toast.error(error.message)
+      }
     },
-    [acceptBuyOrder, contractHash, currentAccount, getDeploy],
+    [
+      acceptBuyOrder,
+      approve,
+      contractHash,
+      currentAccount,
+      getAllowance,
+      getDeploy,
+      signDeploy,
+    ],
   )
 
   return {

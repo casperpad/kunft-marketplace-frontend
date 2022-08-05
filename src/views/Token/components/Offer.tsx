@@ -57,7 +57,7 @@ export default function Offer() {
     <Container>
       <PriceContainer>
         <PriceText>
-          KNFT
+          CSPR
           <Text fontWeight={700}>v</Text>
         </PriceText>
         <CustomInput placeholder="Input Amount" type="number" />

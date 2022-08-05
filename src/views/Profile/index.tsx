@@ -68,7 +68,7 @@ export default function Profile({ avatar }: ProfileProps) {
             <StyledImage src={profileAvatar} alt="" width={235} height={235} />
           </ImageContainer>
           <NameContainer>
-            <Title>Insert Name Here</Title>
+            <Title>{user!.name || 'Please set name.'}</Title>
             <Rating
               onClick={handleRating}
               ratingValue={rating}
@@ -76,9 +76,7 @@ export default function Profile({ avatar }: ProfileProps) {
               fillColor="#FA5F0C"
             />
             <Description mt="25px">
-              User profile bio here is written here. User profile bio here is
-              written here. User profile bio here is written here. User profile
-              bio here is written here.
+              {user!.description || 'You can write your bio.'}
             </Description>
           </NameContainer>
           {size[0] >= 1280 && <Filter />}

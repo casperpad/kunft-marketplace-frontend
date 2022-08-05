@@ -1,6 +1,7 @@
 import { useState } from 'react'
+import { CLPublicKey } from 'casper-js-sdk'
 import { Box, Text } from '@/components'
-import useWindowSize from '@/hooks/useWindowResize'
+import { useCasperWeb3Provider, useWindowSize } from '@/hooks'
 import { Token as IToken } from '@/types'
 import {
   Buy,
@@ -25,7 +26,7 @@ import {
 export default function Token({ token: _token }: { token: IToken }) {
   const [token, setToken] = useState(_token)
   const [active, setActive] = useState(0)
-
+  const { currentAccount } = useCasperWeb3Provider()
   const size = useWindowSize()
 
   return (
@@ -40,10 +41,18 @@ export default function Token({ token: _token }: { token: IToken }) {
           <Box mb="40px">
             <Name token={token} setToken={setToken} />
           </Box>
-          <Box mb="10px">
-            <Offer />
-          </Box>
-          <Buy token={token} setToken={setToken} />
+          {currentAccount &&
+          CLPublicKey.fromHex(currentAccount).toAccountHashStr().slice(13) ===
+            token.owner ? (
+            <>You have owned this token</>
+          ) : (
+            <>
+              <Box mb="10px">
+                <Offer />
+              </Box>
+              <Buy token={token} setToken={setToken} />
+            </>
+          )}
         </PriceContainer>
         <ImageContainer>
           <StyledImage
@@ -59,7 +68,7 @@ export default function Token({ token: _token }: { token: IToken }) {
           <>
             <HistoryContainer>
               <PriceHistory />
-              <SaleListing sales={token.sales} />
+              <SaleListing token={token} />
               <OfferListing token={token} />
             </HistoryContainer>
             <DescriptionContainer>
@@ -72,7 +81,7 @@ export default function Token({ token: _token }: { token: IToken }) {
             {(active === 0 && (
               <HistoryContainer>
                 <PriceHistory />
-                <SaleListing sales={token.sales} />
+                <SaleListing token={token} />
                 <OfferListing token={token} />
               </HistoryContainer>
             )) || (

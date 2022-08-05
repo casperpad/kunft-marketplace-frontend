@@ -25,7 +25,7 @@ export default function Detail({ token }: DescriptionProps) {
       <DataContainer>
         <Flex alignItems="center" justifyContent="space-between">
           <NameContainer>
-            <Text>Contract Address</Text>
+            <Text>Contract Package Hash</Text>
           </NameContainer>
           <ValueContainer>
             <Text color="primary">
