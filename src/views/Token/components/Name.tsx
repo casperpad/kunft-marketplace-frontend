@@ -43,7 +43,7 @@ const Button = styled(Flex)`
 const ViewButton = styled(Button)``
 
 const DataContainer = styled(Flex)`
-  flex-direction: column;
+  flex-direction: row;
   flex-wrap: wrap;
   gap: 24px;
   font-family: 'Avenir';

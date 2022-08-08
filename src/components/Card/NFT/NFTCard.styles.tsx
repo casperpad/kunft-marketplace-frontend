@@ -1,4 +1,5 @@
 import Image from 'next/image'
+import NextLink from 'next/link'
 import styled from 'styled-components'
 
 import { Box, Flex } from '@/components/Box'
@@ -50,7 +51,7 @@ export const ValueContainer = styled(StyledFlex)`
   }
 `
 
-export const Container = styled.div`
+export const Wrapper = styled.div`
   position: relative;
   background-color: transparent;
   border-radius: 10px;
@@ -75,3 +76,4 @@ export const Container = styled.div`
     }
   }
 `
+export const Container = styled(NextLink)``

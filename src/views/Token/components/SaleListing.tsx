@@ -1,13 +1,8 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useMemo } from 'react'
 import { CLPublicKey } from 'casper-js-sdk'
-import { Flex, TransactionButton, Text } from '@/components'
-import {
-  useCasperWeb3Provider,
-  useCEP47,
-  useMarketplaceTransaction,
-} from '@/hooks'
+import { Flex, TransactionButton, Text, Address } from '@/components'
+import { useCasperWeb3Provider, useMarketplaceTransaction } from '@/hooks'
 import { Token } from '@/types'
-import { shortenHash } from '@/utils/hash'
 
 import { Container, StyledTable, HeadTr, Td, TitleContainer } from './styles'
 
@@ -15,12 +10,11 @@ interface SaleListingProps {
   token: Token
 }
 
-function TableView({ token: { sales, collection, id } }: SaleListingProps) {
-  const [isOwner, setIsOwner] = useState(false)
-  const [loading, setLoading] = useState(true)
+function TableView({
+  token: { sales, collection, id, owner },
+}: SaleListingProps) {
   const { currentAccount } = useCasperWeb3Provider()
   const { buyToken } = useMarketplaceTransaction(collection.contractHash)
-  const { getOwnerOf } = useCEP47(collection.contractHash)
   const buy = useCallback(
     async (price: string) => {
       const _ = await buyToken(id, price)
@@ -28,19 +22,12 @@ function TableView({ token: { sales, collection, id } }: SaleListingProps) {
     [buyToken, id],
   )
 
-  useEffect(() => {
-    async function fetchData() {
-      if (sales.length > 0 && currentAccount) {
-        const owner = await getOwnerOf(id)
-        if (CLPublicKey.fromHex(currentAccount).toAccountHashStr() === owner)
-          setIsOwner(true)
-        setLoading(false)
-      } else {
-        setLoading(false)
-      }
-    }
-    fetchData()
-  }, [sales.length, currentAccount, getOwnerOf, id])
+  const isOwner = useMemo(() => {
+    if (!currentAccount) return false
+    return (
+      CLPublicKey.fromHex(currentAccount).toAccountHashStr().slice(13) === owner
+    )
+  }, [currentAccount, owner])
 
   return (
     <StyledTable>
@@ -66,21 +53,17 @@ function TableView({ token: { sales, collection, id } }: SaleListingProps) {
                 <Td>{sale.price}</Td>
                 <Td>{sale.price}</Td>
                 <Td>{new Date(sale.createdAt).toLocaleDateString('en-US')}</Td>
-                <Td>{shortenHash(sale.creator)}</Td>
-                {loading ? (
-                  <Td>Loading...</Td>
-                ) : (
-                  <Td>
-                    {sale.status === 'pending' && !isOwner ? (
-                      <TransactionButton
-                        title="Buy Now"
-                        onClick={() => buy(sale.price)}
-                      />
-                    ) : (
-                      ''
-                    )}
-                  </Td>
-                )}
+                <Td>
+                  <Address address={sale.creator} />
+                </Td>
+                <Td>
+                  {sale.status === 'pending' && !isOwner ? (
+                    <TransactionButton
+                      title="Buy Now"
+                      onClick={() => buy(sale.price)}
+                    />
+                  ) : null}
+                </Td>
               </tr>
             )
           })}

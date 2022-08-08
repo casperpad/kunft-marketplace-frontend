@@ -27,7 +27,8 @@ fragment TokenFields on Token {
   favoritedUsers
   viewed
   owner
-  pendingSale {
+  listed
+  price {
     ...SaleFields
   }
   sales {

@@ -15,10 +15,10 @@ export interface Token {
   metadata: Metadata
   owner: string
   viewed: number
-  payToken?: string
   favoritedUsers: string[]
   collection: Collection
-  pendingSale?: Sale
+  price?: Sale
+  listed: boolean
   sales: Sale[]
   offers: Offer[]
 }
@@ -31,7 +31,8 @@ export const asToken = (fields: TokenFieldsFragment): Token => ({
   viewed: fields.viewed,
   favoritedUsers: fields.favoritedUsers ? fields.favoritedUsers : [],
   collection: asCollection(fields.collection),
-  pendingSale: fields.pendingSale ? asSale(fields.pendingSale) : undefined,
+  price: fields.price ? asSale(fields.price) : undefined,
+  listed: fields.listed,
   sales: fields.sales.map(asSale),
   offers: fields.offers.map(asOffer),
 })

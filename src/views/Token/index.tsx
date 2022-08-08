@@ -48,7 +48,7 @@ export default function Token({ token: _token }: { token: IToken }) {
           ) : (
             <>
               <Box mb="10px">
-                <Offer />
+                <Offer token={token} />
               </Box>
               <Buy token={token} setToken={setToken} />
             </>

@@ -7,7 +7,6 @@ import { BaseButtonProps } from './types'
 interface StyledButtonProps extends BaseButtonProps {
   text: string
   link?: boolean
-  onClick?: () => void
 }
 
 const StyledButton: React.FC<StyledButtonProps> = ({

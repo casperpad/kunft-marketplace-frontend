@@ -6,29 +6,35 @@ import { shortenHash } from '@/utils/hash'
 
 export default function Address({ address, ...props }: { address: string }) {
   const [copied, setCopied] = useState(false)
-
-  const [tooltip, showTooltip] = useState(true)
+  const [mounted, setMounted] = useState(false)
+  const [tooltip, showTooltip] = useState(false)
   useEffect(() => {
     if (copied) setTimeout(() => setCopied(false), 1000)
   }, [copied])
+
+  useEffect(() => {
+    setMounted(true)
+  }, [])
 
   return (
     <>
       <CopyToClipboard text={address} onCopy={() => setCopied(true)}>
         <StyledAddress
-          data-tip="react-tooltip"
+          data-tip
+          data-for="react-tooltip"
           onMouseEnter={() => showTooltip(true)}
           onMouseLeave={() => {
             showTooltip(false)
-            setTimeout(() => showTooltip(true), 50)
           }}
           {...props}
         >
           {shortenHash(address)}
         </StyledAddress>
       </CopyToClipboard>
-      {tooltip && (
+
+      {mounted && tooltip && (
         <ReactTooltip
+          id="react-tooltip"
           place="top"
           type="dark"
           effect="float"

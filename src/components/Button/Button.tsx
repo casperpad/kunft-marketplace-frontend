@@ -1,28 +1,25 @@
-import styled, { DefaultTheme } from 'styled-components'
-import { border, layout, space, typography } from 'styled-system'
-import getThemeValue from '@/utils/getThemeValue'
+import styled from 'styled-components'
+import { border, layout, space, typography, color } from 'styled-system'
 
 import { BaseButtonProps } from './types'
 
-interface ThemeProps extends BaseButtonProps {
-  theme: DefaultTheme
-}
-
-const getColor = ({ color, theme }: ThemeProps) => {
-  return getThemeValue(`colors.${color}`, color)(theme)
-}
-
 export const DefaultButton = styled.button<BaseButtonProps>`
-  background-color: ${getColor};
+  background-color: ${({ theme }) => theme.colors.primary};
   border: 0;
   ${border}
   ${layout}
   ${space}
   ${typography}
-  cursor: pointer;
+  ${color}
   transition: opacity 0.3s;
+
   &:hover {
     opacity: 0.8;
+    cursor: pointer;
+  }
+  &:disabled {
+    background-color: ${({ theme }) => theme.colors.disabled};
+    cursor: not-allowed;
   }
 `
 
@@ -34,5 +31,7 @@ export const Button = styled(DefaultButton)`
   box-shadow: ${({ theme }) => theme.shadows.base};
   &:hover {
     box-shadow: ${({ theme }) => theme.shadows.hover};
+  }
+  &:disabled {
   }
 `

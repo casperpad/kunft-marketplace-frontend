@@ -19,7 +19,7 @@ import FavoriteToken from '../../FavoriteToken'
 import {
   SaleButton,
   StyledImage,
-  Container,
+  Wrapper,
   NameContainer,
   ValueContainer,
 } from './NFTCard.styles'
@@ -33,7 +33,8 @@ export default function NFTCard(_token: Token) {
     metadata,
     collection: { contractHash, image: collectionImage, slug },
     owner,
-    pendingSale,
+    listed,
+    price,
     offers,
   } = token
   const { currentAccount, connect } = useCasperWeb3Provider()
@@ -67,17 +68,18 @@ export default function NFTCard(_token: Token) {
           return sellToken(id)
         }
       }
-      if (pendingSale) return buyToken(id, pendingSale.price)
+      if (listed && price) return buyToken(id, price.price)
       return offerToken(id, '2000000000')
     } catch (error: any) {
       console.error(error)
     }
   }, [
     currentAccount,
-    pendingSale,
+    listed,
     buyToken,
     getOwnerOf,
     id,
+    price,
     addOrUpdateTokenMutation,
     contractHash,
     owner,
@@ -95,9 +97,9 @@ export default function NFTCard(_token: Token) {
         return 'Sell'
       }
     }
-    if (pendingSale) return 'Buy Now'
+    if (listed) return 'Buy Now'
     return 'Make Offer'
-  }, [pendingSale, owner, offers, currentAccount])
+  }, [listed, owner, offers, currentAccount])
 
   useEffect(() => {
     if (addOrUpdateTokenMutationLoading || !addOrUpdateTokenMutationData) return
@@ -106,7 +108,7 @@ export default function NFTCard(_token: Token) {
   }, [addOrUpdateTokenMutationLoading])
 
   return (
-    <Container>
+    <Wrapper>
       <StyledImage
         src={metadata?.image || metadata?.logo || collectionImage || ''}
         width={320}
@@ -122,8 +124,8 @@ export default function NFTCard(_token: Token) {
         <ValueContainer>
           <FavoriteToken token={token} setToken={setToken} />
           <Text color="primary">
-            {pendingSale
-              ? parseFloat(formatFixed(pendingSale.price, 9)).toLocaleString()
+            {price
+              ? parseFloat(formatFixed(price.price, 9)).toLocaleString()
               : 'Not Available'}
           </Text>
         </ValueContainer>
@@ -133,6 +135,6 @@ export default function NFTCard(_token: Token) {
         onClick={currentAccount ? handle : connect}
         text={currentAccount ? buttonText : 'Connect Wallet'}
       />
-    </Container>
+    </Wrapper>
   )
 }

@@ -1,13 +1,12 @@
 import { useCallback, useEffect, useState } from 'react'
 import { CLAccountHash, CLPublicKey, decodeBase16 } from 'casper-js-sdk'
-import { Flex, Text, TransactionButton } from '@/components'
+import { Address, Flex, Text, TransactionButton } from '@/components'
 import {
   useCasperWeb3Provider,
   useCEP47,
   useMarketplaceTransaction,
 } from '@/hooks'
 import { Token } from '@/types'
-import { shortenHash } from '@/utils/hash'
 
 import { Container, StyledTable, Td, HeadTr, TitleContainer } from './styles'
 
@@ -59,19 +58,19 @@ function TableView({ token: { collection, offers, id } }: OfferListingProps) {
               <tr key={offer.startTime}>
                 <Td>{offer.price}</Td>
                 <Td>{offer.price}</Td>
-                <Td>{shortenHash(offer.creator)}</Td>
-                {loading ? (
-                  <Td>Loading</Td>
-                ) : (
-                  <Td>
-                    {offer.status === 'pending' && isOwner ? (
-                      <TransactionButton
-                        title="Accept Offer"
-                        onClick={() => accept(offer.creator)}
-                      />
-                    ) : null}
-                  </Td>
-                )}
+                <Td>
+                  <Address address={offer.creator} />
+                </Td>
+                <Td>
+                  {loading ? (
+                    'Loading'
+                  ) : offer.status === 'pending' && isOwner ? (
+                    <TransactionButton
+                      title="Accept Offer"
+                      onClick={() => accept(offer.creator)}
+                    />
+                  ) : null}
+                </Td>
               </tr>
             )
           })}

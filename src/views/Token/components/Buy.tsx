@@ -1,7 +1,7 @@
 import { useCallback } from 'react'
 import styled from 'styled-components'
 
-import { Flex, StyledButton, Text } from '@/components'
+import { Flex, Text, TransactionButton } from '@/components'
 import { useMarketplaceTransaction } from '@/hooks'
 import { Token } from '@/types'
 
@@ -42,22 +42,20 @@ interface BuyProps {
 export default function Buy({ token }: BuyProps) {
   const { buyToken } = useMarketplaceTransaction(token.collection.contractHash)
   const handle = useCallback(async () => {
-    if (token.pendingSale) await buyToken(token.id, token.pendingSale.price)
-  }, [buyToken, token.id, token.pendingSale])
+    if (token.listed && token.price) await buyToken(token.id, token.price.price)
+  }, [buyToken, token.id, token.listed, token.price])
   return (
     <Container>
       <PriceContainer>
         <Text fontSize="16px">Current Price</Text>
         <Text fontSize="30px" fontWeight={700} mt="-10px">
-          {token.pendingSale ? token.pendingSale.price : 'Not Available'}
+          {token.price ? token.price.price : 'Not Available'}
         </Text>
       </PriceContainer>
       <ButtonContainer>
-        <StyledButton
-          text="Buy Now"
-          link={false}
-          fontSize="20px"
-          height={44}
+        <TransactionButton
+          title="Buy Now"
+          disabled={!token.listed}
           onClick={handle}
         />
       </ButtonContainer>

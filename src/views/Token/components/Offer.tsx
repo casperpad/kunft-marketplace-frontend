@@ -1,6 +1,52 @@
+import { useCallback, useState } from 'react'
+import { parseFixed } from '@ethersproject/bignumber'
 import styled from 'styled-components'
 
-import { Flex, StyledButton, Input, Text } from '@/components'
+import { Flex, Input, Text, TransactionButton } from '@/components'
+import { useMarketplaceTransaction } from '@/hooks'
+import { Token } from '@/types'
+
+interface OfferProps {
+  token: Token
+}
+
+export default function Offer({ token }: OfferProps) {
+  const [offerPrice, setOfferPrice] = useState('')
+
+  const { offerToken } = useMarketplaceTransaction(
+    token.collection.contractHash,
+  )
+  const offer = useCallback(async () => {
+    const _ = await offerToken(token.id, parseFixed(offerPrice, 9))
+  }, [offerToken, token.id, offerPrice])
+  return (
+    <Container>
+      <PriceContainer>
+        <PriceText>
+          CSPR
+          <Text fontWeight={700}>v</Text>
+        </PriceText>
+        <CustomInput
+          placeholder="Input Amount"
+          type="number"
+          value={offerPrice}
+          onChange={(e) => setOfferPrice(e.target.value)}
+        />
+        <Flex flexDirection="column">
+          <Text fontFamily="Avenir" fontSize="10px">
+            Highest Offer
+          </Text>
+          <Text fontFamily="Avenir" fontSize="18px" fontWeight={700}>
+            50,531 KNFT
+          </Text>
+        </Flex>
+      </PriceContainer>
+      <ButtonContainer>
+        <TransactionButton title="Make Offer" onClick={offer} />
+      </ButtonContainer>
+    </Container>
+  )
+}
 
 const CustomInput = styled(Input)`
   width: 150px;
@@ -51,33 +97,3 @@ const Container = styled(Flex)`
     justify-content: space-between;
   }
 `
-
-export default function Offer() {
-  return (
-    <Container>
-      <PriceContainer>
-        <PriceText>
-          CSPR
-          <Text fontWeight={700}>v</Text>
-        </PriceText>
-        <CustomInput placeholder="Input Amount" type="number" />
-        <Flex flexDirection="column">
-          <Text fontFamily="Avenir" fontSize="10px">
-            Highest Offer
-          </Text>
-          <Text fontFamily="Avenir" fontSize="18px" fontWeight={700}>
-            50,531 KNFT
-          </Text>
-        </Flex>
-      </PriceContainer>
-      <ButtonContainer>
-        <StyledButton
-          text="Make Offer"
-          link={false}
-          fontSize="20px"
-          height={44}
-        />
-      </ButtonContainer>
-    </Container>
-  )
-}

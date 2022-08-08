@@ -38,7 +38,8 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
               favoritedUsers
               viewed
               owner
-              pendingSale {
+              listed
+              price {
                 creator
                 price
                 payToken

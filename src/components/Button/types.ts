@@ -16,4 +16,6 @@ export interface BaseButtonProps
     BorderProps,
     TypographyProps {
   color?: string
+  onClick?: any
+  disabled?: boolean
 }
