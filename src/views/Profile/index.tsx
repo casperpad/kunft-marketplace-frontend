@@ -1,11 +1,18 @@
 import { useCallback, useEffect, useState } from 'react'
 import { CLPublicKey } from 'casper-js-sdk'
+import uniqWith from 'lodash/uniqWith'
 import { Rating } from 'react-simple-star-rating'
-
-import { NFTCard, AddButton, ImportTokenModal } from '@/components'
+import { toast } from 'react-toastify'
+import {
+  NFTCard,
+  AddButton,
+  ImportTokenModal,
+  StyledButton,
+} from '@/components'
 import { useWindowSize, useGetTokens } from '@/hooks'
-import { userApis } from '@/service'
+import { tokenApis, userApis } from '@/service'
 import { useAppSelector } from '@/store'
+import { isEqual } from '@/utils/token'
 import { Token } from '../../types/Token'
 import Filter from './Filter'
 
@@ -49,14 +56,24 @@ export default function Profile({ avatar }: ProfileProps) {
   )
   const handleImportToken = useCallback(
     async (contractHash: string, tokenId: string) => {
-      await userApis.addToken(contractHash, tokenId)
+      const _ = await userApis.addToken(contractHash, tokenId)
+      setShowImportTokenDialog(false)
     },
     [],
   )
 
+  const handleImportAllToken = useCallback(async () => {
+    const { result } = await tokenApis.addUserToken(
+      CLPublicKey.fromHex(user!.publicKey).toAccountHashStr().slice(13),
+    )
+    toast.success(result)
+  }, [user])
+
   useEffect(() => {
     if (loading || !data) return
-    setTokens((prev) => [...prev, ...data.tokens])
+    setTokens((prev) => {
+      return uniqWith([...prev, ...data.tokens], isEqual)
+    })
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [loading])
 
@@ -84,16 +101,29 @@ export default function Profile({ avatar }: ProfileProps) {
         {size[0] < 1280 && <Filter />}
         <NFTContainer>
           {tokens.map((token) => (
-            <NFTCard key={token.id} {...token} />
+            <NFTCard
+              key={`${token.collection.contractPackageHash}_${token.id}`}
+              {...token}
+            />
           ))}
           {loading ? 'Loading...' : null}
         </NFTContainer>
+
+        <AddButton onClick={() => setShowImportTokenDialog(true)} />
+        <StyledButton
+          text="Import all token(*experimental)"
+          link={false}
+          onClick={() =>
+            toast.promise(handleImportAllToken, {
+              pending: 'Adding tokens...',
+            })
+          }
+        />
         <ImportTokenModal
           show={showImportTokenDialog}
           setShow={setShowImportTokenDialog}
           onImport={handleImportToken}
         />
-        <AddButton onClick={() => setShowImportTokenDialog(true)} />
       </CustomLayout>
     </Container>
   )

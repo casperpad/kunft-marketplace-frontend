@@ -108,7 +108,7 @@ export default function NFTCard(_token: Token) {
   return (
     <Container>
       <StyledImage
-        src={metadata?.image || collectionImage || ''}
+        src={metadata?.image || metadata?.logo || collectionImage || ''}
         width={320}
         height={320}
         layout="responsive"
