@@ -1,7 +1,6 @@
 import styled from 'styled-components'
-import { Flex, Text } from '@/components'
+import { Address, Flex, Text } from '@/components'
 import { Token } from '@/types'
-import { shortenHash } from '@/utils/hash'
 import {
   Container as DefaultContainer,
   StyledText,
@@ -28,9 +27,7 @@ export default function Detail({ token }: DescriptionProps) {
             <Text>Contract Package Hash</Text>
           </NameContainer>
           <ValueContainer>
-            <Text color="primary">
-              {shortenHash(token.collection.contractPackageHash)}
-            </Text>
+            <Address address={token.collection.contractPackageHash} />
           </ValueContainer>
         </Flex>
 

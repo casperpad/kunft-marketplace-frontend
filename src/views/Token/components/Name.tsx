@@ -1,9 +1,8 @@
 import { BsEye } from 'react-icons/bs'
 import styled from 'styled-components'
 
-import { Flex, Text, FavoriteToken } from '@/components'
+import { Flex, Text, FavoriteToken, Address } from '@/components'
 import { Token } from '@/types'
-import { shortenHash } from '@/utils/hash'
 
 interface NameProps {
   token: Token
@@ -17,7 +16,7 @@ export default function Name({ token, setToken }: NameProps) {
       <DataContainer>
         <Flex flexDirection="row">
           <Text mr="4px">Owned by</Text>
-          <Text color="primary">{shortenHash(token.owner)}</Text>
+          <Address address={token.owner} />
         </Flex>
         <Flex flexDirection="row">
           <FavoriteToken token={token} setToken={setToken} />
