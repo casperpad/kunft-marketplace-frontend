@@ -20,6 +20,8 @@ export interface BoxProps
     TypographyProps,
     HTMLAttributes<HTMLDivElement> {}
 
-export interface FlexProps extends BoxProps, FlexboxProps {}
+export interface FlexProps extends BoxProps, FlexboxProps {
+  gap?: number
+}
 
 export interface GridProps extends FlexProps, _GridProps {}

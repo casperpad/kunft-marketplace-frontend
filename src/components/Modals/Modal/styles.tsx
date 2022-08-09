@@ -13,7 +13,7 @@ export const ModalHeader = styled.div<{ background?: string }>`
   align-items: center;
   background: transparent;
   display: flex;
-  padding: 12px 24px;
+  padding: 24px;
 
   ${({ theme }) => theme.mediaQueries.md} {
     background: ${({ background }) => background || 'transparent'};
@@ -21,6 +21,8 @@ export const ModalHeader = styled.div<{ background?: string }>`
 `
 
 export const ModalTitle = styled(Flex)`
+  font-size: 20px;
+  font-family: 'Castle';
   align-items: center;
   flex: 1;
 `
@@ -58,10 +60,9 @@ export const ModalBackButton: React.FC<{ onBack: ModalProps['onBack'] }> = ({
 export const ModalContainer = styled.div<{ minWidth: string }>`
   overflow: hidden;
   background: white;
-  box-shadow: 0px 20px 36px -8px rgba(14, 14, 44, 0.1),
-    0px 1px 1px rgba(0, 0, 0, 0.05);
-  border-radius: 5px 5px 0px 0px;
-  width: 100%;
+  box-shadow: ${({ theme }) => theme.shadows.base};
+  /* border-radius: 5px 5px 0px 0px; */
+  width: 80%;
   max-height: 90vh;
   max-height: calc(var(--vh, 1vh) * 100);
   z-index: ${({ theme }) => theme.zIndices.modal};
@@ -76,7 +77,7 @@ export const ModalContainer = styled.div<{ minWidth: string }>`
     width: auto;
     position: auto;
     bottom: auto;
-    border-radius: 32px;
+    border-radius: 12px;
     max-width: 100%;
     max-height: 100vh;
   }

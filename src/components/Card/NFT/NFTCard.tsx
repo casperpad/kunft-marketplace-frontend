@@ -1,23 +1,20 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react'
+import React, { useCallback, useMemo, useState } from 'react'
 
 import { formatFixed } from '@ethersproject/bignumber'
 import { CLPublicKey } from 'casper-js-sdk'
 import NextLink from 'next/link'
-import { toast } from 'react-toastify'
 
 import { Box } from '@/components/Box'
 import { Text } from '@/components/Text'
 import {
-  useAddOrUpdateTokenMutation,
   useCasperWeb3Provider,
-  useCEP47,
   useMarketplaceTransaction,
   useModal,
 } from '@/hooks'
 import { Token } from '@/types'
 
 import FavoriteToken from '../../FavoriteToken'
-import { OfferTokenModal } from '../../Modals'
+import { OfferTokenModal, SellTokenModal } from '../../Modals'
 import {
   SaleButton,
   StyledImage,
@@ -40,37 +37,23 @@ export default function NFTCard(_token: Token) {
     offers,
   } = token
   const { currentAccount, connect } = useCasperWeb3Provider()
-  const { buyToken, sellToken } = useMarketplaceTransaction(contractHash)
-  const { getOwnerOf } = useCEP47(contractHash)
+  const { buyToken } = useMarketplaceTransaction(contractHash)
+
   const [onPresentOfferModal] = useModal(
     <OfferTokenModal token={token} />,
     true,
   )
-
-  const {
-    addOrUpdateTokenMutation,
-    data: addOrUpdateTokenMutationData,
-    loading: addOrUpdateTokenMutationLoading,
-  } = useAddOrUpdateTokenMutation()
+  const [onPresentSellModal] = useModal(<SellTokenModal token={token} />, true)
 
   const handle = useCallback(async () => {
     try {
-      // const _owner = await getOwnerOf(id)
-      // // DB data is outdated
-      // if (owner !== _owner.slice(13)) {
-      //   toast.error('Invalid token')
-      //   await addOrUpdateTokenMutation({
-      //     variables: { contractHash, tokenId: id },
-      //   })
-      //   return
-      // }
       if (currentAccount) {
         const currentAccountHash = CLPublicKey.fromHex(currentAccount)
           .toAccountHashStr()
           .slice(13)
         if (currentAccountHash === owner) {
           // if (pendingSale) return 'Cancel Listing'
-          return sellToken(id)
+          return onPresentSellModal()
         }
       }
       if (listed && price) return buyToken(id, price.price)
@@ -82,15 +65,12 @@ export default function NFTCard(_token: Token) {
   }, [
     currentAccount,
     listed,
-    buyToken,
-    getOwnerOf,
-    id,
     price,
-    addOrUpdateTokenMutation,
-    contractHash,
-    owner,
-    sellToken,
+    buyToken,
+    id,
     onPresentOfferModal,
+    owner,
+    onPresentSellModal,
   ])
 
   const buttonText = useMemo(() => {
@@ -106,12 +86,6 @@ export default function NFTCard(_token: Token) {
     if (listed) return 'Buy Now'
     return 'Make Offer'
   }, [listed, owner, offers, currentAccount])
-
-  useEffect(() => {
-    if (addOrUpdateTokenMutationLoading || !addOrUpdateTokenMutationData) return
-    setToken(addOrUpdateTokenMutationData)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [addOrUpdateTokenMutationLoading])
 
   return (
     <Wrapper>

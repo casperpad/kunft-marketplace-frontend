@@ -10,19 +10,17 @@ import { TransactionButton } from '../../Button'
 import { Input } from '../../Input'
 import { Text } from '../../Text'
 
-interface OfferProps {
+interface SellProps {
   token: Token
 }
 
-export default function Offer({ token }: OfferProps) {
-  const [offerPrice, setOfferPrice] = useState('')
+export default function Sell({ token }: SellProps) {
+  const [sellPrice, setSellPrice] = useState('')
 
-  const { offerToken } = useMarketplaceTransaction(
-    token.collection.contractHash,
-  )
-  const offer = useCallback(async () => {
-    const _ = await offerToken(token.id, parseFixed(offerPrice, 9))
-  }, [offerToken, token.id, offerPrice])
+  const { sellToken } = useMarketplaceTransaction(token.collection.contractHash)
+  const sell = useCallback(async () => {
+    const _ = await sellToken(token.id, parseFixed(sellPrice, 9))
+  }, [sellToken, token.id, sellPrice])
   return (
     <Container>
       <PriceContainer>
@@ -33,12 +31,12 @@ export default function Offer({ token }: OfferProps) {
         <CustomInput
           placeholder="Input Amount"
           type="number"
-          value={offerPrice}
-          onChange={(e) => setOfferPrice(e.target.value)}
+          value={sellPrice}
+          onChange={(e) => setSellPrice(e.target.value)}
         />
         <Flex flexDirection="column">
           <Text fontFamily="Avenir" fontSize="10px">
-            Highest Offer
+            Highest Sell
           </Text>
           <Text fontFamily="Avenir" fontSize="18px" fontWeight={700}>
             50,531 KNFT
@@ -46,9 +44,9 @@ export default function Offer({ token }: OfferProps) {
         </Flex>
       </PriceContainer>
       <TransactionButton
-        title="Make Offer"
-        onClick={offer}
-        disabled={offerPrice.length === 0}
+        title="Sell"
+        onClick={sell}
+        disabled={sellPrice.length === 0}
       />
     </Container>
   )

@@ -28,7 +28,7 @@ export default function TransactionButton({
     <StyledButton
       fontSize="20px"
       onClick={connected ? onClick : connect}
-      disabled={disabled}
+      disabled={connected ? disabled : false}
     >
       {connected ? title : 'Connect Wallet'}
     </StyledButton>

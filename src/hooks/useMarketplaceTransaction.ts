@@ -30,7 +30,7 @@ export default function useMarketplaceTransaction(contractHash: string) {
   const { approve, getAllowance } = useCEP47(contractHash)
 
   const sellToken = useCallback(
-    async (id: string) => {
+    async (id: string, price: BigNumberish) => {
       if (currentAccount === undefined) return
 
       toast.info('Checking allownace')
@@ -90,7 +90,7 @@ export default function useMarketplaceTransaction(contractHash: string) {
         toast.info('Already approved')
       }
       try {
-        const tokens = new Map<BigNumberish, BigNumberish>([[id, '1000000']])
+        const tokens = new Map<BigNumberish, BigNumberish>([[id, price]])
         toast.info('Sign sell request transaction')
         const deployHash = await createSellOrder(
           Date.now(),

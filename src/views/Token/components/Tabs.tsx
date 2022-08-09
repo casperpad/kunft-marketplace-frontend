@@ -35,6 +35,7 @@ export default function Tabs({ active, setActive }: TabsProps) {
       {TABS.map((tab, index) => {
         return (
           <Button
+            type="button"
             key={tab}
             onClick={() => setActive(index)}
             active={active === index}
