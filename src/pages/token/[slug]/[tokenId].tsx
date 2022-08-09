@@ -40,12 +40,8 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
               owner
               listed
               price {
-                creator
                 price
                 payToken
-                startTime
-                status
-                createdAt
               }
               sales {
                 creator

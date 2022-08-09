@@ -16,15 +16,27 @@ export const Container = styled(Flex)`
 export const StyledTable = styled.table`
   table-layout: fixed;
   width: 100%;
-`
 
-export const HeadTr = styled.tr`
-  font-size: 15px;
-`
-
-export const Td = styled.td`
-  text-align: center;
-  margin-left: auto;
+  thead {
+    font-size: 15px;
+    tr {
+      background: white !important;
+      border-bottom: 1px solid black;
+    }
+  }
+  tr:nth-child(odd) {
+    background: ${({ theme }) => `${theme.colors.primary}0F`};
+  }
+  tr:nth-child(even) {
+    background: ${({ theme }) => `${theme.colors.primary}05`};
+  }
+  tr {
+    height: 50px;
+  }
+  td {
+    text-align: center;
+    margin-left: auto;
+  }
 `
 
 export const TitleContainer = styled(Flex)`

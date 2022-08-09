@@ -15,7 +15,7 @@ import {
   contracts,
 } from '@/config'
 import { openCsprExplorer } from '@/utils/hash'
-import { useCasperWeb3Provider } from '../provider/CasperWeb3Provider'
+import { useCasperWeb3Provider } from '../providers/CasperWeb3Provider'
 import useCEP47 from './useCEP47'
 import useMarketplace from './useMarketplace'
 
@@ -143,21 +143,25 @@ export default function useMarketplaceTransaction(contractHash: string) {
 
   const offerToken = useCallback(
     async (id: string, amount: BigNumberish) => {
-      // TODO Check token owner is not caller and marketplace
-      if (!currentAccount) throw Error('')
-      const deployHash = await createBuyOrderCspr(
-        contractHash,
-        id,
-        amount,
-        '1000000000',
-        CLPublicKey.fromHex(currentAccount),
-      )
-      toast.info(`Transaction created: ${deployHash}`, {
-        autoClose: false,
-        onClick: () => openCsprExplorer(deployHash),
-      })
-      const _ = await getDeploy(deployHash)
-      toast.success(`Transaction confirmed`)
+      try {
+        // TODO Check token owner is not caller and marketplace
+        if (!currentAccount) throw Error('')
+        const deployHash = await createBuyOrderCspr(
+          contractHash,
+          id,
+          amount,
+          '1000000000',
+          CLPublicKey.fromHex(currentAccount),
+        )
+        toast.info(`Transaction created: ${deployHash}`, {
+          autoClose: false,
+          onClick: () => openCsprExplorer(deployHash),
+        })
+        const _ = await getDeploy(deployHash)
+        toast.success(`Transaction confirmed`)
+      } catch (error: any) {
+        toast.error(error.toString())
+      }
     },
     [contractHash, createBuyOrderCspr, currentAccount, getDeploy],
   )

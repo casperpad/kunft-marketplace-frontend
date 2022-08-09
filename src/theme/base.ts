@@ -29,8 +29,17 @@ const shadows = {
   slider: '0px 0px 4px 4px #00000040',
 }
 
+const zIndices = {
+  ribbon: 5,
+  dropdown: 7,
+  navbar: 10,
+  overlay: 20,
+  modal: 100,
+}
+
 export default {
   breakpoints,
   mediaQueries,
   shadows,
+  zIndices,
 }

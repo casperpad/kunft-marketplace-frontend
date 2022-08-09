@@ -47,7 +47,10 @@ export default function CollectionExplorer({
   return (
     <DiscoverContainer>
       {tokens.map((token) => (
-        <NFTCard key={token.id} {...token} />
+        <NFTCard
+          key={`${token.collection.contractPackageHash}-${token.id}`}
+          {...token}
+        />
       ))}
       {loading ? 'Loading...' : null}
     </DiscoverContainer>

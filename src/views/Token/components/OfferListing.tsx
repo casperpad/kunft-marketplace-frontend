@@ -8,7 +8,7 @@ import {
 } from '@/hooks'
 import { Token } from '@/types'
 
-import { Container, StyledTable, Td, HeadTr, TitleContainer } from './styles'
+import { Container, StyledTable, TitleContainer } from './styles'
 
 interface OfferListingProps {
   token: Token
@@ -45,23 +45,23 @@ function TableView({ token: { collection, offers, id } }: OfferListingProps) {
     return (
       <StyledTable>
         <thead>
-          <HeadTr>
-            <Td>Price</Td>
-            <Td>USDPrice</Td>
-            <Td>From</Td>
-            <Td />
-          </HeadTr>
+          <tr>
+            <td>Price</td>
+            <td>USDPrice</td>
+            <td>From</td>
+            <td />
+          </tr>
         </thead>
         <tbody>
           {offers.map((offer) => {
             return (
               <tr key={offer.startTime}>
-                <Td>{offer.price}</Td>
-                <Td>{offer.price}</Td>
-                <Td>
+                <td>{offer.price}</td>
+                <td>{offer.price}</td>
+                <td>
                   <Address address={offer.creator} />
-                </Td>
-                <Td>
+                </td>
+                <td>
                   {loading ? (
                     'Loading'
                   ) : offer.status === 'pending' && isOwner ? (
@@ -70,7 +70,7 @@ function TableView({ token: { collection, offers, id } }: OfferListingProps) {
                       onClick={() => accept(offer.creator)}
                     />
                   ) : null}
-                </Td>
+                </td>
               </tr>
             )
           })}

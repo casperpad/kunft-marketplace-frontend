@@ -6,12 +6,12 @@ import type { AppProps } from 'next/app'
 
 import { Navbar, Footer, Spinner, PageMeta } from '@/components'
 import { useAuth } from '@/hooks'
+import GlobalStyle, { ResetCSS } from '@/styles/Global'
 import Providers from '../Providers'
 import { useStore } from '../store'
 
 // eslint-disable-next-line import/order
 import '../assets/scss/main.scss'
-import '../styles/globals.css'
 // eslint-disable-next-line import/order
 import 'react-toastify/dist/ReactToastify.css'
 
@@ -34,6 +34,8 @@ function MyApp({ Component, pageProps }: AppProps) {
   const store = useStore(pageProps.initialReduxState)
   return (
     <Providers store={store}>
+      <ResetCSS />
+      <GlobalStyle />
       <PageMeta symbol="" />
       <Navbar />
       {pageProps.protected ? (

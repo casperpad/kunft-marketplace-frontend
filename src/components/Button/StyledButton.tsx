@@ -1,6 +1,6 @@
+import { MdKeyboardArrowRight } from 'react-icons/md'
 import { Flex } from '@/components/Box'
 import { Text } from '@/components/Text'
-
 import { Button } from './Button'
 import { BaseButtonProps } from './types'
 
@@ -25,7 +25,7 @@ const StyledButton: React.FC<StyledButtonProps> = ({
     >
       <Flex alignItems="center" position="relative" height="100%">
         <Text mr={link ? '8px' : '0px'}>{text}</Text>
-        {link && <Text fontSize="100px">{'>'}</Text>}
+        {link && <MdKeyboardArrowRight color="black" />}
       </Flex>
     </Button>
   )

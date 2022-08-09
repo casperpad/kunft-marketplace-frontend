@@ -7,7 +7,7 @@ import styled from 'styled-components'
 
 import { Flex } from '@/components/Box'
 import { CustomLink } from '@/components/Link'
-import { ProfileModal as Modal, ProfileSubmitProps } from '@/components/Modal'
+import { ProfileModal as Modal, ProfileSubmitProps } from '@/components/Modals'
 import { navLinks } from '@/config/constants/data'
 import { useCasperWeb3Provider, useAuth, useWindowSize } from '@/hooks'
 import { authApis } from '@/service'
@@ -67,8 +67,8 @@ const NavbarContainer = styled.nav`
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  background-color: ${({ theme }) => theme.colors.background};
-  z-index: 100;
+  background-color: white;
+  z-index: ${({ theme }) => theme.zIndices.navbar};
 `
 
 export default function Navbar() {

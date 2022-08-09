@@ -1,6 +1,7 @@
 import { TokenFieldsFragment } from '@/graphql/queries/__generated__/token.generated'
 import { asCollection, Collection } from './Collection'
 import { asOffer, Offer } from './Offer'
+import { asPrice, Price } from './Price'
 import { asSale, Sale } from './Sale'
 
 export type TokenType = 'Listed' | 'NotListed' | 'Upcoming'
@@ -17,7 +18,7 @@ export interface Token {
   viewed: number
   favoritedUsers: string[]
   collection: Collection
-  price?: Sale
+  price?: Price
   listed: boolean
   sales: Sale[]
   offers: Offer[]
@@ -31,7 +32,7 @@ export const asToken = (fields: TokenFieldsFragment): Token => ({
   viewed: fields.viewed,
   favoritedUsers: fields.favoritedUsers ? fields.favoritedUsers : [],
   collection: asCollection(fields.collection),
-  price: fields.price ? asSale(fields.price) : undefined,
+  price: fields.price ? asPrice(fields.price) : undefined,
   listed: fields.listed,
   sales: fields.sales.map(asSale),
   offers: fields.offers.map(asOffer),

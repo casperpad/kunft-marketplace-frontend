@@ -12,10 +12,12 @@ import {
   useCasperWeb3Provider,
   useCEP47,
   useMarketplaceTransaction,
+  useModal,
 } from '@/hooks'
 import { Token } from '@/types'
 
 import FavoriteToken from '../../FavoriteToken'
+import { OfferTokenModal } from '../../Modals'
 import {
   SaleButton,
   StyledImage,
@@ -38,9 +40,12 @@ export default function NFTCard(_token: Token) {
     offers,
   } = token
   const { currentAccount, connect } = useCasperWeb3Provider()
-  const { buyToken, sellToken, offerToken } =
-    useMarketplaceTransaction(contractHash)
+  const { buyToken, sellToken } = useMarketplaceTransaction(contractHash)
   const { getOwnerOf } = useCEP47(contractHash)
+  const [onPresentOfferModal] = useModal(
+    <OfferTokenModal token={token} />,
+    true,
+  )
 
   const {
     addOrUpdateTokenMutation,
@@ -50,15 +55,15 @@ export default function NFTCard(_token: Token) {
 
   const handle = useCallback(async () => {
     try {
-      const _owner = await getOwnerOf(id)
-      // DB data is outdated
-      if (owner !== _owner.slice(13)) {
-        toast.error('Invalid token')
-        await addOrUpdateTokenMutation({
-          variables: { contractHash, tokenId: id },
-        })
-        return
-      }
+      // const _owner = await getOwnerOf(id)
+      // // DB data is outdated
+      // if (owner !== _owner.slice(13)) {
+      //   toast.error('Invalid token')
+      //   await addOrUpdateTokenMutation({
+      //     variables: { contractHash, tokenId: id },
+      //   })
+      //   return
+      // }
       if (currentAccount) {
         const currentAccountHash = CLPublicKey.fromHex(currentAccount)
           .toAccountHashStr()
@@ -69,7 +74,8 @@ export default function NFTCard(_token: Token) {
         }
       }
       if (listed && price) return buyToken(id, price.price)
-      return offerToken(id, '2000000000')
+      // return offerToken(id, '2000000000')
+      onPresentOfferModal()
     } catch (error: any) {
       console.error(error)
     }
@@ -84,7 +90,7 @@ export default function NFTCard(_token: Token) {
     contractHash,
     owner,
     sellToken,
-    offerToken,
+    onPresentOfferModal,
   ])
 
   const buttonText = useMemo(() => {

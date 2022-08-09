@@ -6,6 +6,8 @@ export type MediaQueries = typeof base.mediaQueries
 
 export type Shadows = typeof base.shadows
 
+export type ZIndices = typeof base.zIndices
+
 export type Colors = {
   primary: string
   background: string

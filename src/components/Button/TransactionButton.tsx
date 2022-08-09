@@ -1,12 +1,21 @@
 import React from 'react'
+import styled from 'styled-components'
 import { useCasperWeb3Provider } from '@/hooks'
-import StyledButton from './StyledButton'
+import { Button } from './Button'
 
 interface TransactionButtonProps {
   title: string
   onClick?: any
   disabled?: boolean
 }
+
+const StyledButton = styled(Button)`
+  border-radius: 50px;
+  font-weight: 400;
+  font-size: inherit;
+  color: black;
+  padding: 5px 15px;
+`
 
 export default function TransactionButton({
   title,
@@ -17,12 +26,11 @@ export default function TransactionButton({
 
   return (
     <StyledButton
-      text={connected ? title : 'Connect Wallet'}
-      link={false}
       fontSize="20px"
-      height={44}
       onClick={connected ? onClick : connect}
       disabled={disabled}
-    />
+    >
+      {connected ? title : 'Connect Wallet'}
+    </StyledButton>
   )
 }

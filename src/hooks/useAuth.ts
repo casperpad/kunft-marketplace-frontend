@@ -4,7 +4,7 @@ import { Signer } from 'casper-js-sdk'
 
 import { userActions } from '@/store/actions'
 import { User } from '@/types'
-import { useCasperWeb3Provider } from '../provider/CasperWeb3Provider'
+import { useCasperWeb3Provider } from '../providers/CasperWeb3Provider'
 import { authApis } from '../service'
 import { useAppSelector, useAppDispatch } from '../store'
 

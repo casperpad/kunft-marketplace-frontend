@@ -59,7 +59,6 @@ export const Wrapper = styled.div`
   font-family: 'Avenir';
   font-weight: lighter;
   transition: all 0.3s;
-  cursor: pointer;
   height: max-content;
   margin-bottom: 40px;
   &:hover {

@@ -4,10 +4,13 @@ import { Provider } from 'react-redux'
 import { Store } from 'redux'
 import { PersistGate } from 'redux-persist/integration/react'
 import styled, { ThemeProvider } from 'styled-components'
-import { ModalProvider, BaseModalBackground } from 'styled-react-modal'
+import {
+  ModalProvider as StyledModalProvider,
+  BaseModalBackground,
+} from 'styled-react-modal'
 
-import { Spinner } from '@/components'
-import CasperWeb3Provider from './provider/CasperWeb3Provider'
+import { ModalProvider, Spinner } from '@/components'
+import CasperWeb3Provider from './providers/CasperWeb3Provider'
 import { persistor } from './store'
 import { light } from './theme'
 
@@ -37,9 +40,9 @@ export default function Providers({ children, store }: ProvdersProps) {
         <ApolloProvider client={client}>
           <CasperWeb3Provider>
             <StyledThemeProvider>
-              <ModalProvider backgroundComponent={BlurBackground}>
-                {children}
-              </ModalProvider>
+              <StyledModalProvider backgroundComponent={BlurBackground}>
+                <ModalProvider>{children}</ModalProvider>
+              </StyledModalProvider>
             </StyledThemeProvider>
           </CasperWeb3Provider>
         </ApolloProvider>

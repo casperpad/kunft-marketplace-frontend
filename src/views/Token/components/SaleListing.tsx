@@ -4,7 +4,7 @@ import { Flex, TransactionButton, Text, Address } from '@/components'
 import { useCasperWeb3Provider, useMarketplaceTransaction } from '@/hooks'
 import { Token } from '@/types'
 
-import { Container, StyledTable, HeadTr, Td, TitleContainer } from './styles'
+import { Container, StyledTable, TitleContainer } from './styles'
 
 interface SaleListingProps {
   token: Token
@@ -32,13 +32,13 @@ function TableView({
   return (
     <StyledTable>
       <thead>
-        <HeadTr>
-          <Td>Price</Td>
-          <Td>USDPrice</Td>
-          <Td>Date</Td>
-          <Td>From</Td>
-          <Td> </Td>
-        </HeadTr>
+        <tr>
+          <td>Price</td>
+          <td>USDPrice</td>
+          <td>Date</td>
+          <td>From</td>
+          <td> </td>
+        </tr>
       </thead>
       <tbody>
         {sales
@@ -50,20 +50,20 @@ function TableView({
           .map((sale) => {
             return (
               <tr key={sale.startTime}>
-                <Td>{sale.price}</Td>
-                <Td>{sale.price}</Td>
-                <Td>{new Date(sale.createdAt).toLocaleDateString('en-US')}</Td>
-                <Td>
+                <td>{sale.price}</td>
+                <td>{sale.price}</td>
+                <td>{new Date(sale.createdAt).toLocaleDateString('en-US')}</td>
+                <td>
                   <Address address={sale.creator} />
-                </Td>
-                <Td>
+                </td>
+                <td>
                   {sale.status === 'pending' && !isOwner ? (
                     <TransactionButton
                       title="Buy Now"
                       onClick={() => buy(sale.price)}
                     />
                   ) : null}
-                </Td>
+                </td>
               </tr>
             )
           })}

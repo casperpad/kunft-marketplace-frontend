@@ -14,7 +14,7 @@ export default function Name({ token, setToken }: NameProps) {
     <Container>
       <NameText>{token.name}</NameText>
       <DataContainer>
-        <Flex flexDirection="row">
+        <Flex flexDirection="row" alignItems="center">
           <Text mr="4px">Owned by</Text>
           <Address address={token.owner} />
         </Flex>

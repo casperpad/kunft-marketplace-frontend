@@ -1,16 +1,23 @@
 import React, { useCallback, useEffect, useMemo } from 'react'
 import { BsHeart, BsHeartFill } from 'react-icons/bs'
+import { toast } from 'react-toastify'
 import styled from 'styled-components'
 
 import { useAuth, useFavoriteToken } from '@/hooks'
 import { Token } from '@/types'
 
-import { Flex } from '../Box'
 import { DefaultButton } from '../Button'
 import { Text } from '../Text'
 
 export const StarsButton = styled(DefaultButton)`
   color: ${({ theme }) => theme.colors.primary};
+  background-color: transparent;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 4px;
+  font-weight: 300;
+  font-size: 20px;
 `
 
 interface FavoriteTokenProps {
@@ -26,9 +33,9 @@ export default function FavoriteToken({ token, setToken }: FavoriteTokenProps) {
   } = useFavoriteToken()
   const { user } = useAuth()
 
-  const handleStarClick = useCallback(() => {
+  const handleStarClick = useCallback(async () => {
     if (!user) return
-    favoriteTokenMutation({
+    await favoriteTokenMutation({
       variables: {
         slug: token.collection.slug,
         tokenId: token.id,
@@ -49,13 +56,17 @@ export default function FavoriteToken({ token, setToken }: FavoriteTokenProps) {
   }, [user, token.favoritedUsers])
 
   return (
-    <Flex flexDirection="row" alignItems="center">
-      <StarsButton color="transparent" onClick={handleStarClick}>
-        {userStarred ? <BsHeartFill /> : <BsHeart />}
-      </StarsButton>
-      <Text ml="4px" color="primary">
-        {token.favoritedUsers.length}
-      </Text>
-    </Flex>
+    <StarsButton
+      color="transparent"
+      onClick={() =>
+        toast.promise(handleStarClick, {
+          pending: 'Saving...',
+          success: 'Completed',
+        })
+      }
+    >
+      {userStarred ? <BsHeartFill /> : <BsHeart />}
+      <Text color="primary">{token.favoritedUsers.length}</Text>
+    </StarsButton>
   )
 }
