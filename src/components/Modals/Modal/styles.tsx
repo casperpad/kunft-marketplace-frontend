@@ -65,7 +65,7 @@ export const ModalContainer = styled.div<{ minWidth: string }>`
   max-height: 90vh;
   max-height: calc(var(--vh, 1vh) * 100);
   z-index: ${({ theme }) => theme.zIndices.modal};
-  position: absolute;
+  position: fixed;
   min-width: ${({ minWidth }) => minWidth};
   top: 50%;
   left: 50%;

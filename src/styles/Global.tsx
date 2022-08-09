@@ -60,8 +60,10 @@ a {
   color: inherit;
   text-decoration: none;
 }
-[role="button"] {
+[type="button"] {
   cursor: pointer;
+  background: transparent;
+  border: none;
 }
 *,
 *::before,
