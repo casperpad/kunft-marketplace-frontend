@@ -2,15 +2,10 @@ import { useCallback, useState } from 'react'
 import { parseFixed } from '@ethersproject/bignumber'
 import styled from 'styled-components'
 
+import { Flex, TransactionButton, Input, Text, TokenSelect } from '@/components'
 import { acceptableTokens } from '@/config'
 import { useMarketplaceTransaction } from '@/hooks'
 import { Token } from '@/types'
-
-import { Flex } from '../../Box'
-import { TransactionButton } from '../../Button'
-import { Input } from '../../Input'
-import { Text } from '../../Text'
-import TokenSelect from '../../TokenSelect'
 
 interface SellProps {
   token: Token

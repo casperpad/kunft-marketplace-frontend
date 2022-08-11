@@ -1,5 +1,5 @@
 import { useCallback } from 'react'
-import { BigNumberish } from '@ethersproject/bignumber'
+import { BigNumber, BigNumberish } from '@ethersproject/bignumber'
 import {
   CLPublicKey,
   CLValueBuilder,
@@ -14,7 +14,9 @@ import {
   NEXT_PUBLIC_CASPER_NODE_ADDRESS,
   contracts,
 } from '@/config'
-import { openCsprExplorer } from '@/utils/hash'
+import { Token } from '@/types'
+import { openCsprExplorer, shortenHash } from '@/utils/hash'
+import { ERC20SignerClient } from '@/web3/client/erc20'
 import { useCasperWeb3Provider } from '../providers/CasperWeb3Provider'
 import useCEP47 from './useCEP47'
 import useMarketplace from './useMarketplace'
@@ -23,14 +25,26 @@ export default function useMarketplaceTransaction(contractHash: string) {
   const { currentAccount, getDeploy, signDeploy } = useCasperWeb3Provider()
   const {
     acceptBuyOrder,
+    buySellOrder,
     buySellOrderCspr,
     createBuyOrderCspr,
     createSellOrder,
   } = useMarketplace()
   const { approve, getAllowance } = useCEP47(contractHash)
+  const erc20Client = new ERC20SignerClient(
+    NEXT_PUBLIC_CASPER_NODE_ADDRESS,
+    NEXT_PUBLIC_CASPER_CHAIN_NAME,
+  )
+  const marketplaceContractPackageHash = CLValueBuilder.byteArray(
+    decodeBase16(
+      contracts.marketplace[
+        NEXT_PUBLIC_CASPER_CHAIN_NAME
+      ].contractPackageHash.slice(5),
+    ),
+  )
 
   const sellToken = useCallback(
-    async (id: string, price: BigNumberish) => {
+    async (id: string, price: BigNumberish, payToken?: string) => {
       if (currentAccount === undefined) return
 
       toast.info('Checking allownace')
@@ -44,13 +58,7 @@ export default function useMarketplaceTransaction(contractHash: string) {
         const parsedAllowance = CLValueBuilder.byteArray(
           decodeBase16(allowance.slice(13)),
         )
-        const marketplaceContractPackageHash = CLValueBuilder.byteArray(
-          decodeBase16(
-            contracts.marketplace[
-              NEXT_PUBLIC_CASPER_CHAIN_NAME
-            ].contractPackageHash.slice(5),
-          ),
-        )
+
         shouldApprove =
           encodeBase16(parsedAllowance.data) !==
           encodeBase16(marketplaceContractPackageHash.data)
@@ -97,7 +105,8 @@ export default function useMarketplaceTransaction(contractHash: string) {
           contractHash,
           tokens,
           currentAccount!,
-          '5000000000',
+          '1000000000',
+          payToken,
         )
 
         const _ = await getDeploy(deployHash)
@@ -105,6 +114,8 @@ export default function useMarketplaceTransaction(contractHash: string) {
         console.error('createSellOrder Error', error.message)
       }
     },
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [
       contractHash,
       currentAccount,
@@ -116,7 +127,7 @@ export default function useMarketplaceTransaction(contractHash: string) {
     ],
   )
 
-  const buyToken = useCallback(
+  const buyTokenCspr = useCallback(
     async (id: string, price: string) => {
       //
       try {
@@ -128,7 +139,7 @@ export default function useMarketplaceTransaction(contractHash: string) {
           '8000000000',
           currentAccount,
         )
-        toast.info(`Transaction created: ${deployHash}`, {
+        toast.info(`Transaction created: ${shortenHash(deployHash)}`, {
           autoClose: false,
           onClick: () => openCsprExplorer(deployHash),
         })
@@ -141,6 +152,80 @@ export default function useMarketplaceTransaction(contractHash: string) {
     [contractHash, currentAccount, buySellOrderCspr, getDeploy],
   )
 
+  const buyTokenERC20 = useCallback(
+    async (
+      tokenId: string,
+      erc20ContractHash: string,
+      amount: BigNumberish,
+    ) => {
+      try {
+        if (currentAccount === undefined) return
+
+        toast.info('Checking allowance...')
+        await erc20Client.setContractHash(`hash-${erc20ContractHash}`)
+        // Check allowance
+        const allowancesMote = await erc20Client.allowances(
+          CLPublicKey.fromHex(currentAccount),
+          marketplaceContractPackageHash,
+        )
+        // const decimals = await erc20Client.decimals()
+        // const allowances = formatFixed(allowancesMote, decimals)
+        // console.log(allowances)
+        if (BigNumber.from(allowancesMote).lt(BigNumber.from(amount))) {
+          // Approve
+          const approveDeployHash = await erc20Client.approve(
+            marketplaceContractPackageHash,
+            amount,
+            CLPublicKey.fromHex(currentAccount),
+            '1000000000',
+          )
+          toast.info(
+            `Approve Transaction created: ${shortenHash(approveDeployHash)}`,
+            {
+              autoClose: false,
+              onClick: () => openCsprExplorer(approveDeployHash),
+            },
+          )
+          const _ = await getDeploy(approveDeployHash)
+          toast.success('Approved Successfully')
+        }
+
+        const deployHash = await buySellOrder(
+          contractHash,
+          tokenId,
+          amount,
+          CLPublicKey.fromHex(currentAccount),
+          '5000000000',
+        )
+        toast.info(`Transaction created: ${shortenHash(deployHash)}`, {
+          autoClose: false,
+          onClick: () => openCsprExplorer(deployHash),
+        })
+        const _ = await getDeploy(deployHash)
+        toast.success('Transaction confirmed')
+      } catch (error: any) {
+        console.error(error)
+        toast.error('Transaction failed')
+      }
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [buySellOrder, currentAccount, getDeploy, contractHash],
+  )
+
+  const buyToken = useCallback(
+    async (token: Token) => {
+      if (token.price!.payToken)
+        await buyTokenERC20(token.id, token.price!.payToken, token.price!.price)
+      else await buyTokenCspr(token.id, token.price!.price)
+    },
+    [buyTokenERC20, buyTokenCspr],
+  )
+
+  /**
+   * Offer token by cspr desposit
+   * @param id tokenId
+   * @param amount offer amount
+   */
   const offerToken = useCallback(
     async (id: string, amount: BigNumberish) => {
       try {
@@ -153,8 +238,7 @@ export default function useMarketplaceTransaction(contractHash: string) {
           '1000000000',
           CLPublicKey.fromHex(currentAccount),
         )
-        toast.info(`Transaction created: ${deployHash}`, {
-          autoClose: false,
+        toast.info(`Transaction created: ${shortenHash(deployHash)}`, {
           onClick: () => openCsprExplorer(deployHash),
         })
         const _ = await getDeploy(deployHash)
@@ -165,6 +249,10 @@ export default function useMarketplaceTransaction(contractHash: string) {
     },
     [contractHash, createBuyOrderCspr, currentAccount, getDeploy],
   )
+
+  const offerTokenERC20 = useCallback(() => {
+    //
+  }, [])
 
   const acceptOffer = useCallback(
     async (id: string, bidder: CLKeyParameters) => {
@@ -220,7 +308,6 @@ export default function useMarketplaceTransaction(contractHash: string) {
           )
 
           toast.info(`Approve transaction created: ${arppoveDeployHash}`, {
-            autoClose: false,
             onClick: () => openCsprExplorer(arppoveDeployHash),
           })
 
@@ -265,6 +352,7 @@ export default function useMarketplaceTransaction(contractHash: string) {
     acceptOffer,
     sellToken,
     buyToken,
+    buyTokenERC20,
     offerToken,
   }
 }

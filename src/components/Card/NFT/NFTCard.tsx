@@ -56,7 +56,9 @@ export default function NFTCard(_token: Token) {
           return onPresentSellModal()
         }
       }
-      if (listed && price) return buyToken(id, price.price)
+      if (listed && price) {
+        return buyToken(token)
+      }
       // return offerToken(id, '2000000000')
       onPresentOfferModal()
     } catch (error: any) {
@@ -66,11 +68,11 @@ export default function NFTCard(_token: Token) {
     currentAccount,
     listed,
     price,
-    buyToken,
-    id,
     onPresentOfferModal,
     owner,
     onPresentSellModal,
+    buyToken,
+    token,
   ])
 
   const buttonText = useMemo(() => {

@@ -20,6 +20,7 @@ export default function useMarketplace() {
     createSellOrder: marketplaceClient.createSellOrder.bind(marketplaceClient),
     buySellOrderCspr:
       marketplaceClient.buySellOrderCspr.bind(marketplaceClient),
+    buySellOrder: marketplaceClient.buySellOrder.bind(marketplaceClient),
     createBuyOrderCspr:
       marketplaceClient.createBuyOrderCspr.bind(marketplaceClient),
     acceptBuyOrder: marketplaceClient.acceptBuyOrder.bind(marketplaceClient),

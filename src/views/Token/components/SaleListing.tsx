@@ -10,17 +10,13 @@ interface SaleListingProps {
   token: Token
 }
 
-function TableView({
-  token: { sales, collection, id, owner },
-}: SaleListingProps) {
+function TableView({ token }: SaleListingProps) {
+  const { sales, collection, owner } = token
   const { currentAccount } = useCasperWeb3Provider()
   const { buyToken } = useMarketplaceTransaction(collection.contractHash)
-  const buy = useCallback(
-    async (price: string) => {
-      const _ = await buyToken(id, price)
-    },
-    [buyToken, id],
-  )
+  const buy = useCallback(async () => {
+    const _ = await buyToken(token)
+  }, [buyToken, token])
 
   const isOwner = useMemo(() => {
     if (!currentAccount) return false
@@ -58,10 +54,7 @@ function TableView({
                 </td>
                 <td>
                   {sale.status === 'pending' && !isOwner ? (
-                    <TransactionButton
-                      title="Buy Now"
-                      onClick={() => buy(sale.price)}
-                    />
+                    <TransactionButton title="Buy Now" onClick={buy} />
                   ) : null}
                 </td>
               </tr>

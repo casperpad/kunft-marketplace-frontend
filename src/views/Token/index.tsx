@@ -12,6 +12,7 @@ import {
   SaleListing,
   Description,
   Tabs,
+  Sell,
 } from './components'
 import {
   RowContainer,
@@ -44,7 +45,7 @@ export default function Token({ token: _token }: { token: IToken }) {
           {currentAccount &&
           CLPublicKey.fromHex(currentAccount).toAccountHashStr().slice(13) ===
             token.owner ? (
-            <>You have owned this token</>
+            <Sell token={token} />
           ) : (
             <>
               <Box mb="10px">

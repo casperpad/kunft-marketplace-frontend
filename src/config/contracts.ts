@@ -11,9 +11,9 @@ export default {
     },
     [Chain.TESTNET]: {
       contractPackageHash:
-        'hash-f6ed8863ffeedc7c79cacaaaa8e3164f6b26f569895076d0d6be8fb32230b8e2',
+        'hash-002f2aefa6647a871022965a8366be029e821ad8e2ad63d4ade105cef2a0b183',
       versions: [
-        'hash-c429e15c2a0e04727e0aa2461bea794d4b839078da888a7c767c5699d55867ec',
+        'hash-3a03d42a5b7eb1b52da25ee862f6b296b5c823bf2df57c249dd4fbd110fb0860',
       ],
     },
   },

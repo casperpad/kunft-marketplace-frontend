@@ -162,7 +162,9 @@ export class MarketplaceClient {
       collection: CLValueBuilder.string(formatedCollection),
       tokens: tokensMap,
       pay_token: payToken
-        ? CLValueBuilder.option(Some(CLValueBuilder.string(payToken)))
+        ? CLValueBuilder.option(
+            Some(CLValueBuilder.string(`contract-${payToken.slice(5)}`)),
+          )
         : CLValueBuilder.option(None, new CLStringType()),
     })
 
@@ -200,30 +202,34 @@ export class MarketplaceClient {
     )
   }
 
-  public buySellOrder(
+  public async buySellOrder(
     collection: string,
     tokenId: BigNumberish,
     amount: BigNumberish,
-    key: Keys.AsymmetricKey,
+    sender: CLPublicKey,
     paymentAmount: string,
     additionalRecipient?: CLKeyParameters,
+    signingKeys?: Keys.AsymmetricKey[],
   ) {
     const runtimeArgs = RuntimeArgs.fromMap({
-      collection: CLValueBuilder.string(collection),
+      collection: CLValueBuilder.string(`contract-${collection}`),
       token_id: CLValueBuilder.u256(tokenId),
       amount: CLValueBuilder.u256(amount),
       additional_recipient: additionalRecipient
         ? CLValueBuilder.option(Some(additionalRecipient))
         : CLValueBuilder.option(None, new CLKeyType()),
     })
-    return this.contractClient.callEntrypoint(
+    const deploy = this.contractClient.callEntrypoint(
       'buy_sell_order',
       runtimeArgs,
-      key.publicKey,
+      sender,
       this.chainName,
       paymentAmount,
-      [key],
+      signingKeys,
     )
+    const signedDeploy = await signDeploy(deploy, sender.toHex())
+    const deployHash = await this.casperClient.putDeploy(signedDeploy)
+    return deployHash
   }
 
   public async buySellOrderCspr(
@@ -316,31 +322,36 @@ export class MarketplaceClient {
     return deployHash
   }
 
-  public createBuyOrder(
+  public async createBuyOrder(
     collection: string,
     tokenId: BigNumberish,
     amount: BigNumberish,
     payToken: string,
-    key: Keys.AsymmetricKey,
+    sender: CLPublicKey,
     paymentAmount: string,
     additionalRecipient?: CLKeyParameters,
+    signingKeys?: Keys.AsymmetricKey[],
   ) {
     const runtimeArgs = RuntimeArgs.fromMap({
       collection: CLValueBuilder.string(collection),
       token_id: CLValueBuilder.u256(tokenId),
       amount: CLValueBuilder.u256(amount),
+      pay_token: CLValueBuilder.string(`contract-${payToken}`),
       additional_recipient: additionalRecipient
         ? CLValueBuilder.option(Some(additionalRecipient))
         : CLValueBuilder.option(None, new CLKeyType()),
     })
-    return this.contractClient.callEntrypoint(
-      'cancel_sell_order',
+    const deploy = this.contractClient.callEntrypoint(
+      'create_buy_order',
       runtimeArgs,
-      key.publicKey,
+      sender,
       this.chainName,
       paymentAmount,
-      [key],
+      signingKeys,
     )
+    const signedDeploy = await signDeploy(deploy, sender.toHex())
+    const deployHash = await this.casperClient.putDeploy(signedDeploy)
+    return deployHash
   }
 
   public async acceptBuyOrder(

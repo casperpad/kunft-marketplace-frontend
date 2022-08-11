@@ -8,9 +8,12 @@ interface SellTokenModalProps extends InjectedModalProps {
   token: Token
 }
 
-export default function SellTokenModal({ token }: SellTokenModalProps) {
+export default function SellTokenModal({
+  token,
+  ...props
+}: SellTokenModalProps) {
   return (
-    <Modal title={`Sell ${token.name}`}>
+    <Modal title={`Sell ${token.name}`} {...props}>
       <Sell token={token} />
     </Modal>
   )

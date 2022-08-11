@@ -1,9 +1,15 @@
-import { useCallback, useState } from 'react'
+import { useCallback, useState, useEffect, useMemo } from 'react'
 import { parseFixed } from '@ethersproject/bignumber'
+import { CLPublicKey } from 'casper-js-sdk'
 import styled from 'styled-components'
 
-import { Flex, Input, Text, TransactionButton } from '@/components'
-import { useMarketplaceTransaction } from '@/hooks'
+import { Flex, Input, Text, TransactionButton, TokenSelect } from '@/components'
+import { acceptableTokens } from '@/config'
+import {
+  useMarketplaceTransaction,
+  useERC20,
+  useCasperWeb3Provider,
+} from '@/hooks'
 import { Token } from '@/types'
 
 interface OfferProps {
@@ -12,22 +18,54 @@ interface OfferProps {
 
 export default function Offer({ token }: OfferProps) {
   const [offerPrice, setOfferPrice] = useState('')
+  const [offerToken, setOfferToken] = useState(acceptableTokens[1].contractHash)
+  const {
+    balanceOf,
+    allowances,
+    approve,
+    loading: erc20Loading,
+  } = useERC20({
+    contractHash: offerToken,
+  })
+  const [balance, setBalance] = useState(0)
+  const [loading, setLoading] = useState(false)
 
-  const { offerToken } = useMarketplaceTransaction(
+  const { currentAccount } = useCasperWeb3Provider()
+  const { offerToken: handleOfferToken } = useMarketplaceTransaction(
     token.collection.contractHash,
   )
   const offer = useCallback(async () => {
-    const _ = await offerToken(token.id, parseFixed(offerPrice, 9))
-  }, [offerToken, token.id, offerPrice])
+    const _ = await handleOfferToken(token.id, parseFixed(offerPrice, 9))
+  }, [handleOfferToken, token.id, offerPrice])
+
+  useEffect(() => {
+    async function fetchData() {
+      if (!currentAccount || erc20Loading) return
+      setLoading(true)
+      if (offerToken.startsWith('hash-')) {
+        const balance = await balanceOf(CLPublicKey.fromHex(currentAccount))
+        console.log(balance)
+        setBalance(balance.toNumber())
+      }
+      setLoading(false)
+    }
+    fetchData()
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [offerToken, erc20Loading, currentAccount])
+
   return (
     <Container>
       <PriceContainer>
-        <PriceText>
-          CSPR
-          <Text fontWeight={700}>v</Text>
-        </PriceText>
+        <TokenSelect
+          tokens={acceptableTokens}
+          value={offerToken}
+          onChange={setOfferToken}
+        />
         <CustomInput
-          placeholder="Input Amount"
+          placeholder={
+            loading || erc20Loading ? 'Loading...' : balance.toFixed(2)
+          }
           type="number"
           value={offerPrice}
           onChange={(e) => setOfferPrice(e.target.value)}
@@ -42,7 +80,11 @@ export default function Offer({ token }: OfferProps) {
         </Flex>
       </PriceContainer>
       <ButtonContainer>
-        <TransactionButton title="Make Offer" onClick={offer} />
+        <TransactionButton
+          title="Make Offer"
+          onClick={offer}
+          disabled={offerPrice.length === 0}
+        />
       </ButtonContainer>
     </Container>
   )
@@ -54,17 +96,6 @@ const CustomInput = styled(Input)`
   ${({ theme }) => theme.mediaQueries.md} {
     width: 175px;
   }
-`
-
-const PriceText = styled(Flex)`
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-  width: 85px;
-  font-family: 'Avenir';
-  font-size: 16px;
-  padding: 12px 10px;
-  border: 1px solid ${({ theme }) => theme.colors.border};
 `
 
 const PriceContainer = styled(Flex)`
