@@ -5,6 +5,7 @@ import { Box, Flex, Layout as _Layout } from '@/components'
 
 export const PriceContainer = styled(Flex)`
   grid-column: 1/3;
+  gap: 16px;
   flex-direction: column;
 `
 

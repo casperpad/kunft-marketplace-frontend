@@ -13,7 +13,7 @@ import { useStore } from '../store'
 // eslint-disable-next-line import/order
 import '../assets/scss/main.scss'
 // eslint-disable-next-line import/order
-import 'react-toastify/dist/ReactToastify.css'
+import '../styles/react-toastify.css'
 
 function Auth({ children }: { children: React.ReactNode }) {
   const { user } = useAuth()

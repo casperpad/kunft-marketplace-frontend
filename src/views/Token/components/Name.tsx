@@ -12,7 +12,7 @@ interface NameProps {
 export default function Name({ token, setToken }: NameProps) {
   return (
     <Container>
-      <NameText>{token.name}</NameText>
+      <Title>{token.name}</Title>
       <DataContainer>
         <Flex flexDirection="row" alignItems="center">
           <Text mr="4px">Owned by</Text>
@@ -30,7 +30,7 @@ export default function Name({ token, setToken }: NameProps) {
   )
 }
 
-const NameText = styled(Text)`
+const Title = styled.h1`
   font-size: 40px;
 `
 

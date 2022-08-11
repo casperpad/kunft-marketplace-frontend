@@ -3,7 +3,36 @@ import styled from 'styled-components'
 import { Box, Grid, NFTCard, Layout, Text } from '@/components'
 import { useGetTokens } from '@/hooks'
 
-const Title = styled(Text)`
+export default function NFTs() {
+  const { data, loading } = useGetTokens({ promoted: true })
+  return (
+    <Layout mt="60px">
+      <Box>
+        <Title>
+          {loading ? 'Loading...' : data?.tokens[0].collection.name}
+        </Title>
+        <Description>
+          {loading ? (
+            <div>Loading</div>
+          ) : (
+            data?.tokens[0].collection.description
+          )}
+        </Description>
+        <Container>
+          {loading ? (
+            <div>Loading...</div>
+          ) : (
+            data?.tokens.map((token) => {
+              return <NFTCard key={token.id} {...token} />
+            })
+          )}
+        </Container>
+      </Box>
+    </Layout>
+  )
+}
+
+const Title = styled.h1`
   font-size: 40px;
 
   ${({ theme }) => theme.mediaQueries.lg} {
@@ -40,32 +69,3 @@ const Container = styled(Grid)`
     grid-template-columns: repeat(4, 1fr);
   }
 `
-
-export default function NFTs() {
-  const { data, loading } = useGetTokens({ promoted: true })
-  return (
-    <Layout mt="60px">
-      <Box>
-        <Title>
-          {loading ? <div>Loading</div> : data?.tokens[0].collection.name}
-        </Title>
-        <Description>
-          {loading ? (
-            <div>Loading</div>
-          ) : (
-            data?.tokens[0].collection.description
-          )}
-        </Description>
-        <Container>
-          {loading ? (
-            <div>Loading...</div>
-          ) : (
-            data?.tokens.map((token) => {
-              return <NFTCard key={token.id} {...token} />
-            })
-          )}
-        </Container>
-      </Box>
-    </Layout>
-  )
-}

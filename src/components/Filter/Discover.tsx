@@ -1,4 +1,5 @@
-import { useState, useCallback } from 'react'
+import { useState, useCallback, useEffect } from 'react'
+import { useRouter } from 'next/router'
 import styled from 'styled-components'
 
 import { Box, Flex, BoxProps } from '@/components/Box'
@@ -42,6 +43,7 @@ export default function Filter({
   step = 10,
   ...props
 }: FilterProps) {
+  const router = useRouter()
   const [minValue, setMinValue] = useState(min)
   const [maxValue, setMaxValue] = useState(max)
 
@@ -56,6 +58,14 @@ export default function Filter({
     setMinValue(value[0])
     setMaxValue(value[1])
   }, [])
+
+  useEffect(() => {
+    router.push({
+      pathname: router.pathname,
+      query: { ...router.query, listed: sale ? 'true' : 'false' },
+    })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [sale])
 
   return (
     <Container {...props}>

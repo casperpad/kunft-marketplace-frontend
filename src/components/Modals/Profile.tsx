@@ -102,6 +102,7 @@ export default function Profile({
           </Text>
           <ModalInput
             placeholder="Input Email Address"
+            type="email"
             value={email}
             {...register('email', {
               required: true,

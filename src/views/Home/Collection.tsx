@@ -1,6 +1,6 @@
 import styled from 'styled-components'
 
-import { Flex, StyledButton, Layout, Text } from '@/components'
+import { Flex, StyledButton, Layout } from '@/components'
 
 const CollectionButton = styled(StyledButton)`
   font-size: 20px;
@@ -39,11 +39,18 @@ export default function Collection() {
   return (
     <Layout>
       <Container>
-        <Text color="background" textAlign="center">
-          ALL NFT COLLECTIONS
-        </Text>
+        <Title>ALL NFT COLLECTIONS</Title>
         <CollectionButton text="Collections" />
       </Container>
     </Layout>
   )
 }
+
+const Title = styled.h1`
+  font-size: 40px;
+  color: white;
+  text-align: center;
+  ${({ theme }) => theme.mediaQueries.lg} {
+    font-size: 60px;
+  }
+`

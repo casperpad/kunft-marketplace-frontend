@@ -22,7 +22,7 @@ import {
   HistoryContainer,
   DescriptionContainer,
   Layout,
-} from './NFTView.styles'
+} from './styles'
 
 export default function Token({ token: _token }: { token: IToken }) {
   const [token, setToken] = useState(_token)
@@ -34,14 +34,10 @@ export default function Token({ token: _token }: { token: IToken }) {
     <Layout>
       <RowContainer>
         <PriceContainer>
-          <Box mb="36px">
-            <Text fontSize="20px" color="primary">
-              {token.collection.name}
-            </Text>
-          </Box>
-          <Box mb="40px">
-            <Name token={token} setToken={setToken} />
-          </Box>
+          <Text fontSize="20px" color="primary">
+            {token.collection.name}
+          </Text>
+          <Name token={token} setToken={setToken} />
           {currentAccount &&
           CLPublicKey.fromHex(currentAccount).toAccountHashStr().slice(13) ===
             token.owner ? (

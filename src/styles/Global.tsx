@@ -117,12 +117,24 @@ input[type=range]::-ms-track {
   background: transparent; 
   border-color: transparent;
   color: transparent;
+}
+::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+  color: white;
+  opacity: 1; /* Firefox */
+}
+
+:-ms-input-placeholder { /* Internet Explorer 10-11 */
+  color: white;
+}
+
+::-ms-input-placeholder { /* Microsoft Edge */
+  color: white;
 }  
 `
 
 const GlobalStyle = createGlobalStyle`
   * {
-    font-family: 'Castle';
+    font-family: 'Avenir';
     box-sizing: border-box;
   }
 
@@ -145,6 +157,13 @@ const GlobalStyle = createGlobalStyle`
   a {
       color: inherit;
       text-decoration: none;
+  }
+  h1, h2, h3, h4, a {
+    font-family: 'Castle';
+    font-weight: 400;
+  }
+  div {
+    font-family: 'Avenir';
   }
 `
 

@@ -1,7 +1,7 @@
 import Image from 'next/image'
 import styled from 'styled-components'
 
-import { Flex, StyledButton, Layout, Text } from '@/components'
+import { Flex, StyledButton, Layout } from '@/components'
 
 const StrollButton = styled(StyledButton)`
   position: absolute;
@@ -13,6 +13,17 @@ const StrollButton = styled(StyledButton)`
 const LandingImage = styled(Image)`
   box-shadow: ${({ theme }) => theme.shadows.base};
   z-index: 2;
+
+  @keyframes float-image {
+    from {
+      transform: translateY(0);
+    }
+
+    to {
+      transform: translateY(10px);
+    }
+  }
+  animation: float-image 3s ease-in-out infinite alternate;
 `
 
 const LandingImageContainer = styled(Flex)`
@@ -125,8 +136,11 @@ export default function Landing({ tops }: LandingProps) {
             height={235}
           />
         </LandingImageContainer>
-        <Text>WHERE ART AND</Text>
-        <Text>THE FUTURE COLLIDE</Text>
+        <h1>
+          WHERE ART AND
+          <br />
+          THE FUTURE COLLIDE
+        </h1>
         <StrollButton text="Go on a Stroll" />
       </TitleContainer>
       <TopsContainer>

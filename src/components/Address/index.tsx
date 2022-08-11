@@ -57,6 +57,6 @@ export default function Address({ address, ...props }: { address: string }) {
   )
 }
 
-const StyledAddress = styled.a`
+const StyledAddress = styled.div`
   color: ${({ theme }) => theme.colors.primary};
 `

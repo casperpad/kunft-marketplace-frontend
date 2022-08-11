@@ -2,10 +2,17 @@ import { useGetTokensQuery } from '@/graphql/queries/__generated__/token.generat
 import { asPaginationInfo } from '@/types/PaginationInfo'
 import { asToken } from '@/types/Token'
 
-interface GetTokensInput {
+interface MetadataInput {
+  key: string
+  values: string[]
+}
+
+export interface GetTokensInput {
   slug?: string
   owner?: string
   promoted?: boolean
+  listed?: boolean
+  metadata?: MetadataInput[]
 }
 
 export default function useGetTokens(
