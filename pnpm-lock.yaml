@@ -81,6 +81,7 @@ specifiers:
   lint-staged: ^13.0.3
   lodash: ^4.17.21
   next: 12.2.0
+  next-seo: ^5.5.0
   postcss: ^8.4.14
   prettier: ^2.7.1
   rc-slider: ^10.0.0
@@ -152,6 +153,7 @@ dependencies:
   joi: 17.6.0
   lodash: 4.17.21
   next: 12.2.0_zazhvxb5wdpfvem7m5mnvhb45a
+  next-seo: 5.5.0_24lkarzjpo3wcmj2o6qyrkug4y
   rc-slider: 10.0.0_biqbaboplfbrettd7655fr4n2y
   react: 18.2.0
   react-copy-to-clipboard: 5.1.0_react@18.2.0
@@ -11545,6 +11547,18 @@ packages:
   /nested-error-stacks/2.1.1:
     resolution: {integrity: sha512-9iN1ka/9zmX1ZvLV9ewJYEk9h7RyRRtqdK0woXcqohu8EWIerfPUjYJPg0ULy0UqP7cslmdGc8xKDJcojlKiaw==}
     dev: true
+
+  /next-seo/5.5.0_24lkarzjpo3wcmj2o6qyrkug4y:
+    resolution: {integrity: sha512-5ouBHFtx8YrSDW44lj0qIEQ+oMcz6stgoITB+SqHUZbhgizoJsyLmq73gJ0lxtEKpcN8vG2QgRIJfdb8OAPChw==}
+    peerDependencies:
+      next: ^8.1.1-canary.54 || >=9.0.0
+      react: '>=16.0.0'
+      react-dom: '>=16.0.0'
+    dependencies:
+      next: 12.2.0_zazhvxb5wdpfvem7m5mnvhb45a
+      react: 18.2.0
+      react-dom: 18.2.0_react@18.2.0
+    dev: false
 
   /next/12.2.0_zazhvxb5wdpfvem7m5mnvhb45a:
     resolution: {integrity: sha512-B4j7D3SHYopLYx6/Ark0fenwIar9tEaZZFAaxmKjgcMMexhVJzB3jt7X+6wcdXPPMeUD6r09weUtnDpjox/vIA==}

@@ -1,10 +1,12 @@
 import React, { useEffect } from 'react'
 
+import { DefaultSeo } from 'next-seo'
 import { useRouter } from 'next/router'
 import { ToastContainer } from 'react-toastify'
 import type { AppProps } from 'next/app'
 
-import { Navbar, Footer, Spinner, PageMeta } from '@/components'
+import { Navbar, Footer, Spinner } from '@/components'
+import { meta } from '@/config'
 import { useAuth } from '@/hooks'
 import GlobalStyle, { ResetCSS } from '@/styles/Global'
 import Providers from '../Providers'
@@ -34,9 +36,24 @@ function MyApp({ Component, pageProps }: AppProps) {
   const store = useStore(pageProps.initialReduxState)
   return (
     <Providers store={store}>
+      <DefaultSeo
+        title={meta.SITE_TITLE}
+        description={meta.SITE_DESCRIPTION}
+        titleTemplate="KUNFT Marketplace | %s"
+        openGraph={{
+          type: 'website',
+          locale: 'en_IE',
+          url: meta.SITE_URL,
+          site_name: meta.SITE_NAME,
+        }}
+        // twitter={{
+        //   handle: '@handle',
+        //   site: '@site',
+        //   cardType: 'summary_large_image',
+        // }}
+      />
       <ResetCSS />
       <GlobalStyle />
-      <PageMeta symbol="" />
       <Navbar />
       {pageProps.protected ? (
         <Auth>

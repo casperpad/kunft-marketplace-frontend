@@ -19,6 +19,7 @@ export const SLOW_INTERVAL = 60000
 
 export { default as contracts } from './contracts'
 export * from './acceptableTokens'
+export * as meta from './meta'
 
 export {
   NEXT_PUBLIC_CASPER_NODE_ADDRESS,

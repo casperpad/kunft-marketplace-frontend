@@ -1,6 +1,8 @@
+import { NextSeo } from 'next-seo'
 import styled from 'styled-components'
 
 import { Page, Box, Flex } from '@/components'
+import { meta } from '@/config'
 import { Collection as ICollection } from '@/types'
 import CollectionExplorer from './CollectionExplorer'
 import Filter from './Filter'
@@ -24,15 +26,36 @@ export default function Collection({
 }: {
   collection: ICollection
 }) {
-  const { name } = collection
+  const { name, slug } = collection
 
   return (
-    <StyledPage>
-      <Logo>{name}</Logo>
-      <Container>
-        <Filter />
-        <CollectionExplorer collection={collection} />
-      </Container>
-    </StyledPage>
+    <>
+      <NextSeo
+        title={name}
+        openGraph={{
+          url: `${meta.SITE_URL}/collections/${slug}`,
+          title: name,
+          description: collection.description,
+          images: collection.image
+            ? [
+                {
+                  url: collection.image || '',
+                  width: 800,
+                  height: 600,
+                  alt: collection.name,
+                },
+              ]
+            : undefined,
+          site_name: meta.SITE_NAME,
+        }}
+      />
+      <StyledPage>
+        <Logo>{name}</Logo>
+        <Container>
+          <Filter />
+          <CollectionExplorer collection={collection} />
+        </Container>
+      </StyledPage>
+    </>
   )
 }
