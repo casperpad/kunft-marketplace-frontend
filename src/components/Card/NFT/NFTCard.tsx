@@ -1,8 +1,9 @@
 import React, { useCallback, useMemo, useState } from 'react'
 
-import { formatFixed } from '@ethersproject/bignumber'
+import { BigNumberish, formatFixed } from '@ethersproject/bignumber'
 import { CLPublicKey } from 'casper-js-sdk'
-import NextLink from 'next/link'
+
+import styled from 'styled-components'
 
 import { Box } from '@/components/Box'
 import { Text } from '@/components/Text'
@@ -37,13 +38,38 @@ export default function NFTCard(_token: Token) {
     offers,
   } = token
   const { currentAccount, connect } = useCasperWeb3Provider()
-  const { buyToken } = useMarketplaceTransaction(contractHash)
+  const { buyToken, offerToken, sellToken } =
+    useMarketplaceTransaction(contractHash)
 
-  const [onPresentOfferModal] = useModal(
-    <OfferTokenModal token={token} />,
+  const handleOfferToken = useCallback(
+    async (id: string, amount: BigNumberish) => {
+      await offerToken(id, amount)
+      hideOfferModal()
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [offerToken],
+  )
+
+  const handleSellToken = useCallback(
+    async (id: string, price: BigNumberish, payToken?: string | undefined) => {
+      const preferPayToken = payToken?.startsWith('hash-')
+        ? payToken
+        : undefined
+      await sellToken(id, price, preferPayToken)
+      hideSellModal()
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [sellToken],
+  )
+
+  const [onPresentOfferModal, hideOfferModal] = useModal(
+    <OfferTokenModal token={token} offerToken={handleOfferToken} />,
     true,
   )
-  const [onPresentSellModal] = useModal(<SellTokenModal token={token} />, true)
+  const [onPresentSellModal, hideSellModal] = useModal(
+    <SellTokenModal token={token} sellToken={handleSellToken} />,
+    true,
+  )
 
   const handle = useCallback(async () => {
     try {
@@ -52,14 +78,12 @@ export default function NFTCard(_token: Token) {
           .toAccountHashStr()
           .slice(13)
         if (currentAccountHash === owner) {
-          // if (pendingSale) return 'Cancel Listing'
           return onPresentSellModal()
         }
       }
       if (listed && price) {
         return buyToken(token)
       }
-      // return offerToken(id, '2000000000')
       onPresentOfferModal()
     } catch (error: any) {
       console.error(error)
@@ -111,7 +135,7 @@ export default function NFTCard(_token: Token) {
               : 'Not Available'}
           </Text>
         </ValueContainer>
-        <NextLink href={`/token/${slug}/${id}`}>Details</NextLink>
+        <StyledLink href={`/token/${slug}/${id}`}>Details</StyledLink>
       </Box>
       <SaleButton
         onClick={currentAccount ? handle : connect}
@@ -120,3 +144,8 @@ export default function NFTCard(_token: Token) {
     </Wrapper>
   )
 }
+
+const StyledLink = styled.a`
+  text-decoration: underline;
+  color: ${({ theme }) => theme.colors.primary};
+`

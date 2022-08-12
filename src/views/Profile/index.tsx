@@ -28,19 +28,13 @@ import {
   Container,
 } from './Profile.styles'
 
-interface ProfileProps {
-  avatar?: string
-}
-
-export default function Profile({ avatar }: ProfileProps) {
-  const profileAvatar =
-    avatar ||
-    'https://beta.api.solanalysis.com/images/400x400/filters:frames(,0)/https://arweave.net/eWX3j4ulh4LK8RXC2VSIyF1Lwd-dKZIymXBuGiKsEpY'
-
+export default function Profile() {
   const [rating, setRating] = useState(0)
   const size = useWindowSize()
   const [showImportTokenDialog, setShowImportTokenDialog] = useState(false)
   const { user } = useAppSelector((state) => state.user)
+  const profileAvatar = user?.avatar || '/assets/images/Avatar/Default.svg'
+
   const handleRating = (rate: number) => {
     setRating(rate)
   }

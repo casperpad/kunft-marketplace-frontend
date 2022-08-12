@@ -15,7 +15,8 @@ import {
   contracts,
 } from '@/config'
 import { Token } from '@/types'
-import { openCsprExplorer, shortenHash } from '@/utils/hash'
+import { openCsprExplorer } from '@/utils/hash'
+import { showDeployHash } from '@/utils/toast'
 import { ERC20SignerClient } from '@/web3/client/erc20'
 import { useCasperWeb3Provider } from '../providers/CasperWeb3Provider'
 import useCEP47 from './useCEP47'
@@ -86,11 +87,11 @@ export default function useMarketplaceTransaction(contractHash: string) {
             currentAccount,
           )
 
-          const arppoveDeployHash = await signedApproveDeploy.send(
+          const approveDeployHash = await signedApproveDeploy.send(
             NEXT_PUBLIC_CASPER_NODE_ADDRESS,
           )
-
-          const _ = await getDeploy(arppoveDeployHash)
+          showDeployHash(approveDeployHash)
+          const _ = await getDeploy(approveDeployHash)
         } catch (error: any) {
           console.error('Approve Error:', error)
         }
@@ -108,8 +109,11 @@ export default function useMarketplaceTransaction(contractHash: string) {
           '1000000000',
           payToken,
         )
-
-        const _ = await getDeploy(deployHash)
+        showDeployHash(deployHash)
+        getDeploy(deployHash).then(() => {
+          toast.success(`Transaction confirmed`)
+        })
+        return
       } catch (error: any) {
         console.error('createSellOrder Error', error.message)
       }
@@ -139,12 +143,11 @@ export default function useMarketplaceTransaction(contractHash: string) {
           '8000000000',
           currentAccount,
         )
-        toast.info(`Transaction created: ${shortenHash(deployHash)}`, {
-          autoClose: false,
-          onClick: () => openCsprExplorer(deployHash),
+        showDeployHash(deployHash)
+        getDeploy(deployHash).then(() => {
+          toast.success(`Transaction confirmed`)
         })
-        const _ = await getDeploy(deployHash)
-        toast.success('Transaction confirmed')
+        return
       } catch (error: any) {
         toast.error('Transaction failed')
       }
@@ -179,13 +182,7 @@ export default function useMarketplaceTransaction(contractHash: string) {
             CLPublicKey.fromHex(currentAccount),
             '1000000000',
           )
-          toast.info(
-            `Approve Transaction created: ${shortenHash(approveDeployHash)}`,
-            {
-              autoClose: false,
-              onClick: () => openCsprExplorer(approveDeployHash),
-            },
-          )
+          showDeployHash(approveDeployHash)
           const _ = await getDeploy(approveDeployHash)
           toast.success('Approved Successfully')
         }
@@ -197,12 +194,11 @@ export default function useMarketplaceTransaction(contractHash: string) {
           CLPublicKey.fromHex(currentAccount),
           '5000000000',
         )
-        toast.info(`Transaction created: ${shortenHash(deployHash)}`, {
-          autoClose: false,
-          onClick: () => openCsprExplorer(deployHash),
+        showDeployHash(deployHash)
+        getDeploy(deployHash).then(() => {
+          toast.success(`Transaction confirmed`)
         })
-        const _ = await getDeploy(deployHash)
-        toast.success('Transaction confirmed')
+        return
       } catch (error: any) {
         console.error(error)
         toast.error('Transaction failed')
@@ -238,11 +234,11 @@ export default function useMarketplaceTransaction(contractHash: string) {
           '1000000000',
           CLPublicKey.fromHex(currentAccount),
         )
-        toast.info(`Transaction created: ${shortenHash(deployHash)}`, {
-          onClick: () => openCsprExplorer(deployHash),
+        showDeployHash(deployHash)
+        getDeploy(deployHash).then(() => {
+          toast.success(`Transaction confirmed`)
         })
-        const _ = await getDeploy(deployHash)
-        toast.success(`Transaction confirmed`)
+        return
       } catch (error: any) {
         toast.error(error.toString())
       }
@@ -303,15 +299,12 @@ export default function useMarketplaceTransaction(contractHash: string) {
             currentAccount,
           )
 
-          const arppoveDeployHash = await signedApproveDeploy.send(
+          const approveDeployHash = await signedApproveDeploy.send(
             NEXT_PUBLIC_CASPER_NODE_ADDRESS,
           )
+          showDeployHash(approveDeployHash)
 
-          toast.info(`Approve transaction created: ${arppoveDeployHash}`, {
-            onClick: () => openCsprExplorer(arppoveDeployHash),
-          })
-
-          const _ = await getDeploy(arppoveDeployHash)
+          const _ = await getDeploy(approveDeployHash)
         } catch (error: any) {
           console.error('acceptBuyOrder Error', error)
           toast.error(error.message)
@@ -326,10 +319,7 @@ export default function useMarketplaceTransaction(contractHash: string) {
           '7000000000',
           CLPublicKey.fromHex(currentAccount),
         )
-        toast.info(`Transaction created: ${deployHash}`, {
-          autoClose: false,
-          onClick: () => openCsprExplorer(deployHash),
-        })
+        showDeployHash(deployHash)
         const _ = await getDeploy(deployHash)
         toast.success(`Transaction confirmed`)
       } catch (error: any) {

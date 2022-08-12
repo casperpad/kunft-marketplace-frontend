@@ -1,8 +1,7 @@
-import { useCallback, useState } from 'react'
-import { parseFixed } from '@ethersproject/bignumber'
+import { useState } from 'react'
+import { BigNumberish, parseFixed } from '@ethersproject/bignumber'
 import styled from 'styled-components'
 
-import { useMarketplaceTransaction } from '@/hooks'
 import { Token } from '@/types'
 
 import { Flex } from '../../Box'
@@ -12,17 +11,12 @@ import { Text } from '../../Text'
 
 interface OfferProps {
   token: Token
+  offerToken: (id: string, amount: BigNumberish) => Promise<void>
 }
 
-export default function Offer({ token }: OfferProps) {
+export default function Offer({ token, offerToken }: OfferProps) {
   const [offerPrice, setOfferPrice] = useState('')
 
-  const { offerToken } = useMarketplaceTransaction(
-    token.collection.contractHash,
-  )
-  const offer = useCallback(async () => {
-    const _ = await offerToken(token.id, parseFixed(offerPrice, 9))
-  }, [offerToken, token.id, offerPrice])
   return (
     <Container>
       <PriceContainer>
@@ -47,7 +41,7 @@ export default function Offer({ token }: OfferProps) {
       </PriceContainer>
       <TransactionButton
         title="Make Offer"
-        onClick={offer}
+        onClick={() => offerToken(token.id, parseFixed(offerPrice, 9))}
         disabled={offerPrice.length === 0}
       />
     </Container>

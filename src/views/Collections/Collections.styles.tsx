@@ -3,7 +3,7 @@ import styled from 'styled-components'
 
 import { Box, Flex, Text } from '@/components'
 
-export const Title = styled(Text)`
+export const Title = styled.h1`
   font-size: 30px;
   margin-bottom: 60px;
 
@@ -20,7 +20,7 @@ export const Title = styled(Text)`
   }
 `
 
-export const SubTitle = styled(Text)`
+export const SubTitle = styled.h2`
   font-size: 20px;
 
   ${({ theme }) => theme.mediaQueries.sm} {

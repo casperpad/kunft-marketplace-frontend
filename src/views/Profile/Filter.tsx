@@ -57,7 +57,7 @@ const Container = styled(Flex)`
   left: 0;
   top: 0;
   padding: 80px 0px 120px 46px;
-  z-index: 20;
+  /* z-index: 20; */
   background-color: ${({ theme }) => theme.colors.background};
   height: 100%;
   transition: all 0.3s;

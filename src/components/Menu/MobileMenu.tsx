@@ -2,7 +2,7 @@ import { useRouter } from 'next/router'
 import styled from 'styled-components'
 
 import { Flex } from '@/components/Box'
-import { CustomLink } from '@/components/Link'
+import Link from '@/components/Link'
 import { Text } from '@/components/Text'
 import { navLinks } from '@/config/constants/data'
 
@@ -53,11 +53,11 @@ export default function MobileMenu({ show }: MobileMenuProps) {
       {navLinks.map((item) => {
         const active = pathname.indexOf(item.path) > -1
         return (
-          <CustomLink key={item.name} href={item.path}>
+          <Link key={item.name} href={item.path}>
             <MenuItem>
               <StyledText active={active}>{item.name}</StyledText>
             </MenuItem>
-          </CustomLink>
+          </Link>
         )
       })}
     </Container>

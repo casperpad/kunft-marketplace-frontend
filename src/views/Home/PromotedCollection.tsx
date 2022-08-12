@@ -1,34 +1,30 @@
 import styled from 'styled-components'
 
-import { Box, Grid, NFTCard, Layout, Text } from '@/components'
+import { Box, Grid, NFTCard, Text } from '@/components'
 import { useGetTokens } from '@/hooks'
 
-export default function NFTs() {
+interface PromotedCollection {
+  slug?: string
+}
+
+export default function PromotedCollection({ slug: _ }: PromotedCollection) {
   const { data, loading } = useGetTokens({ promoted: true })
   return (
-    <Layout mt="60px">
-      <Box>
-        <Title>
-          {loading ? 'Loading...' : data?.tokens[0].collection.name}
-        </Title>
-        <Description>
-          {loading ? (
-            <div>Loading</div>
-          ) : (
-            data?.tokens[0].collection.description
-          )}
-        </Description>
-        <Container>
-          {loading ? (
-            <div>Loading...</div>
-          ) : (
-            data?.tokens.map((token) => {
-              return <NFTCard key={token.id} {...token} />
-            })
-          )}
-        </Container>
-      </Box>
-    </Layout>
+    <Box>
+      <Title>{loading ? 'Loading...' : data?.tokens[0].collection.name}</Title>
+      <Description>
+        {loading ? <div>Loading</div> : data?.tokens[0].collection.description}
+      </Description>
+      <Container>
+        {loading ? (
+          <div>Loading...</div>
+        ) : (
+          data?.tokens.map((token) => {
+            return <NFTCard key={token.id} {...token} />
+          })
+        )}
+      </Container>
+    </Box>
   )
 }
 

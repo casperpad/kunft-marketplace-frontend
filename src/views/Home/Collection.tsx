@@ -1,6 +1,6 @@
 import styled from 'styled-components'
 
-import { Flex, StyledButton, Layout } from '@/components'
+import { Flex, StyledButton } from '@/components'
 
 const CollectionButton = styled(StyledButton)`
   font-size: 20px;
@@ -17,7 +17,8 @@ const Container = styled(Flex)`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  padding: 40px 0px 33px;
+  margin: 24px 0px;
+  /* padding: 40px 0px 33px; */
   font-size: 35px;
 
   ${({ theme }) => theme.mediaQueries.lg} {
@@ -37,12 +38,10 @@ const Container = styled(Flex)`
 
 export default function Collection() {
   return (
-    <Layout>
-      <Container>
-        <Title>ALL NFT COLLECTIONS</Title>
-        <CollectionButton text="Collections" />
-      </Container>
-    </Layout>
+    <Container>
+      <Title>ALL NFT COLLECTIONS</Title>
+      <CollectionButton text="Collections" />
+    </Container>
   )
 }
 

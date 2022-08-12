@@ -1,3 +1,3 @@
-import TopNFTsPage from '@/views/TopNFTs'
+import ComingSoon from '@/views/ComingSoon'
 
-export default TopNFTsPage
+export default ComingSoon

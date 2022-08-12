@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import { CustomLink, Text } from '@/components'
+import { Link, Text } from '@/components'
 
 const StyledNotFound = styled.div`
   align-items: center;
@@ -15,11 +15,11 @@ export default function NotFound() {
       <Text mb="20px" fontSize="50px">
         Page Not Found.
       </Text>
-      <CustomLink href="/">
+      <Link href="/">
         <Text color="primary" fontSize="30px">
           Back Home
         </Text>
-      </CustomLink>
+      </Link>
     </StyledNotFound>
   )
 }

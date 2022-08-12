@@ -1,12 +1,11 @@
 import React from 'react'
 
-import { FiCopy } from 'react-icons/fi'
 import { IoSettingsOutline } from 'react-icons/io5'
 import { RiLogoutBoxRLine } from 'react-icons/ri'
 
-import { Box, Flex } from '@/components/Box'
-import { CustomLink } from '@/components/Link'
-import { Text } from '@/components/Text'
+import Address from '@/components/Address'
+import { Box } from '@/components/Box'
+import Link from '@/components/Link'
 
 import useAuth from '@/hooks/useAuth'
 import {
@@ -14,7 +13,6 @@ import {
   UserProfile,
   ItemContainer as UserMenuItem,
   StyledText,
-  StyledIcon,
   UserMenuDivider,
   StyledImage,
 } from './UserMenu.styles'
@@ -32,28 +30,17 @@ export default function UserMenu(props: UserMenuProps) {
     ? (avatar as string)
     : '/assets/images/Avatar/Default.svg'
 
-  const shortenPublicKey = (publicKey: string) => {
-    return `${publicKey.slice(0, 7)}...${publicKey.slice(-7)}`
-  }
-
   return (
     <UserMenuContainer>
       <UserProfile>
         <StyledImage src={profileAvatar} alt="" width={73} height={74} />
         <Box>
-          <Flex flexDirection="row" alignItems="center">
-            <Text mr="8px" fontSize="10px" color="input">
-              {shortenPublicKey(user!.publicKey)}
-            </Text>
-            <StyledIcon>
-              <FiCopy size={20} />
-            </StyledIcon>
-          </Flex>
-          <CustomLink href="/profile">
+          <Address variant="secondary" address={user!.publicKey} />
+          <Link href="/profile">
             <StyledText fontSize="12px" color="textSecondary">
               Profile
             </StyledText>
-          </CustomLink>
+          </Link>
         </Box>
       </UserProfile>
       <UserMenuDivider />

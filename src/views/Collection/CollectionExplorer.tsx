@@ -47,20 +47,20 @@ export default function CollectionExplorer({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [loading])
 
-  useEffect(() => {
-    if (query.slug && typeof query.slug === 'string') {
-      setWhere({ ...where, slug: query.slug })
-    }
-    if (
-      query.listed &&
-      typeof query.listed === 'string' &&
-      (query.listed === 'true' || query.listed === 'false')
-    ) {
-      setWhere({ ...where, listed: query.listed === 'true' })
-    }
-    setTokens([])
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [query])
+  // useEffect(() => {
+  //   if (query.slug && typeof query.slug === 'string') {
+  //     setWhere({ ...where, slug: query.slug })
+  //   }
+  //   if (
+  //     query.listed &&
+  //     typeof query.listed === 'string' &&
+  //     (query.listed === 'true' || query.listed === 'false')
+  //   ) {
+  //     setWhere({ ...where, listed: query.listed === 'true' })
+  //   }
+  //   setTokens([])
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [query])
 
   return (
     <DiscoverContainer>

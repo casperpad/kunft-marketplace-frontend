@@ -1,3 +1,3 @@
-import CreatePage from '@/views/Create'
+import ComingSoon from '@/views/ComingSoon'
 
-export default CreatePage
+export default ComingSoon

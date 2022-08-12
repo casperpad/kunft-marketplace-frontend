@@ -1,4 +1,7 @@
-import { useGetTokensQuery } from '@/graphql/queries/__generated__/token.generated'
+import {
+  useGetTokensQuery,
+  GetTokensQuery,
+} from '@/graphql/queries/__generated__/token.generated'
 import { asPaginationInfo } from '@/types/PaginationInfo'
 import { asToken } from '@/types/Token'
 
@@ -15,6 +18,16 @@ export interface GetTokensInput {
   metadata?: MetadataInput[]
 }
 
+export const parseGetTokensResponse = (data?: GetTokensQuery) => ({
+  data:
+    data && data.getTokens
+      ? {
+          tokens: data.getTokens.tokens!.map(asToken),
+          paginationInfo: asPaginationInfo(data.getTokens.paginationInfo),
+        }
+      : undefined,
+})
+
 export default function useGetTokens(
   where: GetTokensInput,
   page?: number,
@@ -24,17 +37,10 @@ export default function useGetTokens(
     variables: { where, page, limit },
   })
 
-  // const [fetch,result] = useGetTokensLazyQuery()
-  // const {data,error,loading} = result
+  const parsed = parseGetTokensResponse(data)
 
   return {
-    data:
-      data && data.getTokens
-        ? {
-            tokens: data.getTokens.tokens!.map(asToken),
-            paginationInfo: asPaginationInfo(data.getTokens.paginationInfo),
-          }
-        : undefined,
+    data: parsed.data,
     error,
     loading,
   }

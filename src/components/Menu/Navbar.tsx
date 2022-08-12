@@ -6,7 +6,7 @@ import { toast } from 'react-toastify'
 import styled from 'styled-components'
 
 import { Flex } from '@/components/Box'
-import { CustomLink } from '@/components/Link'
+import Link from '@/components/Link'
 import { ProfileModal as Modal, ProfileSubmitProps } from '@/components/Modals'
 import { navLinks } from '@/config/constants/data'
 import { useCasperWeb3Provider, useAuth, useWindowSize } from '@/hooks'
@@ -22,10 +22,9 @@ const ProfileMenu = styled.div`
   transform: translateY(100%);
 `
 
-const MenuItem = styled(CustomLink)``
-
 const StyledAvatar = styled(Image)`
   cursor: pointer;
+  border-radius: 50%;
 `
 
 const Menus = styled(Flex)`
@@ -121,14 +120,14 @@ export default function Navbar() {
   return (
     <>
       <NavbarContainer>
-        <CustomLink href="/">
+        <Link href="/">
           <Image
             src="/assets/images/Logo/KUNFTLogo.png"
             alt="KUNFT"
             width={101}
             height={57}
           />
-        </CustomLink>
+        </Link>
         <MenuContainer>
           <ShowMenu onClick={() => setMenuShow(!menuShow)}>
             <HiMenu size={25} />
@@ -138,9 +137,9 @@ export default function Navbar() {
             {navLinks.map((item) => {
               const active = pathname.indexOf(item.path) > -1
               return (
-                <MenuItem href={item.path} key={item.name} active={active}>
+                <Link href={item.path} key={item.name} active={active}>
                   {item.name}
-                </MenuItem>
+                </Link>
               )
             })}
           </Menus>
@@ -168,7 +167,7 @@ export default function Navbar() {
             onMouseEnter={() => setShow(true)}
             onMouseLeave={() => setShow(false)}
           >
-            <UserMenu onSettingClick={setModalShow} />
+            <UserMenu onSettingClick={setModalShow} avatar={user.avatar} />
           </ProfileMenu>
         )}
       </NavbarContainer>

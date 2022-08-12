@@ -1,40 +1,38 @@
 import Image from 'next/image'
 import styled from 'styled-components'
 
-import { Flex, Layout, Text } from '@/components'
+import { Flex, Text } from '@/components'
 
 export default function About() {
   return (
-    <Layout>
-      <Flex flexDirection="column" alignItems="center" mb="60px">
-        <Title>ABOUT KUNFT</Title>
-        <Description>
-          Our goal is to serve as a platform for NFT creators to exhibit their
-          unique work, & to bridge between creatives and collectors. Hop on
-          board, push the boundaries and start creating!
-        </Description>
-        <ImageContainer>
-          <Image
-            src="/assets/images/Home/About_1.png"
-            alt=""
-            width={320}
-            height={320}
-          />
-          <Image
-            src="/assets/images/Home/About_2.png"
-            alt=""
-            width={320}
-            height={320}
-          />
-          <Image
-            src="/assets/images/Home/About_3.png"
-            alt=""
-            width={320}
-            height={320}
-          />
-        </ImageContainer>
-      </Flex>
-    </Layout>
+    <Flex flexDirection="column" alignItems="center" mb="60px">
+      <Title>ABOUT KUNFT</Title>
+      <Description>
+        Our goal is to serve as a platform for NFT creators to exhibit their
+        unique work, & to bridge between creatives and collectors. Hop on board,
+        push the boundaries and start creating!
+      </Description>
+      <ImageContainer>
+        <Image
+          src="/assets/images/Home/About_1.png"
+          alt=""
+          width={320}
+          height={320}
+        />
+        <Image
+          src="/assets/images/Home/About_2.png"
+          alt=""
+          width={320}
+          height={320}
+        />
+        <Image
+          src="/assets/images/Home/About_3.png"
+          alt=""
+          width={320}
+          height={320}
+        />
+      </ImageContainer>
+    </Flex>
   )
 }
 

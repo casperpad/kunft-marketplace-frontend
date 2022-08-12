@@ -59,13 +59,13 @@ export default function Filter({
     setMaxValue(value[1])
   }, [])
 
-  useEffect(() => {
-    router.push({
-      pathname: router.pathname,
-      query: { ...router.query, listed: sale ? 'true' : 'false' },
-    })
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [sale])
+  // useEffect(() => {
+  //   router.push({
+  //     pathname: router.pathname,
+  //     query: { ...router.query, listed: sale ? 'true' : 'false' },
+  //   })
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [sale])
 
   return (
     <Container {...props}>

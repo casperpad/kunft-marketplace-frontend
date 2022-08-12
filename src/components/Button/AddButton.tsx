@@ -25,7 +25,7 @@ const StyledButton = styled.button<BaseButtonProps>`
 
 export default function AddButton(props: AddButtonProps) {
   return (
-    <StyledButton {...props}>
+    <StyledButton type="button" {...props}>
       <MdAddCircleOutline />
     </StyledButton>
   )

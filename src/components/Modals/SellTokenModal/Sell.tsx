@@ -1,9 +1,8 @@
 import { useCallback, useState } from 'react'
-import { parseFixed } from '@ethersproject/bignumber'
+import { BigNumberish, parseFixed } from '@ethersproject/bignumber'
 import styled from 'styled-components'
 
 import { acceptableTokens } from '@/config'
-import { useMarketplaceTransaction } from '@/hooks'
 import { Token } from '@/types'
 
 import { Flex } from '../../Box'
@@ -14,21 +13,17 @@ import TokenSelect from '../../TokenSelect'
 
 interface SellProps {
   token: Token
+  sellToken: (
+    id: string,
+    price: BigNumberish,
+    payToken?: string | undefined,
+  ) => Promise<void>
 }
 
-export default function Sell({ token }: SellProps) {
+export default function Sell({ token, sellToken }: SellProps) {
   const [sellPrice, setSellPrice] = useState('')
   const [payToken, setPayToken] = useState(acceptableTokens[1].contractHash)
 
-  const { sellToken } = useMarketplaceTransaction(token.collection.contractHash)
-  const sell = useCallback(async () => {
-    const preferPayToken = payToken.startsWith('hash-') ? payToken : undefined
-    const _ = await sellToken(
-      token.id,
-      parseFixed(sellPrice, 9),
-      preferPayToken,
-    )
-  }, [sellToken, token.id, sellPrice, payToken])
   return (
     <Container>
       <PriceContainer>
@@ -54,7 +49,7 @@ export default function Sell({ token }: SellProps) {
       </PriceContainer>
       <TransactionButton
         title="Sell"
-        onClick={sell}
+        onClick={sellToken}
         disabled={sellPrice.length === 0}
       />
     </Container>

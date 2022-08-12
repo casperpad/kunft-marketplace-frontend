@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { Layout } from '@/components'
 
 import About from './About'
 import Artist from './Artist'
@@ -18,9 +19,11 @@ export default function HomeView() {
     <>
       <Landing tops={tops} />
       <Artist />
-      <PromotedCollection />
-      <Collection />
-      <About />
+      <Layout>
+        <PromotedCollection />
+        <Collection />
+        <About />
+      </Layout>
     </>
   )
 }
