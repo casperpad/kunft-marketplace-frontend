@@ -180,11 +180,12 @@ export class MarketplaceClient {
     return deployHash
   }
 
-  public cancelSellOrder(
+  public async cancelSellOrder(
     collection: string,
     tokenIds: BigNumberish[],
-    key: Keys.AsymmetricKey,
+    sender: CLPublicKey,
     paymentAmount: string,
+    signingKeys?: Keys.AsymmetricKey[],
   ) {
     const runtimeArgs = RuntimeArgs.fromMap({
       collection: CLValueBuilder.string(collection),
@@ -192,14 +193,17 @@ export class MarketplaceClient {
         tokenIds.map((tokenId) => CLValueBuilder.u256(tokenId)),
       ),
     })
-    return this.contractClient.callEntrypoint(
+    const deploy = this.contractClient.callEntrypoint(
       'cancel_sell_order',
       runtimeArgs,
-      key.publicKey,
+      sender,
       this.chainName,
       paymentAmount,
-      [key],
+      signingKeys,
     )
+    const signedDeploy = await signDeploy(deploy, sender.toHex())
+    const deployHash = await this.casperClient.putDeploy(signedDeploy)
+    return deployHash
   }
 
   public async buySellOrder(
@@ -370,6 +374,30 @@ export class MarketplaceClient {
 
     const deploy = this.contractClient.callEntrypoint(
       'accept_buy_order',
+      runtimeArgs,
+      sender,
+      this.chainName,
+      paymentAmount,
+      signingKeys,
+    )
+    const signedDeploy = await signDeploy(deploy, sender.toHex())
+    const deployHash = await this.casperClient.putDeploy(signedDeploy)
+    return deployHash
+  }
+
+  public async cancelBuyOrder(
+    collection: string,
+    tokenId: BigNumberish,
+    sender: CLPublicKey,
+    paymentAmount: string,
+    signingKeys?: Keys.AsymmetricKey[],
+  ) {
+    const runtimeArgs = RuntimeArgs.fromMap({
+      collection: CLValueBuilder.string(collection),
+      token_id: CLValueBuilder.u256(tokenId),
+    })
+    const deploy = this.contractClient.callEntrypoint(
+      'cancel_buy_order',
       runtimeArgs,
       sender,
       this.chainName,

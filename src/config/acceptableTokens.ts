@@ -1,11 +1,13 @@
 import { ERC20 } from '@/types'
 
+export const NATIVE_HASH = ''
+
 export const acceptableTokens: ERC20[] = [
   {
     name: 'CSPR',
     symbol: 'CSPR',
-    contractHash: '',
-    contractPackageHash: '',
+    contractHash: NATIVE_HASH,
+    contractPackageHash: NATIVE_HASH,
   },
   {
     name: 'KUNFT Token',

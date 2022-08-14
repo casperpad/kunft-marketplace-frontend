@@ -18,11 +18,14 @@ export default function useMarketplace() {
 
   return {
     createSellOrder: marketplaceClient.createSellOrder.bind(marketplaceClient),
+    cancelSellOrder: marketplaceClient.cancelSellOrder.bind(marketplaceClient),
     buySellOrderCspr:
       marketplaceClient.buySellOrderCspr.bind(marketplaceClient),
     buySellOrder: marketplaceClient.buySellOrder.bind(marketplaceClient),
     createBuyOrderCspr:
       marketplaceClient.createBuyOrderCspr.bind(marketplaceClient),
+    createBuyOrder: marketplaceClient.createBuyOrder.bind(marketplaceClient),
+    cancelBuyOrder: marketplaceClient.cancelBuyOrder.bind(marketplaceClient),
     acceptBuyOrder: marketplaceClient.acceptBuyOrder.bind(marketplaceClient),
   }
 }

@@ -15,7 +15,7 @@ import {
   contracts,
 } from '@/config'
 import { Token } from '@/types'
-import { openCsprExplorer } from '@/utils/hash'
+import { openCsprExplorer } from '@/utils/casper'
 import { showDeployHash } from '@/utils/toast'
 import { ERC20SignerClient } from '@/web3/client/erc20'
 import { useCasperWeb3Provider } from '../providers/CasperWeb3Provider'
@@ -29,7 +29,10 @@ export default function useMarketplaceTransaction(contractHash: string) {
     buySellOrder,
     buySellOrderCspr,
     createBuyOrderCspr,
+    createBuyOrder,
     createSellOrder,
+    cancelSellOrder,
+    cancelBuyOrder,
   } = useMarketplace()
   const { approve, getAllowance } = useCEP47(contractHash)
   const erc20Client = new ERC20SignerClient(
@@ -92,6 +95,9 @@ export default function useMarketplaceTransaction(contractHash: string) {
           )
           showDeployHash(approveDeployHash)
           const _ = await getDeploy(approveDeployHash)
+          toast.success('Approved Successfully', {
+            onClick: () => openCsprExplorer(approveDeployHash),
+          })
         } catch (error: any) {
           console.error('Approve Error:', error)
         }
@@ -111,7 +117,9 @@ export default function useMarketplaceTransaction(contractHash: string) {
         )
         showDeployHash(deployHash)
         getDeploy(deployHash).then(() => {
-          toast.success(`Transaction confirmed`)
+          toast.success(`Transaction confirmed`, {
+            onClick: () => openCsprExplorer(deployHash),
+          })
         })
         return
       } catch (error: any) {
@@ -131,6 +139,29 @@ export default function useMarketplaceTransaction(contractHash: string) {
     ],
   )
 
+  const cancelSell = useCallback(
+    async (tokenIds: BigNumberish[]) => {
+      if (currentAccount === undefined) return
+      try {
+        const deployHash = await cancelSellOrder(
+          contractHash,
+          tokenIds,
+          CLPublicKey.fromHex(currentAccount),
+          '5000000000',
+        )
+        showDeployHash(deployHash)
+        getDeploy(deployHash).then(() => {
+          toast.success(`Transaction confirmed`, {
+            onClick: () => openCsprExplorer(deployHash),
+          })
+        })
+      } catch (error: any) {
+        toast.error(error.toString())
+      }
+    },
+    [cancelSellOrder, contractHash, currentAccount, getDeploy],
+  )
+
   const buyTokenCspr = useCallback(
     async (id: string, price: string) => {
       //
@@ -145,7 +176,9 @@ export default function useMarketplaceTransaction(contractHash: string) {
         )
         showDeployHash(deployHash)
         getDeploy(deployHash).then(() => {
-          toast.success(`Transaction confirmed`)
+          toast.success(`Transaction confirmed`, {
+            onClick: () => openCsprExplorer(deployHash),
+          })
         })
         return
       } catch (error: any) {
@@ -164,28 +197,7 @@ export default function useMarketplaceTransaction(contractHash: string) {
       try {
         if (currentAccount === undefined) return
 
-        toast.info('Checking allowance...')
-        await erc20Client.setContractHash(`hash-${erc20ContractHash}`)
-        // Check allowance
-        const allowancesMote = await erc20Client.allowances(
-          CLPublicKey.fromHex(currentAccount),
-          marketplaceContractPackageHash,
-        )
-        // const decimals = await erc20Client.decimals()
-        // const allowances = formatFixed(allowancesMote, decimals)
-        // console.log(allowances)
-        if (BigNumber.from(allowancesMote).lt(BigNumber.from(amount))) {
-          // Approve
-          const approveDeployHash = await erc20Client.approve(
-            marketplaceContractPackageHash,
-            amount,
-            CLPublicKey.fromHex(currentAccount),
-            '1000000000',
-          )
-          showDeployHash(approveDeployHash)
-          const _ = await getDeploy(approveDeployHash)
-          toast.success('Approved Successfully')
-        }
+        await checkERC20BalanceAndAllowance(erc20ContractHash, amount)
 
         const deployHash = await buySellOrder(
           contractHash,
@@ -196,7 +208,9 @@ export default function useMarketplaceTransaction(contractHash: string) {
         )
         showDeployHash(deployHash)
         getDeploy(deployHash).then(() => {
-          toast.success(`Transaction confirmed`)
+          toast.success(`Transaction confirmed`, {
+            onClick: () => openCsprExplorer(deployHash),
+          })
         })
         return
       } catch (error: any) {
@@ -222,8 +236,12 @@ export default function useMarketplaceTransaction(contractHash: string) {
    * @param id tokenId
    * @param amount offer amount
    */
-  const offerToken = useCallback(
-    async (id: string, amount: BigNumberish) => {
+  const offerTokenCspr = useCallback(
+    async (
+      id: BigNumberish,
+      amount: BigNumberish,
+      additionalRecipient?: CLKeyParameters,
+    ) => {
       try {
         // TODO Check token owner is not caller and marketplace
         if (!currentAccount) throw Error('')
@@ -233,10 +251,13 @@ export default function useMarketplaceTransaction(contractHash: string) {
           amount,
           '1000000000',
           CLPublicKey.fromHex(currentAccount),
+          additionalRecipient,
         )
         showDeployHash(deployHash)
         getDeploy(deployHash).then(() => {
-          toast.success(`Transaction confirmed`)
+          toast.success(`Transaction confirmed`, {
+            onClick: () => openCsprExplorer(deployHash),
+          })
         })
         return
       } catch (error: any) {
@@ -246,9 +267,62 @@ export default function useMarketplaceTransaction(contractHash: string) {
     [contractHash, createBuyOrderCspr, currentAccount, getDeploy],
   )
 
-  const offerTokenERC20 = useCallback(() => {
-    //
-  }, [])
+  const offerTokenERC20 = useCallback(
+    async (
+      tokenId: BigNumberish,
+      amount: BigNumberish,
+      payToken: string,
+      additionalRecipient?: CLKeyParameters,
+    ) => {
+      //
+      try {
+        if (!currentAccount) throw Error('')
+
+        await checkERC20BalanceAndAllowance(payToken, amount)
+
+        const deployHash = await createBuyOrder(
+          contractHash,
+          tokenId,
+          amount,
+          payToken,
+          CLPublicKey.fromHex(currentAccount),
+          '5000000000',
+          additionalRecipient,
+        )
+        showDeployHash(deployHash)
+        getDeploy(deployHash).then(() => {
+          toast.success(`Transaction confirmed`, {
+            onClick: () => openCsprExplorer(deployHash),
+          })
+        })
+        return
+      } catch (error: any) {
+        toast.error(error.toString())
+      }
+    },
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [contractHash, createBuyOrder, currentAccount, getDeploy],
+  )
+
+  const offerToken = useCallback(
+    async (
+      tokenId: BigNumberish,
+      amount: BigNumberish,
+      payToken?: string,
+      additionalRecipient?: CLKeyParameters,
+    ) => {
+      if (payToken)
+        return await offerTokenERC20(
+          tokenId,
+          amount,
+          payToken,
+          additionalRecipient,
+        )
+      return await offerTokenCspr(tokenId, amount, additionalRecipient)
+    },
+    [offerTokenERC20, offerTokenCspr],
+  )
 
   const acceptOffer = useCallback(
     async (id: string, bidder: CLKeyParameters) => {
@@ -305,6 +379,9 @@ export default function useMarketplaceTransaction(contractHash: string) {
           showDeployHash(approveDeployHash)
 
           const _ = await getDeploy(approveDeployHash)
+          toast.success(`Approved Successfully`, {
+            onClick: () => openCsprExplorer(approveDeployHash),
+          })
         } catch (error: any) {
           console.error('acceptBuyOrder Error', error)
           toast.error(error.message)
@@ -321,7 +398,9 @@ export default function useMarketplaceTransaction(contractHash: string) {
         )
         showDeployHash(deployHash)
         const _ = await getDeploy(deployHash)
-        toast.success(`Transaction confirmed`)
+        toast.success(`Transaction confirmed`, {
+          onClick: () => openCsprExplorer(deployHash),
+        })
       } catch (error: any) {
         console.error('acceptBuyOrder Error', error)
         toast.error(error.message)
@@ -338,11 +417,70 @@ export default function useMarketplaceTransaction(contractHash: string) {
     ],
   )
 
+  const cancelOffer = useCallback(
+    async (tokenId: BigNumberish) => {
+      if (currentAccount === undefined) return
+      try {
+        const deployHash = await cancelBuyOrder(
+          contractHash,
+          tokenId,
+          CLPublicKey.fromHex(currentAccount),
+          '5000000000',
+        )
+        showDeployHash(deployHash)
+        getDeploy(deployHash).then(() => {
+          toast.success(`Transaction confirmed`, {
+            onClick: () => openCsprExplorer(deployHash),
+          })
+        })
+      } catch (error: any) {
+        toast.error(error.toString())
+      }
+    },
+    [contractHash, currentAccount, getDeploy, cancelBuyOrder],
+  )
+
+  const checkERC20BalanceAndAllowance = useCallback(
+    async (contractHash: string, amount: BigNumberish) => {
+      if (!currentAccount) throw Error('')
+      toast.info('Checking allowance...')
+      await erc20Client.setContractHash(`hash-${contractHash}`)
+
+      const balance = await erc20Client.balanceOf(
+        CLPublicKey.fromHex(currentAccount),
+      )
+      if (BigNumber.from(balance).lt(BigNumber.from(amount))) {
+        throw Error('Insufficient balance')
+      }
+      // Check allowance
+      const allowancesMote = await erc20Client.allowances(
+        CLPublicKey.fromHex(currentAccount),
+        marketplaceContractPackageHash,
+      )
+
+      if (BigNumber.from(allowancesMote).lt(BigNumber.from(amount))) {
+        // Approve
+        const approveDeployHash = await erc20Client.approve(
+          marketplaceContractPackageHash,
+          amount,
+          CLPublicKey.fromHex(currentAccount),
+          '1000000000',
+        )
+        showDeployHash(approveDeployHash)
+        const _ = await getDeploy(approveDeployHash)
+        toast.success('Approved Successfully')
+      }
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [currentAccount, getDeploy],
+  )
+
   return {
-    acceptOffer,
     sellToken,
+    cancelSell,
     buyToken,
-    buyTokenERC20,
     offerToken,
+    cancelOffer,
+    acceptOffer,
   }
 }

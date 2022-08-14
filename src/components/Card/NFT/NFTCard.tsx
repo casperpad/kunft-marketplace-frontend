@@ -1,8 +1,8 @@
 import React, { useCallback, useMemo, useState } from 'react'
 
 import { BigNumberish, formatFixed } from '@ethersproject/bignumber'
-import { CLPublicKey } from 'casper-js-sdk'
-
+import { CLKeyParameters, CLPublicKey } from 'casper-js-sdk'
+import { useRouter } from 'next/router'
 import styled from 'styled-components'
 
 import { Box } from '@/components/Box'
@@ -40,10 +40,16 @@ export default function NFTCard(_token: Token) {
   const { currentAccount, connect } = useCasperWeb3Provider()
   const { buyToken, offerToken, sellToken } =
     useMarketplaceTransaction(contractHash)
+  const router = useRouter()
 
   const handleOfferToken = useCallback(
-    async (id: string, amount: BigNumberish) => {
-      await offerToken(id, amount)
+    async (
+      id: BigNumberish,
+      amount: BigNumberish,
+      payToken?: string,
+      additionalRecipient?: CLKeyParameters,
+    ) => {
+      await offerToken(id, amount, payToken, additionalRecipient)
       hideOfferModal()
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -78,6 +84,8 @@ export default function NFTCard(_token: Token) {
           .toAccountHashStr()
           .slice(13)
         if (currentAccountHash === owner) {
+          if (offers.find((o) => o.status === 'pending'))
+            router.push(`/token/${token.collection.slug}/${token.id}`)
           return onPresentSellModal()
         }
       }
@@ -89,14 +97,16 @@ export default function NFTCard(_token: Token) {
       console.error(error)
     }
   }, [
+    token,
     currentAccount,
     listed,
     price,
-    onPresentOfferModal,
+    router,
+    offers,
     owner,
+    onPresentOfferModal,
     onPresentSellModal,
     buyToken,
-    token,
   ])
 
   const buttonText = useMemo(() => {

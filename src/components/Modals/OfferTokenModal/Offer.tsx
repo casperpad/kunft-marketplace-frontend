@@ -1,33 +1,43 @@
 import { useState } from 'react'
 import { BigNumberish, parseFixed } from '@ethersproject/bignumber'
+import { CLKeyParameters } from 'casper-js-sdk'
 import styled from 'styled-components'
 
+import { acceptableTokens, NATIVE_HASH } from '@/config'
 import { Token } from '@/types'
 
 import { Flex } from '../../Box'
 import { TransactionButton } from '../../Button'
 import { Input } from '../../Input'
 import { Text } from '../../Text'
+import TokenSelect from '../../TokenSelect'
 
 interface OfferProps {
   token: Token
-  offerToken: (id: string, amount: BigNumberish) => Promise<void>
+  offerToken: (
+    tokenId: BigNumberish,
+    amount: BigNumberish,
+    payToken?: string,
+    additionalRecipient?: CLKeyParameters,
+  ) => Promise<void>
 }
 
 export default function Offer({ token, offerToken }: OfferProps) {
   const [offerPrice, setOfferPrice] = useState('')
-
+  const [payToken, setPayToken] = useState(acceptableTokens[1].contractHash)
   return (
     <Container>
       <PriceContainer>
-        <PriceText>
-          CSPR
-          <Text fontWeight={700}>v</Text>
-        </PriceText>
+        <TokenSelect
+          tokens={acceptableTokens}
+          value={payToken}
+          onChange={setPayToken}
+        />
         <CustomInput
           placeholder="Input Amount"
           type="number"
           value={offerPrice}
+          min={0}
           onChange={(e) => setOfferPrice(e.target.value)}
         />
         <Flex flexDirection="column">
@@ -41,7 +51,13 @@ export default function Offer({ token, offerToken }: OfferProps) {
       </PriceContainer>
       <TransactionButton
         title="Make Offer"
-        onClick={() => offerToken(token.id, parseFixed(offerPrice, 9))}
+        onClick={() =>
+          offerToken(
+            token.id,
+            parseFixed(offerPrice, 9),
+            payToken === NATIVE_HASH ? undefined : payToken,
+          )
+        }
         disabled={offerPrice.length === 0}
       />
     </Container>
@@ -54,17 +70,6 @@ const CustomInput = styled(Input)`
   ${({ theme }) => theme.mediaQueries.md} {
     width: 175px;
   }
-`
-
-const PriceText = styled(Flex)`
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-  width: 85px;
-  font-family: 'Avenir';
-  font-size: 16px;
-  padding: 12px 10px;
-  border: 1px solid ${({ theme }) => theme.colors.border};
 `
 
 const PriceContainer = styled(Flex)`
