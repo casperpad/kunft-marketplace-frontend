@@ -57,11 +57,6 @@ export default function Filter({
   const [minValue, setMinValue] = useState(min)
   const [maxValue, setMaxValue] = useState(max)
 
-  const [sale, setSale] = useState(false)
-  const [auction, setAuction] = useState(false)
-  const [created, setCreated] = useState(false)
-  const [owned, setOwned] = useState(false)
-
   const handleChange = useCallback((value: any) => {
     setMinValue(value[0])
     setMaxValue(value[1])
@@ -77,21 +72,6 @@ export default function Filter({
           <Text fontFamily="Avenir" fontSize="18px" fontWeight={500} mb="4px">
             Status
           </Text>
-          <CheckboxContainer>
-            <CheckboxItem text="For Sale" checked={sale} setChecked={setSale} />
-            <CheckboxItem
-              text="On Auction"
-              disabled
-              checked={auction}
-              setChecked={setAuction}
-            />
-            <CheckboxItem
-              text="Created"
-              checked={created}
-              setChecked={setCreated}
-            />
-            <CheckboxItem text="Owned" checked={owned} setChecked={setOwned} />
-          </CheckboxContainer>
         </Box>
         <Box>
           <Text fontFamily="Avenir" fontSize="18px" fontWeight={500} mb="4px">

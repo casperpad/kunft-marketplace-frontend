@@ -8,8 +8,9 @@ import {
   AddButton,
   ImportTokenModal,
   StyledButton,
+  Flex,
 } from '@/components'
-import { useWindowSize, useGetTokens } from '@/hooks'
+import { useGetTokens } from '@/hooks'
 import { tokenApis, userApis } from '@/service'
 import { useAppSelector } from '@/store'
 import { isEqual } from '@/utils/token'
@@ -25,12 +26,10 @@ import {
   DataContainer,
   NFTContainer,
   CustomLayout,
-  Container,
 } from './Profile.styles'
 
 export default function Profile() {
   const [rating, setRating] = useState(0)
-  const size = useWindowSize()
   const [showImportTokenDialog, setShowImportTokenDialog] = useState(false)
   const { user } = useAppSelector((state) => state.user)
   const profileAvatar = user?.avatar || '/assets/images/Avatar/Default.svg'
@@ -72,27 +71,26 @@ export default function Profile() {
   }, [loading])
 
   return (
-    <Container>
-      <CustomLayout>
-        <DataContainer>
-          <ImageContainer>
-            <StyledImage src={profileAvatar} alt="" width={235} height={235} />
-          </ImageContainer>
-          <NameContainer>
-            <Title>{user!.name || 'Please set name.'}</Title>
-            <Rating
-              onClick={handleRating}
-              ratingValue={rating}
-              size={15}
-              fillColor="#FA5F0C"
-            />
-            <Description mt="25px">
-              {user!.description || 'You can write your bio.'}
-            </Description>
-          </NameContainer>
-          {size[0] >= 1280 && <Filter />}
-        </DataContainer>
-        {size[0] < 1280 && <Filter />}
+    <CustomLayout>
+      <DataContainer>
+        <ImageContainer>
+          <StyledImage src={profileAvatar} alt="" width={235} height={235} />
+        </ImageContainer>
+        <NameContainer>
+          <Title>{user!.name || 'Please set name.'}</Title>
+          <Rating
+            onClick={handleRating}
+            ratingValue={rating}
+            size={15}
+            fillColor="#FA5F0C"
+          />
+          <Description mt="25px">
+            {user!.description || 'You can write your bio.'}
+          </Description>
+        </NameContainer>
+      </DataContainer>
+      <Flex flexDirection="row">
+        <Filter />
         <NFTContainer>
           {tokens.map((token) => (
             <NFTCard
@@ -102,23 +100,23 @@ export default function Profile() {
           ))}
           {loading ? 'Loading...' : null}
         </NFTContainer>
+      </Flex>
 
-        <AddButton onClick={() => setShowImportTokenDialog(true)} />
-        <StyledButton
-          text="Import all token(*experimental)"
-          link={false}
-          onClick={() =>
-            toast.promise(handleImportAllToken, {
-              pending: 'Adding tokens...',
-            })
-          }
-        />
-        <ImportTokenModal
-          show={showImportTokenDialog}
-          setShow={setShowImportTokenDialog}
-          onImport={handleImportToken}
-        />
-      </CustomLayout>
-    </Container>
+      <AddButton onClick={() => setShowImportTokenDialog(true)} />
+      <StyledButton
+        text="Import all token(*experimental)"
+        link={false}
+        onClick={() =>
+          toast.promise(handleImportAllToken, {
+            pending: 'Adding tokens...',
+          })
+        }
+      />
+      <ImportTokenModal
+        show={showImportTokenDialog}
+        setShow={setShowImportTokenDialog}
+        onImport={handleImportToken}
+      />
+    </CustomLayout>
   )
 }

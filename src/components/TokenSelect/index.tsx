@@ -31,7 +31,7 @@ export default function TokenSelect({
 const Select = styled.select`
   width: auto;
   height: 50px;
-  background: white;
+  background: transparent;
   color: gray;
   padding: 0px 10px;
   font-size: 14px;
@@ -44,8 +44,6 @@ const Select = styled.select`
     background: white;
     display: flex;
     white-space: pre;
-
-    height: 50px;
     padding: 3px;
     &:hover {
       cursor: pointer;

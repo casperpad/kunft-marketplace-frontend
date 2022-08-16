@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import { BsArrowLeftCircle, BsArrowRightCircle } from 'react-icons/bs'
 import styled from 'styled-components'
 
-import { Flex, ProfileFilter } from '@/components'
+import { Flex, DiscoverFilter } from '@/components'
 
 import useWindowSize from '@/hooks/useWindowResize'
 
@@ -25,11 +25,6 @@ const CustomFilter = styled(Flex)`
     border: 1px solid ${({ theme }) => theme.colors.border};
     background-color: ${({ theme }) => theme.colors.background};
     padding: 37px 32px;
-    width: 600px;
-  }
-
-  ${({ theme }) => theme.mediaQueries.xl3} {
-    width: 650px;
   }
 `
 
@@ -57,7 +52,7 @@ const Container = styled(Flex)`
   left: 0;
   top: 0;
   padding: 80px 0px 120px 46px;
-  /* z-index: 20; */
+  z-index: ${({ theme }) => theme.zIndices.dropdown};
   background-color: ${({ theme }) => theme.colors.background};
   height: 100%;
   transition: all 0.3s;
@@ -92,7 +87,7 @@ export default function Filter() {
           {show ? <BsArrowLeftCircle /> : <BsArrowRightCircle />}
         </ShowButton>
         <CustomFilter>
-          <ProfileFilter />
+          <DiscoverFilter />
         </CustomFilter>
       </FilterContainer>
     </Container>

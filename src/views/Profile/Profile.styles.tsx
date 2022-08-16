@@ -39,13 +39,9 @@ export const NameContainer = styled(Box)`
   border: 1px solid ${({ theme }) => theme.colors.border};
   background-color: ${({ theme }) => theme.colors.background};
   padding: 34px 34px;
-
+  width: 100%;
   ${({ theme }) => theme.mediaQueries.md} {
     height: 235px;
-  }
-
-  ${({ theme }) => theme.mediaQueries.xl2} {
-    max-width: 405px;
   }
 
   .star-svg {
@@ -67,22 +63,11 @@ export const DataContainer = styled(Flex)`
 `
 
 export const NFTContainer = styled(Grid)`
-  grid-column-gap: 20px;
-  grid-row-gap: 70px;
-
-  grid-template-columns: repeat(1, 1fr);
-
-  ${({ theme }) => theme.mediaQueries.sm} {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
-  ${({ theme }) => theme.mediaQueries.lg} {
-    grid-template-columns: repeat(3, 1fr);
-  }
-
-  ${({ theme }) => theme.mediaQueries.xl2} {
-    grid-template-columns: repeat(4, 1fr);
-  }
+  display: grid;
+  width: 100%;
+  gap: 20px;
+  margin: 0px 40px 0px 40px;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
 `
 
 export const CustomLayout = styled(Layout)`
@@ -104,8 +89,4 @@ export const CustomLayout = styled(Layout)`
     padding-left: 86px;
     padding-right: 86px;
   }
-`
-
-export const Container = styled(Flex)`
-  padding-top: 40px;
 `

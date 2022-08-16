@@ -6,6 +6,8 @@ import { Box, Flex, BoxProps } from '@/components/Box'
 import { CheckboxItem } from '@/components/Checkbox'
 import { RangeSlider } from '@/components/Slider'
 import { Text } from '@/components/Text'
+import { acceptableTokens } from '@/config'
+import TokenSelect from '../TokenSelect'
 
 interface FilterProps extends BoxProps {
   min?: number
@@ -22,6 +24,7 @@ export default function Filter({
   const router = useRouter()
   const [minValue, setMinValue] = useState(min)
   const [maxValue, setMaxValue] = useState(max)
+  const [payToken, setPayToken] = useState(acceptableTokens[1].contractHash)
 
   const handleChange = useCallback((value: any) => {
     setMinValue(value[0])
@@ -76,7 +79,8 @@ export default function Filter({
 
     if (fieldValue !== undefined) {
       if (typeof fieldValue === 'string' && fieldValue === value) return true
-      if (fieldValue?.includes(value)) return true
+      if (typeof fieldValue !== 'string' && fieldValue.find((v) => v === value))
+        return true
     }
     return false
   }
@@ -132,12 +136,11 @@ export default function Filter({
             Price
           </Text>
           <Flex mt="12px">
-            <PriceText>
-              <Flex flexDirection="row" justifyContent="space-between" px="8px">
-                KNFT
-                <Text fontWeight={700}>v</Text>
-              </Flex>
-            </PriceText>
+            <TokenSelect
+              tokens={acceptableTokens}
+              value={payToken}
+              onChange={setPayToken}
+            />
             <PriceText>{minValue}</PriceText>
             <PriceText>{maxValue}</PriceText>
           </Flex>

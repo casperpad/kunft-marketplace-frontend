@@ -1,5 +1,6 @@
 import React from 'react'
 import { ApolloClient, InMemoryCache, ApolloProvider } from '@apollo/client'
+import { SkeletonTheme } from 'react-loading-skeleton'
 import { Provider } from 'react-redux'
 import { Store } from 'redux'
 import { PersistGate } from 'redux-persist/integration/react'
@@ -41,7 +42,14 @@ export default function Providers({ children, store }: ProvdersProps) {
           <CasperWeb3Provider>
             <StyledThemeProvider>
               <StyledModalProvider backgroundComponent={BlurBackground}>
-                <ModalProvider>{children}</ModalProvider>
+                <ModalProvider>
+                  <SkeletonTheme
+                    baseColor="#ffffff10"
+                    highlightColor="#ffffff20"
+                  >
+                    {children}
+                  </SkeletonTheme>
+                </ModalProvider>
               </StyledModalProvider>
             </StyledThemeProvider>
           </CasperWeb3Provider>

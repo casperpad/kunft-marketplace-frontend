@@ -16,6 +16,8 @@ import { useStore } from '../store'
 import '../assets/scss/main.scss'
 // eslint-disable-next-line import/order
 import '../styles/react-toastify.css'
+// eslint-disable-next-line import/order
+import 'react-loading-skeleton/dist/skeleton.css'
 
 function Auth({ children }: { children: React.ReactNode }) {
   const { user } = useAuth()

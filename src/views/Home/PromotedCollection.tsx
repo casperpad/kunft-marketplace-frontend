@@ -1,3 +1,4 @@
+import Skeleton from 'react-loading-skeleton'
 import styled from 'styled-components'
 
 import { Box, Grid, NFTCard, Text } from '@/components'
@@ -11,13 +12,13 @@ export default function PromotedCollection({ slug: _ }: PromotedCollection) {
   const { data, loading } = useGetTokens({ promoted: true })
   return (
     <Box>
-      <Title>{loading ? 'Loading...' : data?.tokens[0].collection.name}</Title>
+      <Title>{loading ? <Skeleton /> : data?.tokens[0].collection.name}</Title>
       <Description>
-        {loading ? <div>Loading</div> : data?.tokens[0].collection.description}
+        {loading ? <Skeleton /> : data?.tokens[0].collection.description}
       </Description>
       <Container>
         {loading ? (
-          <div>Loading...</div>
+          <Skeleton count={5} />
         ) : (
           data?.tokens.map((token) => {
             return <NFTCard key={token.id} {...token} />
