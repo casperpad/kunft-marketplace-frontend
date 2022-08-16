@@ -74,33 +74,7 @@ const TitleContainer = styled(Flex)`
   }
 `
 
-const ImageContainer = styled.div`
-  border: 1px solid ${({ theme }) => theme.colors.border};
-  width: 150px;
-  height: 150px;
-`
-
-const StyledImage = styled(Image)`
-  border: 1px solid ${({ theme }) => theme.colors.border};
-  border-radius: 50%;
-  &:hover {
-    border-radius: 0px;
-  }
-`
-
-const TopsContainer = styled(Flex)`
-  gap: 20px;
-  flex-direction: row;
-  flex-wrap: wrap;
-  height: 320px;
-  overflow: hidden;
-`
-
-interface LandingProps {
-  tops: string[]
-}
-
-export default function Landing({ tops }: LandingProps) {
+export default function Landing() {
   return (
     <Layout>
       <LandingImageContainer right="0px" top="253px">
@@ -143,15 +117,6 @@ export default function Landing({ tops }: LandingProps) {
         </h1>
         <StrollButton text="Go on a Stroll" />
       </TitleContainer>
-      <TopsContainer>
-        {tops.map((item) => {
-          return (
-            <ImageContainer key={item}>
-              <StyledImage src={item} alt="" width={150} height={150} />
-            </ImageContainer>
-          )
-        })}
-      </TopsContainer>
     </Layout>
   )
 }

@@ -41,16 +41,18 @@ const CheckboxContainer = styled.div`
   vertical-align: middle;
 `
 
-interface CheckboxProps {
-  checked: boolean
-  onChange: (event: React.ChangeEvent<HTMLInputElement>) => void
+export interface CheckboxProps {
+  name?: string
+  value?: string
+  checked?: boolean
+  onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void
 }
 
 export default function Checkbox({ checked, ...props }: CheckboxProps) {
   return (
     <CheckboxContainer>
       <HiddenCheckbox checked={checked} {...props} />
-      <StyledCheckbox checked={checked}>
+      <StyledCheckbox checked={checked || false}>
         <Icon />
       </StyledCheckbox>
     </CheckboxContainer>

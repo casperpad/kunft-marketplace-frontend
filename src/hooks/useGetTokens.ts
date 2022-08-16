@@ -1,3 +1,4 @@
+import { useMemo } from 'react'
 import {
   useGetTokensQuery,
   GetTokensQuery,
@@ -33,13 +34,16 @@ export default function useGetTokens(
   page?: number,
   limit?: number,
 ) {
-  const { data, error, loading } = useGetTokensQuery({
+  const { data, error, loading, refetch } = useGetTokensQuery({
     variables: { where, page, limit },
   })
 
-  const parsed = parseGetTokensResponse(data)
+  const parsed = useMemo(() => {
+    return parseGetTokensResponse(data)
+  }, [data])
 
   return {
+    refetch,
     data: parsed.data,
     error,
     loading,

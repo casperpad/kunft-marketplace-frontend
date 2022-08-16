@@ -3,7 +3,7 @@ import styled from 'styled-components'
 
 import { Text } from '@/components/Text'
 
-import Checkbox from './Checkbox'
+import Checkbox, { CheckboxProps } from './Checkbox'
 
 const StyledText = styled(Text)<{ disabled: boolean }>`
   color: ${({ disabled, theme }) =>
@@ -18,25 +18,20 @@ const Container = styled.label`
   cursor: pointer;
 `
 
-interface CheckboxItemProps {
+interface CheckboxItemProps extends CheckboxProps {
   text: string
   disabled?: boolean
-  checked: boolean
-  setChecked: React.Dispatch<React.SetStateAction<boolean>>
+  name?: string
 }
 
 export default function CheckboxItem({
   text,
   disabled = false,
-  checked,
-  setChecked,
+  ...props
 }: CheckboxItemProps) {
   return (
     <Container>
-      <Checkbox
-        checked={checked}
-        onChange={(e) => !disabled && setChecked(e.target.checked)}
-      />
+      <Checkbox {...props} />
       <StyledText disabled={disabled}>{text}</StyledText>
     </Container>
   )

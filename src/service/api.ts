@@ -1,4 +1,6 @@
 import axios from 'axios'
+import store from '@/store'
+import { userActions } from '@/store/actions'
 
 // Create an instance of axios
 const api = axios.create({
@@ -21,6 +23,7 @@ api.interceptors.response.use(
   (err) => {
     if (err.response.status === 401) {
       // TODO signout
+      return store.dispatch(userActions.setUser())
     }
     // TODO
     return Promise.reject(err)
