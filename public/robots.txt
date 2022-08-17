@@ -1,3 +1,9 @@
-# https://www.robotstxt.org/robotstxt.html
+# *
 User-agent: *
-Disallow:
+Allow: /
+
+# Host
+Host: https://kunftmarketplace.io
+
+# Sitemaps
+Sitemap: https://kunftmarketplace.io/sitemap.xml
