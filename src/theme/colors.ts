@@ -4,7 +4,7 @@ export const baseColor = {
 
 export const lightColors = {
   ...baseColor,
-  background: '#E5E5E5',
+  background: '#fff',
   backgroundSecondary: '#191919',
   transparent: 'transparent',
   text: '#000000',

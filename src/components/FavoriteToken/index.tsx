@@ -18,6 +18,7 @@ export const StarsButton = styled(DefaultButton)`
   gap: 4px;
   font-weight: 300;
   font-size: 20px;
+  z-index: 1;
 `
 
 interface FavoriteTokenProps {

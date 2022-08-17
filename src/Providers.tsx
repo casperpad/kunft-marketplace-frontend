@@ -44,8 +44,8 @@ export default function Providers({ children, store }: ProvdersProps) {
               <StyledModalProvider backgroundComponent={BlurBackground}>
                 <ModalProvider>
                   <SkeletonTheme
-                    baseColor="#ffffff10"
-                    highlightColor="#ffffff20"
+                    baseColor="#aaaaaa40"
+                    highlightColor="#aaaaaa20"
                   >
                     {children}
                   </SkeletonTheme>

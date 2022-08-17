@@ -1,8 +1,9 @@
-import React, { useCallback, useMemo, useState } from 'react'
-
+/* eslint-disable no-bitwise */
+import React, { useCallback, useMemo, useRef, useState } from 'react'
 import { BigNumberish, formatFixed } from '@ethersproject/bignumber'
 import { CLKeyParameters, CLPublicKey } from 'casper-js-sdk'
 import { useRouter } from 'next/router'
+import Skeleton from 'react-loading-skeleton'
 import styled from 'styled-components'
 
 import { Box } from '@/components/Box'
@@ -11,6 +12,7 @@ import {
   useCasperWeb3Provider,
   useMarketplaceTransaction,
   useModal,
+  useWindowSize,
 } from '@/hooks'
 import { Token } from '@/types'
 
@@ -26,6 +28,10 @@ import {
 
 export default function NFTCard(_token: Token) {
   const [token, setToken] = useState<Token>(_token)
+  const [loading, setLoading] = useState(true)
+  const ref = useRef<HTMLDivElement>(null)
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [width] = useWindowSize()
 
   const {
     id,
@@ -124,14 +130,19 @@ export default function NFTCard(_token: Token) {
   }, [listed, owner, offers, currentAccount])
 
   return (
-    <Wrapper>
+    <Wrapper ref={ref}>
       <StyledImage
         src={metadata?.image || metadata?.logo || collectionImage || ''}
         width={320}
-        height={320}
+        height={loading ? 0 : 320}
         layout="responsive"
         alt={name}
+        onLoadingComplete={() => setLoading(false)}
       />
+
+      {loading ? (
+        <Skeleton width="100%" height={ref.current?.clientWidth || 320} />
+      ) : null}
       <Box px="28px" py={[14, 17]}>
         <NameContainer>
           <Text fontFamily="Castle">{name}</Text>
@@ -145,12 +156,12 @@ export default function NFTCard(_token: Token) {
               : 'Not Available'}
           </Text>
         </ValueContainer>
-        <StyledLink href={`/token/${slug}/${id}`}>Details</StyledLink>
       </Box>
       <SaleButton
         onClick={currentAccount ? handle : connect}
         text={currentAccount ? buttonText : 'Connect Wallet'}
       />
+      <StyledLink href={`/token/${slug}/${id}`} />
     </Wrapper>
   )
 }
@@ -158,4 +169,13 @@ export default function NFTCard(_token: Token) {
 const StyledLink = styled.a`
   text-decoration: underline;
   color: ${({ theme }) => theme.colors.primary};
+  &::before {
+    content: '';
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+  }
 `
