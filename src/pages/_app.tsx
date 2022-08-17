@@ -39,9 +39,9 @@ function MyApp({ Component, pageProps }: AppProps) {
   return (
     <Providers store={store}>
       <DefaultSeo
-        title={meta.SITE_TITLE}
         description={meta.SITE_DESCRIPTION}
-        titleTemplate="KUNFT Marketplace | %s"
+        title={`${meta.SITE_TITLE}`}
+        titleTemplate={`%s | ${meta.SITE_TITLE}`}
         openGraph={{
           type: 'website',
           locale: 'en_IE',

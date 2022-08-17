@@ -1,7 +1,7 @@
 export const navLinks = [
   {
     name: 'Discover',
-    path: '/collection/kunft',
+    path: '/collections/kunft',
   },
   {
     name: 'Create',

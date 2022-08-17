@@ -3,6 +3,9 @@ import 'rc-slider/assets/index.css'
 import styled from 'styled-components'
 
 const StyledSlider = styled(Slider)`
+  margin-top: 28px;
+  margin-bottom: 5px;
+  padding: 4px 8px;
   .rc-slider-track {
     background-color: ${({ theme }) => theme.colors.backgroundSecondary};
     height: 2px;

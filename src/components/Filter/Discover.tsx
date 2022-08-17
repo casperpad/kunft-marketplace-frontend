@@ -2,6 +2,7 @@ import { useState, useCallback } from 'react'
 import { useRouter } from 'next/router'
 
 import styled from 'styled-components'
+import { space, SpaceProps } from 'styled-system'
 import { Box, Flex, BoxProps } from '@/components/Box'
 import { CheckboxItem } from '@/components/Checkbox'
 import { RangeSlider } from '@/components/Slider'
@@ -33,7 +34,7 @@ export default function Filter({
 
   const handleTrait = useCallback(
     (key: string, value: string) => {
-      let trait = router.query[key]
+      let trait = router.query[`metadata_${key}`]
 
       trait =
         trait === undefined ? [] : typeof trait === 'string' ? [trait] : trait
@@ -45,7 +46,7 @@ export default function Filter({
       router.push(
         {
           pathname: router.pathname,
-          query: { ...router.query, [key]: newTrait },
+          query: { ...router.query, [`metadata_${key}`]: newTrait },
         },
         undefined,
         { shallow: true },
@@ -74,8 +75,8 @@ export default function Filter({
     return false
   }
 
-  const traitSelected = (trait: string, value: string) => {
-    const fieldValue = router.query[trait]
+  const traitSelected = (key: string, value: string) => {
+    const fieldValue = router.query[`metadata_${key}`]
 
     if (fieldValue !== undefined) {
       if (typeof fieldValue === 'string' && fieldValue === value) return true
@@ -84,6 +85,34 @@ export default function Filter({
     }
     return false
   }
+
+  const handlePriceFilter = useCallback(() => {
+    //
+    router.push(
+      {
+        pathname: router.pathname,
+        query: {
+          ...router.query,
+          price_payToken: payToken,
+          price_min: minValue,
+          price_max: maxValue,
+        },
+      },
+      undefined,
+      { shallow: true },
+    )
+  }, [minValue, maxValue, payToken, router])
+
+  const handleClearFilters = useCallback(() => {
+    router.push(
+      {
+        pathname: router.pathname,
+        query: { slug: router.query.slug },
+      },
+      undefined,
+      { shallow: true },
+    )
+  }, [router])
 
   return (
     <Container {...props}>
@@ -133,7 +162,7 @@ export default function Filter({
             />
           </CheckboxContainer>
         </Box>
-        <Box mt="10px">
+        <Flex mt="10px" flexDirection="column">
           <Text fontFamily="Avenir" fontSize="25px" fontWeight={500} mb="4px">
             Price
           </Text>
@@ -154,7 +183,14 @@ export default function Filter({
               onValueChange={handleChange}
             />
           </Flex>
-        </Box>
+          <PriceFilterButton onClick={handlePriceFilter}>
+            Apply Price Filter
+          </PriceFilterButton>
+
+          <PriceFilterButton onClick={handleClearFilters} mt="10px">
+            Clear All
+          </PriceFilterButton>
+        </Flex>
       </Flex>
     </Container>
   )
@@ -182,4 +218,17 @@ const Container = styled(Box)<BoxProps>`
   background-color: ${({ theme }) => theme.colors.background};
   max-width: max-content;
   height: max-content;
+`
+
+const PriceFilterButton = styled.button<SpaceProps>`
+  ${space}
+  padding: 4px 8px;
+  border: 1px solid ${({ theme }) => theme.colors.border};
+  border-radius: 12px;
+  transition: opacity 0.3s;
+  font-size: 15px;
+  &:hover {
+    opacity: 0.8;
+    cursor: pointer;
+  }
 `
