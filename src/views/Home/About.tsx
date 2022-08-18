@@ -13,24 +13,9 @@ export default function About() {
         push the boundaries and start creating!
       </Description>
       <ImageContainer>
-        <Image
-          src="/assets/images/Home/About_1.png"
-          alt=""
-          width={320}
-          height={320}
-        />
-        <Image
-          src="/assets/images/Home/About_2.png"
-          alt=""
-          width={320}
-          height={320}
-        />
-        <Image
-          src="/assets/images/Home/About_3.png"
-          alt=""
-          width={320}
-          height={320}
-        />
+        <Image src="/images/Home/About_1.png" alt="" width={320} height={320} />
+        <Image src="/images/Home/About_2.png" alt="" width={320} height={320} />
+        <Image src="/images/Home/About_3.png" alt="" width={320} height={320} />
       </ImageContainer>
     </Flex>
   )

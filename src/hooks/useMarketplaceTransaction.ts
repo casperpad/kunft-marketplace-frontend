@@ -112,7 +112,7 @@ export default function useMarketplaceTransaction(contractHash: string) {
           contractHash,
           tokens,
           currentAccount!,
-          '1000000000',
+          '5000000000',
           payToken,
         )
         showDeployHash(deployHash)
@@ -144,17 +144,21 @@ export default function useMarketplaceTransaction(contractHash: string) {
       if (currentAccount === undefined) return
       try {
         const deployHash = await cancelSellOrder(
-          contractHash,
+          `contract-${contractHash}`,
           tokenIds,
           CLPublicKey.fromHex(currentAccount),
           '5000000000',
         )
         showDeployHash(deployHash)
-        getDeploy(deployHash).then(() => {
-          toast.success(`Transaction confirmed`, {
-            onClick: () => openCsprExplorer(deployHash),
+        getDeploy(deployHash)
+          .then(() => {
+            toast.success(`Transaction confirmed`, {
+              onClick: () => openCsprExplorer(deployHash),
+            })
           })
-        })
+          .catch((error: any) => {
+            toast.error(error.toString())
+          })
       } catch (error: any) {
         toast.error(error.toString())
       }
@@ -312,11 +316,11 @@ export default function useMarketplaceTransaction(contractHash: string) {
       payToken?: string,
       additionalRecipient?: CLKeyParameters,
     ) => {
-      if (payToken)
+      if (payToken && payToken.startsWith('hash-'))
         return await offerTokenERC20(
           tokenId,
           amount,
-          payToken,
+          payToken.slice(5),
           additionalRecipient,
         )
       return await offerTokenCspr(tokenId, amount, additionalRecipient)
@@ -422,17 +426,21 @@ export default function useMarketplaceTransaction(contractHash: string) {
       if (currentAccount === undefined) return
       try {
         const deployHash = await cancelBuyOrder(
-          contractHash,
+          `contract-${contractHash}`,
           tokenId,
           CLPublicKey.fromHex(currentAccount),
           '5000000000',
         )
         showDeployHash(deployHash)
-        getDeploy(deployHash).then(() => {
-          toast.success(`Transaction confirmed`, {
-            onClick: () => openCsprExplorer(deployHash),
+        getDeploy(deployHash)
+          .then(() => {
+            toast.success(`Transaction confirmed`, {
+              onClick: () => openCsprExplorer(deployHash),
+            })
           })
-        })
+          .catch((error: any) => {
+            toast.error(error.toString())
+          })
       } catch (error: any) {
         toast.error(error.toString())
       }

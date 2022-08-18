@@ -25,7 +25,9 @@ export default function Properties({ metadata }: PropertiesProps) {
         {Object.entries(metadata).map(([key, value]) => {
           return (
             <Flex key={key} alignItems="center" justifyContent="space-between">
-              <NameContainer>{key}</NameContainer>
+              <NameContainer>
+                {key.charAt(0).toUpperCase() + key.slice(1)}
+              </NameContainer>
               <ValueContainer>{shorten(value)}</ValueContainer>
             </Flex>
           )

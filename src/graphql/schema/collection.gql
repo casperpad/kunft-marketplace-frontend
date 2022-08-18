@@ -8,6 +8,7 @@ type Collection {
   verified: Boolean!
   promoted: Boolean!
   image: String
+  logo: String
   twitter: String
   discord: String
 }
@@ -31,10 +32,11 @@ type GetCollectionsResponse {
 
 type Slug {
   slug: String!
+  contractHash: String!
 }
 
 type GetCollectionSlugsResponse {
-  slugs: [Slug!]
+  data: [Slug!]
 }
 
 type Query {

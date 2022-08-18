@@ -6,6 +6,7 @@ fragment CollectionFields on Collection {
   symbol
   slug
   image
+  logo
   verified
   promoted
 }

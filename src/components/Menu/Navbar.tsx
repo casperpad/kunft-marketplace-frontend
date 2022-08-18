@@ -83,8 +83,8 @@ export default function Navbar() {
   const menuAvatar = user
     ? user.avatar
       ? user.avatar
-      : '/assets/images/Avatar/Default.svg'
-    : '/assets/images/Avatar/NotConnectedWallet.svg'
+      : '/images/Avatar/Default.svg'
+    : '/images/Avatar/NotConnectedWallet.svg'
 
   const signInOnConnected = useCallback(() => {
     if (currentAccount === undefined) {
@@ -122,7 +122,7 @@ export default function Navbar() {
       <NavbarContainer>
         <Link href="/">
           <Image
-            src="/assets/images/Logo/KUNFTLogo.png"
+            src="/images/Logo/KUNFTLogo.png"
             alt="KUNFT"
             width={101}
             height={57}

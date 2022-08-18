@@ -1,7 +1,8 @@
 import React, { useEffect } from 'react'
 
 import { DefaultSeo } from 'next-seo'
-import { useRouter } from 'next/router'
+import Router, { useRouter } from 'next/router'
+import nProgress from 'nprogress'
 import { ToastContainer } from 'react-toastify'
 import type { AppProps } from 'next/app'
 
@@ -18,6 +19,8 @@ import '../assets/scss/main.scss'
 import '../styles/react-toastify.css'
 // eslint-disable-next-line import/order
 import 'react-loading-skeleton/dist/skeleton.css'
+// eslint-disable-next-line import/order
+import 'nprogress/nprogress.css'
 
 function Auth({ children }: { children: React.ReactNode }) {
   const { user } = useAuth()
@@ -33,6 +36,10 @@ function Auth({ children }: { children: React.ReactNode }) {
   if (user) return <>{children}</>
   return <Spinner />
 }
+
+Router.events.on('routeChangeStart', nProgress.start)
+Router.events.on('routeChangeError', nProgress.done)
+Router.events.on('routeChangeComplete', nProgress.done)
 
 function MyApp({ Component, pageProps }: AppProps) {
   const store = useStore(pageProps.initialReduxState)

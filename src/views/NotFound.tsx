@@ -15,11 +15,11 @@ export default function NotFound() {
       <Text mb="20px" fontSize="50px">
         Page Not Found.
       </Text>
-      <Link href="/">
-        <Text color="primary" fontSize="30px">
-          Back Home
-        </Text>
-      </Link>
+      <StyledLink href="/">Back Home</StyledLink>
     </StyledNotFound>
   )
 }
+
+const StyledLink = styled(Link)`
+  font-size: 20px;
+`

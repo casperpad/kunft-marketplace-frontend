@@ -1,8 +1,15 @@
 import { BsEye } from 'react-icons/bs'
 import styled from 'styled-components'
 
-import { Flex, Text, FavoriteToken, Address } from '@/components'
+import {
+  Flex,
+  Text,
+  FavoriteToken,
+  Address,
+  CasperExplorerLink,
+} from '@/components'
 import { Token } from '@/types'
+import { getNFTExplorerUrl } from '@/utils/casper'
 
 interface NameProps {
   token: Token
@@ -18,12 +25,18 @@ export default function Name({ token, setToken }: NameProps) {
           <Text mr="4px">Owned by</Text>
           <Address address={token.owner} />
         </Flex>
-        <Flex flexDirection="row">
+        <Flex flexDirection="row" gap={8}>
           <FavoriteToken token={token} setToken={setToken} />
           <ViewButton color="transparent">
             <BsEye />
             <Text color="primary">{token.viewed}</Text>
           </ViewButton>
+          <CasperExplorerLink
+            href={getNFTExplorerUrl(
+              token.collection.contractPackageHash,
+              token.id,
+            )}
+          />
         </Flex>
       </DataContainer>
     </Container>

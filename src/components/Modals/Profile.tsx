@@ -29,7 +29,7 @@ export default function Profile({
   onSave,
   ...user
 }: ProfileProps) {
-  const profileAvatar = user.avatar || '/assets/images/Avatar/Default.svg'
+  const profileAvatar = user.avatar || '/images/Avatar/Default.svg'
   const [name, setName] = useState(user.name || '')
   const [email, setEmail] = useState(user.email || '')
   const [avatar, setAvatar] = useState(user.avatar)

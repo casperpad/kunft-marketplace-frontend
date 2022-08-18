@@ -72,12 +72,14 @@ export default function Token({ token: _token }: { token: IToken }) {
             )}
           </PriceContainer>
           <ImageContainer>
-            <StyledImage
-              src={token.metadata.image || token.collection.image || ''}
-              alt={token.name}
-              width={405}
-              height={405}
-            />
+            {token.metadata.image || token.collection.image ? (
+              <StyledImage
+                src={token.metadata.image || token.collection.image || ''}
+                alt={token.name}
+                width={405}
+                height={405}
+              />
+            ) : null}
           </ImageContainer>
         </RowContainer>
         <RowContainer>

@@ -35,8 +35,12 @@ export default function Offer({ token }: OfferProps) {
     token.collection.contractHash,
   )
   const offer = useCallback(async () => {
-    const _ = await handleOfferToken(token.id, parseFixed(offerPrice, 9))
-  }, [handleOfferToken, token.id, offerPrice])
+    const _ = await handleOfferToken(
+      token.id,
+      parseFixed(offerPrice, 9),
+      offerToken,
+    )
+  }, [handleOfferToken, token.id, offerPrice, offerToken])
 
   useEffect(() => {
     async function fetchData() {

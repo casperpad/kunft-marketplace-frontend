@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { BigNumberish } from '@ethersproject/bignumber'
+import { BigNumberish, parseFixed } from '@ethersproject/bignumber'
 import styled from 'styled-components'
 
 import { acceptableTokens } from '@/config'
@@ -20,7 +20,7 @@ interface SellProps {
   ) => Promise<void>
 }
 
-export default function Sell({ sellToken }: SellProps) {
+export default function Sell({ token, sellToken }: SellProps) {
   const [sellPrice, setSellPrice] = useState('')
   const [payToken, setPayToken] = useState(acceptableTokens[1].contractHash)
 
@@ -49,7 +49,7 @@ export default function Sell({ sellToken }: SellProps) {
       </PriceContainer>
       <TransactionButton
         title="Sell"
-        onClick={sellToken}
+        onClick={() => sellToken(token.id, parseFixed(sellPrice, 9), payToken)}
         disabled={sellPrice.length === 0}
       />
     </Container>

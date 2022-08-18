@@ -1,8 +1,8 @@
-import { useCallback, useMemo } from 'react'
-import { formatFixed } from '@ethersproject/bignumber'
+import { useCallback } from 'react'
 import styled from 'styled-components'
 
-import { Flex, Text, TransactionButton } from '@/components'
+import { Flex, Text, TokenDisplay, TransactionButton } from '@/components'
+import { NATIVE_HASH } from '@/config'
 import { useMarketplaceTransaction } from '@/hooks'
 import { Token } from '@/types'
 
@@ -46,18 +46,23 @@ export default function Buy({ token }: BuyProps) {
     if (token.listed) await buyToken(token)
   }, [buyToken, token])
 
-  const price = useMemo(() => {
-    if (!token.price) return undefined
-    // TODO update decimal
-    return formatFixed(token.price.price, 9)
-  }, [token.price])
-
   return (
     <Container>
       <PriceContainer>
         <Text fontSize="16px">Current Price</Text>
         <Text fontSize="30px" fontWeight={700} mt="-10px">
-          {price || 'Not Available'}
+          {token.price ? (
+            <TokenDisplay
+              contractHash={
+                token.price.payToken
+                  ? `hash-${token.price.payToken}`
+                  : NATIVE_HASH
+              }
+              amount={token.price.price}
+            />
+          ) : (
+            'Not Available'
+          )}
         </Text>
       </PriceContainer>
       <ButtonContainer>

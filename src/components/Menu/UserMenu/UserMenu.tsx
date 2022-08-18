@@ -28,7 +28,7 @@ export default function UserMenu(props: UserMenuProps) {
 
   const profileAvatar = avatar
     ? (avatar as string)
-    : '/assets/images/Avatar/Default.svg'
+    : '/images/Avatar/Default.svg'
 
   return (
     <UserMenuContainer>

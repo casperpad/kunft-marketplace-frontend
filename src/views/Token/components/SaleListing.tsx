@@ -1,6 +1,13 @@
-import { useCallback, useMemo } from 'react'
+import { useCallback } from 'react'
 import { CLPublicKey } from 'casper-js-sdk'
-import { Flex, TransactionButton, Text, Address } from '@/components'
+import {
+  Flex,
+  TransactionButton,
+  Text,
+  Address,
+  TokenDisplay,
+} from '@/components'
+import { NATIVE_HASH } from '@/config'
 import { useCasperWeb3Provider, useMarketplaceTransaction } from '@/hooks'
 import { Token } from '@/types'
 
@@ -11,19 +18,14 @@ interface SaleListingProps {
 }
 
 function TableView({ token }: SaleListingProps) {
-  const { sales, collection, owner } = token
+  const { sales, collection } = token
   const { currentAccount } = useCasperWeb3Provider()
-  const { buyToken } = useMarketplaceTransaction(collection.contractHash)
+  const { buyToken, cancelSell } = useMarketplaceTransaction(
+    collection.contractHash,
+  )
   const buy = useCallback(async () => {
     const _ = await buyToken(token)
   }, [buyToken, token])
-
-  const isOwner = useMemo(() => {
-    if (!currentAccount) return false
-    return (
-      CLPublicKey.fromHex(currentAccount).toAccountHashStr().slice(13) === owner
-    )
-  }, [currentAccount, owner])
 
   return (
     <StyledTable>
@@ -44,17 +46,37 @@ function TableView({ token }: SaleListingProps) {
               new Date(b.createdAt).getUTCMilliseconds(),
           )
           .map((sale) => {
+            const isCreator = currentAccount
+              ? sale.creator ===
+                CLPublicKey.fromHex(currentAccount).toAccountHashStr().slice(13)
+              : false
             return (
               <tr key={sale.startTime}>
-                <td>{sale.price}</td>
-                <td>{sale.price}</td>
+                <td>
+                  <TokenDisplay
+                    contractHash={
+                      sale.payToken ? `hash-${sale.payToken}` : NATIVE_HASH
+                    }
+                    amount={sale.price}
+                  />
+                </td>
+                <td>-</td>
                 <td>{new Date(sale.createdAt).toLocaleDateString('en-US')}</td>
                 <td>
                   <Address address={sale.creator} />
                 </td>
                 <td>
-                  {sale.status === 'pending' && !isOwner ? (
-                    <TransactionButton title="Buy Now" onClick={buy} />
+                  {sale.status === 'pending' ? (
+                    isCreator ? (
+                      <TransactionButton
+                        title="Cancel Listing"
+                        onClick={() => cancelSell([token.id])}
+                      />
+                    ) : (
+                      <TransactionButton title="Buy Now" onClick={buy} />
+                    )
+                  ) : sale.status === 'canceled' ? (
+                    'Canceled'
                   ) : null}
                 </td>
               </tr>

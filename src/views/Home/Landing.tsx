@@ -79,7 +79,7 @@ export default function Landing() {
     <Layout>
       <LandingImageContainer right="0px" top="253px">
         <LandingImage
-          src="/assets/images/Home/Landing_2.png"
+          src="/images/Home/Landing_2.png"
           alt=""
           width={235}
           height={235}
@@ -88,7 +88,7 @@ export default function Landing() {
       <TitleContainer>
         <LandingImageContainer left="37%" top="55px">
           <LandingImage
-            src="/assets/images/Home/Landing_1.png"
+            src="/images/Home/Landing_1.png"
             alt=""
             width={235}
             height={235}
@@ -96,7 +96,7 @@ export default function Landing() {
         </LandingImageContainer>
         <LandingImageContainer left="60%" bottom="30px">
           <LandingImage
-            src="/assets/images/Home/Landing_3.png"
+            src="/images/Home/Landing_3.png"
             alt=""
             width={235}
             height={235}
@@ -104,7 +104,7 @@ export default function Landing() {
         </LandingImageContainer>
         <LandingImageContainer left="0px" bottom="58px">
           <LandingImage
-            src="/assets/images/Home/Landing_4.png"
+            src="/images/Home/Landing_4.png"
             alt=""
             width={235}
             height={235}

@@ -12,16 +12,21 @@ export default function PromotedCollection({ slug: _ }: PromotedCollection) {
   const { data, loading } = useGetTokens({ promoted: true })
   return (
     <Box>
-      <Title>{loading ? <Skeleton /> : data?.tokens[0].collection.name}</Title>
+      <Title>{loading ? <Skeleton /> : data?.tokens[0]?.collection.name}</Title>
       <Description>
-        {loading ? <Skeleton /> : data?.tokens[0].collection.description}
+        {loading ? <Skeleton /> : data?.tokens[0]?.collection.description}
       </Description>
       <Container>
         {loading ? (
           <Skeleton count={5} />
         ) : (
           data?.tokens.map((token) => {
-            return <NFTCard key={token.id} {...token} />
+            return (
+              <NFTCard
+                key={`${token.collection.contractPackageHash}-${token.id}`}
+                {...token}
+              />
+            )
           })
         )}
       </Container>

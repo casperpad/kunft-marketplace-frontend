@@ -11,7 +11,7 @@ const CollectionButton = styled(StyledButton)`
 `
 
 const Container = styled(Flex)`
-  background: url('/assets/images/Home/Collection.png');
+  background: url('/images/Home/Collection.png');
   background-size: 300% 100%;
   background-position-x: 50%;
   flex-direction: column;

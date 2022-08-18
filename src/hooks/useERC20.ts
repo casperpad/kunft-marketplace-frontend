@@ -19,7 +19,7 @@ export default function useERC20({
   )
 
   const [name, setName] = useState('')
-  const [symbol, setSymbol] = useState('')
+  const [symbol, setSymbol] = useState<string | undefined>()
   const [decimals, setDecimals] = useState(0)
   const [totalSupply, setTotalSupply] = useState<BigNumberish>(0)
 

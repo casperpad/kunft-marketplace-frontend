@@ -32,7 +32,7 @@ export default function Profile() {
   const [rating, setRating] = useState(0)
   const [showImportTokenDialog, setShowImportTokenDialog] = useState(false)
   const { user } = useAppSelector((state) => state.user)
-  const profileAvatar = user?.avatar || '/assets/images/Avatar/Default.svg'
+  const profileAvatar = user?.avatar || '/images/Avatar/Default.svg'
 
   const handleRating = (rate: number) => {
     setRating(rate)

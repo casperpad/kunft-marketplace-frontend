@@ -20,7 +20,7 @@ export default function Footer() {
     <Container>
       <ImageContainer>
         <Image
-          src="/assets/images/Logo/KUNFTLogo_White.png"
+          src="/images/Logo/KUNFTLogo_White.png"
           alt=""
           width={160}
           height={60}

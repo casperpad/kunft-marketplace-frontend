@@ -39,7 +39,7 @@ export default function Collection({
           images: collection.image
             ? [
                 {
-                  url: collection.image || '',
+                  url: collection.image,
                   width: 800,
                   height: 600,
                   alt: collection.name,

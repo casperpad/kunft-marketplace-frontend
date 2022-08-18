@@ -1,6 +1,13 @@
 import { useCallback, useEffect, useState } from 'react'
 import { CLAccountHash, CLPublicKey, decodeBase16 } from 'casper-js-sdk'
-import { Address, Flex, Text, TransactionButton } from '@/components'
+import {
+  Address,
+  Flex,
+  Text,
+  TransactionButton,
+  TokenDisplay,
+} from '@/components'
+import { NATIVE_HASH } from '@/config'
 import {
   useCasperWeb3Provider,
   useCEP47,
@@ -18,7 +25,9 @@ function TableView({ token: { collection, offers, id } }: OfferListingProps) {
   const [isOwner, setIsOwner] = useState(false)
   const [loading, setLoading] = useState(true)
   const { currentAccount } = useCasperWeb3Provider()
-  const { acceptOffer } = useMarketplaceTransaction(collection.contractHash)
+  const { acceptOffer, cancelOffer } = useMarketplaceTransaction(
+    collection.contractHash,
+  )
   const { getOwnerOf } = useCEP47(collection.contractHash)
   const accept = useCallback(
     async (bidder: string) => {
@@ -54,21 +63,39 @@ function TableView({ token: { collection, offers, id } }: OfferListingProps) {
         </thead>
         <tbody>
           {offers.map((offer) => {
+            const isCreator = currentAccount
+              ? offer.creator ===
+                CLPublicKey.fromHex(currentAccount).toAccountHashStr().slice(13)
+              : false
             return (
               <tr key={offer.startTime}>
-                <td>{offer.price}</td>
-                <td>{offer.price}</td>
+                <td>
+                  <TokenDisplay
+                    contractHash={
+                      offer.payToken ? `hash-${offer.payToken}` : NATIVE_HASH
+                    }
+                    amount={offer.price}
+                  />
+                </td>
+                <td>-</td>
                 <td>
                   <Address address={offer.creator} />
                 </td>
                 <td>
                   {loading ? (
                     'Loading'
-                  ) : offer.status === 'pending' && isOwner ? (
-                    <TransactionButton
-                      title="Accept Offer"
-                      onClick={() => accept(offer.creator)}
-                    />
+                  ) : offer.status === 'pending' ? (
+                    isOwner ? (
+                      <TransactionButton
+                        title="Accept Offer"
+                        onClick={() => accept(offer.creator)}
+                      />
+                    ) : isCreator ? (
+                      <TransactionButton
+                        title="Cancel Offer"
+                        onClick={() => cancelOffer(id)}
+                      />
+                    ) : null
                   ) : null}
                 </td>
               </tr>
