@@ -3,7 +3,6 @@ import { useMemo } from 'react'
 import { configureStore, combineReducers } from '@reduxjs/toolkit'
 import { useDispatch, useSelector, TypedUseSelectorHook } from 'react-redux'
 import {
-  createPersistoid,
   persistReducer,
   FLUSH,
   REHYDRATE,
@@ -76,16 +75,12 @@ export const initializeStore = (preloadedState = undefined) => {
   return _store
 }
 
-// store = initializeStore()
-store = makeStore()
+store = initializeStore()
 
 export type RootState = ReturnType<typeof rootReducer>
 export type AppDispatch = typeof store.dispatch
 export const useAppDispatch: () => AppDispatch = useDispatch
 export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector
-
-const persistoid = createPersistoid(persistConfig)
-store.subscribe(() => persistoid.update(store.getState()))
 
 export default store
 

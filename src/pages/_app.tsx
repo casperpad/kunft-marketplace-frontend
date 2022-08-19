@@ -58,20 +58,30 @@ function MyApp(props: AppProps) {
           url: meta.SITE_URL,
           site_name: meta.SITE_NAME,
         }}
-        // twitter={{
-        //   handle: '@handle',
-        //   site: '@site',
-        //   cardType: 'summary_large_image',
-        // }}
       />
       <ResetCSS />
       <GlobalStyle />
       <PersistGate loading={null} persistor={persistor}>
-        <App {...props} />
+        {() => <App {...props} />}
       </PersistGate>
+
+      {/*  */}
     </Providers>
   )
 }
+
+// MyApp.getInitialProps = async (appContext: AppContext) => {
+//   const appProps = await NextApp.getInitialProps(appContext)
+//   // initialize redux store on server side
+//   const reduxStore = initializeStore()
+
+//   appProps.pageProps = {
+//     ...appProps.pageProps,
+//     initialReduxState: reduxStore.getState(),
+//   }
+
+//   return appProps
+// }
 
 type NextPageWithLayout = NextPage & {
   Layout?: React.FC<React.PropsWithChildren<unknown>>

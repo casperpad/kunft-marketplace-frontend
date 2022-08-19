@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { BsHeart, BsHeartFill } from 'react-icons/bs'
 import { toast } from 'react-toastify'
 import styled from 'styled-components'
@@ -33,7 +33,7 @@ export default function FavoriteToken({ token, setToken }: FavoriteTokenProps) {
     loading: favoriteTokenMutationLoading,
   } = useFavoriteToken()
   const { user } = useAuth()
-
+  const [userStarred, setUserStarred] = useState(false)
   const handleStarClick = useCallback(async () => {
     if (!user) return
     await favoriteTokenMutation({
@@ -51,9 +51,9 @@ export default function FavoriteToken({ token, setToken }: FavoriteTokenProps) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [favoriteTokenMutationLoading])
 
-  const userStarred = useMemo(() => {
-    if (!user) return false
-    return token.favoritedUsers.includes(user.id)
+  useEffect(() => {
+    if (!user) setUserStarred(false)
+    else setUserStarred(token.favoritedUsers.includes(user.id))
   }, [user, token.favoritedUsers])
 
   return (
