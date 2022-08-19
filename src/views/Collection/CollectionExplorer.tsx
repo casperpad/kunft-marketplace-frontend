@@ -3,20 +3,13 @@ import clone from 'lodash/clone'
 import forIn from 'lodash/forIn'
 import uniqWith from 'lodash/uniqWith'
 import { useRouter } from 'next/router'
+import InfiniteScroll from 'react-infinite-scroll-component'
 import styled from 'styled-components'
-import { Grid, NFTCard } from '@/components'
+import { NFTCard } from '@/components'
 import { useGetTokensLazy } from '@/hooks'
 import { Collection as ICollection, Token } from '@/types'
 import { isEqual } from '@/utils/token'
 // import { useRouter } from '@/utils/route'
-
-const DiscoverContainer = styled(Grid)`
-  display: grid;
-  width: 100%;
-  gap: 20px;
-  margin: 0px 40px 0px 40px;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-`
 
 export default function CollectionExplorer({
   collection: _,
@@ -24,10 +17,11 @@ export default function CollectionExplorer({
   collection: ICollection
 }) {
   const { query } = useRouter()
-  const [page] = useState(1)
+  const [page, setPage] = useState(1)
   const [limit] = useState(20)
   const { loading, getTokens } = useGetTokensLazy()
   const [tokens, setTokens] = useState<Token[]>([])
+  const [hasMore, setHasMore] = useState(true)
 
   const where = useMemo(() => {
     const preferWhere = clone(query) as any
@@ -58,10 +52,14 @@ export default function CollectionExplorer({
 
   const fetchTokens = useCallback(async () => {
     if (loading) return
-
     const { data } = await getTokens(where, page, limit)
     if (data) {
       setTokens((prev) => uniqWith([...prev, ...data.tokens], isEqual))
+      if (data.paginationInfo.hasNext) {
+        setPage(data.paginationInfo.currentPage + 1)
+      } else {
+        setHasMore(false)
+      }
     }
   }, [getTokens, where, page, limit, loading])
 
@@ -77,14 +75,28 @@ export default function CollectionExplorer({
   }, [query])
 
   return (
-    <DiscoverContainer>
+    <StyledInfiniteScroll
+      dataLength={tokens.length}
+      next={fetchTokens}
+      hasMore={hasMore}
+      loader={<h4>Loading...</h4>}
+    >
       {tokens.map((token) => (
         <NFTCard
           key={`${token.collection.contractPackageHash}-${token.id}`}
           {...token}
         />
       ))}
-      {loading ? 'Loading...' : null}
-    </DiscoverContainer>
+    </StyledInfiniteScroll>
   )
 }
+
+// @ts-ignore
+const StyledInfiniteScroll = styled(InfiniteScroll)`
+  display: grid;
+  height: 100%;
+  gap: 20px;
+  padding-bottom: 20px;
+  margin: 0px 40px 0px 40px;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+`
