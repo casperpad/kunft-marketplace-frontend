@@ -52,6 +52,7 @@ function MyApp(props: AppProps) {
         description={meta.SITE_DESCRIPTION}
         title={`${meta.SITE_TITLE}`}
         titleTemplate={`%s | ${meta.SITE_TITLE}`}
+        defaultTitle={`${meta.SITE_TITLE}`}
         openGraph={{
           type: 'website',
           locale: 'en_IE',
