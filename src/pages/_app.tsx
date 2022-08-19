@@ -1,9 +1,11 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, Fragment } from 'react'
 
+import { NextPage } from 'next'
 import { DefaultSeo } from 'next-seo'
 import Router, { useRouter } from 'next/router'
 import nProgress from 'nprogress'
 import { ToastContainer } from 'react-toastify'
+import { PersistGate } from 'redux-persist/integration/react'
 import type { AppProps } from 'next/app'
 
 import { Navbar, Footer, Spinner } from '@/components'
@@ -11,7 +13,7 @@ import { meta } from '@/config'
 import { useAuth } from '@/hooks'
 import GlobalStyle, { ResetCSS } from '@/styles/Global'
 import Providers from '../Providers'
-import { useStore } from '../store'
+import { useStore, persistor } from '../store'
 
 // eslint-disable-next-line import/order
 import '../assets/scss/main.scss'
@@ -41,7 +43,8 @@ Router.events.on('routeChangeStart', nProgress.start)
 Router.events.on('routeChangeError', nProgress.done)
 Router.events.on('routeChangeComplete', nProgress.done)
 
-function MyApp({ Component, pageProps }: AppProps) {
+function MyApp(props: AppProps) {
+  const { pageProps } = props
   const store = useStore(pageProps.initialReduxState)
   return (
     <Providers store={store}>
@@ -63,6 +66,28 @@ function MyApp({ Component, pageProps }: AppProps) {
       />
       <ResetCSS />
       <GlobalStyle />
+      <PersistGate loading={null} persistor={persistor}>
+        <App {...props} />
+      </PersistGate>
+    </Providers>
+  )
+}
+
+type NextPageWithLayout = NextPage & {
+  Layout?: React.FC<React.PropsWithChildren<unknown>>
+  mp?: boolean
+}
+
+type AppPropsWithLayout = AppProps & {
+  Component: NextPageWithLayout
+}
+
+const ProductionErrorBoundary =
+  process.env.NODE_ENV === 'production' ? Fragment : Fragment
+
+const App = ({ Component, pageProps }: AppPropsWithLayout) => {
+  return (
+    <ProductionErrorBoundary>
       <Navbar />
       {pageProps.protected ? (
         <Auth>
@@ -82,7 +107,7 @@ function MyApp({ Component, pageProps }: AppProps) {
         closeOnClick
         pauseOnHover
       />
-    </Providers>
+    </ProductionErrorBoundary>
   )
 }
 
