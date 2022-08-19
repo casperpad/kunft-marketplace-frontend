@@ -67,7 +67,7 @@ function MyApp(props: AppProps) {
       <ResetCSS />
       <GlobalStyle />
       <PersistGate loading={null} persistor={persistor}>
-        {() => <App {...props} />}
+        <App {...props} />
       </PersistGate>
     </Providers>
   )
