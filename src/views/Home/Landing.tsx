@@ -1,13 +1,29 @@
 import Image from 'next/image'
+import { BiChevronRight } from 'react-icons/bi'
 import styled from 'styled-components'
 
-import { Flex, StyledButton, Layout } from '@/components'
+import { Flex, Link, Layout } from '@/components'
 
-const StrollButton = styled(StyledButton)`
+export const StyledLink = styled(Link)`
+  background: ${({ theme }) => theme.colors.primary};
+  display: flex;
+  align-items: center;
+  border-radius: 50px;
   position: absolute;
+  font-size: 25px;
   bottom: 115px;
   right: 0px;
   z-index: 3;
+  padding: 1rem 1.5rem;
+  transition: 300ms all;
+  &:hover {
+    color: black;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    svg {
+      transition: 300ms all;
+      transform: translateX(20%);
+    }
+  }
 `
 
 const LandingImage = styled(Image)`
@@ -115,7 +131,10 @@ export default function Landing() {
           <br />
           THE FUTURE COLLIDE
         </h1>
-        <StrollButton text="Go on a Stroll" />
+        <StyledLink href="/explorer-collections">
+          Go on a Stroll
+          <BiChevronRight />
+        </StyledLink>
       </TitleContainer>
     </Layout>
   )
