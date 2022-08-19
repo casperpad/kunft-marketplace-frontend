@@ -20,7 +20,7 @@ fragment PaginationFields on PaginationInfo {
   hasNext
 }
 
-query getCollections($query: String!, $page: Int!, $limit: Int!) {
+query getCollections($query: String, $page: Int, $limit: Int) {
   getCollections(query: $query, page: $page, limit: $limit) {
     collections {
       ...CollectionFields

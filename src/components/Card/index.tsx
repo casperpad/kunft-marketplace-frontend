@@ -1,2 +1,2 @@
 export * from './NFT'
-export * from './Collection'
+export { default as CollectionCard } from './Collection'

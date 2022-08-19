@@ -22,6 +22,10 @@ export const SaleButton = styled(CardButton)`
 export const StyledImage = styled(Image)`
   border-radius: 10px 10px 0px 0px;
   border-bottom: 1px solid ${({ theme }) => theme.colors.border};
+  transition: all 1s;
+  &:hover {
+    transform: scale(1.15);
+  }
 `
 
 const StyledFlex = styled(Flex)`

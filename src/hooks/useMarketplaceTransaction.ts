@@ -147,7 +147,7 @@ export default function useMarketplaceTransaction(contractHash: string) {
           `contract-${contractHash}`,
           tokenIds,
           CLPublicKey.fromHex(currentAccount),
-          '5000000000',
+          '1500000000',
         )
         showDeployHash(deployHash)
         getDeploy(deployHash)

@@ -1,15 +1,11 @@
 export const navLinks = [
   {
-    name: 'Discover',
-    path: '/collections/kunft',
+    name: 'Explorer',
+    path: '/explorer-collections',
   },
   {
     name: 'Create',
     path: '/create',
-  },
-  {
-    name: 'Collections',
-    path: '/collections',
   },
   {
     name: 'TopNFTs',

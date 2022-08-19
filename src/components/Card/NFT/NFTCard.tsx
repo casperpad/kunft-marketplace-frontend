@@ -131,14 +131,16 @@ export default function NFTCard(_token: Token) {
 
   return (
     <Wrapper ref={ref}>
-      <StyledImage
-        src={metadata?.image || metadata?.logo || collectionImage || ''}
-        width={320}
-        height={loading ? 0 : 320}
-        layout="responsive"
-        alt={name}
-        onLoadingComplete={() => setLoading(false)}
-      />
+      <StyledLink href={`/token/${slug}/${id}`}>
+        <StyledImage
+          src={metadata?.image || metadata?.logo || collectionImage || ''}
+          width={320}
+          height={loading ? 0 : 320}
+          layout="responsive"
+          alt={name}
+          onLoadingComplete={() => setLoading(false)}
+        />
+      </StyledLink>
 
       {loading ? (
         <Skeleton width="100%" height={ref.current?.clientWidth || 320} />
@@ -161,7 +163,6 @@ export default function NFTCard(_token: Token) {
         onClick={currentAccount ? handle : connect}
         text={currentAccount ? buttonText : 'Connect Wallet'}
       />
-      <StyledLink href={`/token/${slug}/${id}`} />
     </Wrapper>
   )
 }
@@ -169,6 +170,7 @@ export default function NFTCard(_token: Token) {
 const StyledLink = styled.a`
   text-decoration: underline;
   color: ${({ theme }) => theme.colors.primary};
+
   &::before {
     content: '';
     position: absolute;

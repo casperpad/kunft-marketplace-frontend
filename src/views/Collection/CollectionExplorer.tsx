@@ -1,11 +1,13 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import clone from 'lodash/clone'
 import forIn from 'lodash/forIn'
+import uniqWith from 'lodash/uniqWith'
 import { useRouter } from 'next/router'
 import styled from 'styled-components'
 import { Grid, NFTCard } from '@/components'
 import { useGetTokensLazy } from '@/hooks'
 import { Collection as ICollection, Token } from '@/types'
+import { isEqual } from '@/utils/token'
 // import { useRouter } from '@/utils/route'
 
 const DiscoverContainer = styled(Grid)`
@@ -59,7 +61,7 @@ export default function CollectionExplorer({
 
     const { data } = await getTokens(where, page, limit)
     if (data) {
-      setTokens((prev) => [...prev, ...data.tokens])
+      setTokens((prev) => uniqWith([...prev, ...data.tokens], isEqual))
     }
   }, [getTokens, where, page, limit, loading])
 
