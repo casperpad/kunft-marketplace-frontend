@@ -50,7 +50,6 @@ function MyApp(props: AppProps) {
     <Providers store={store}>
       <DefaultSeo
         description={meta.SITE_DESCRIPTION}
-        title={`${meta.SITE_TITLE}`}
         titleTemplate={`%s | ${meta.SITE_TITLE}`}
         defaultTitle={`${meta.SITE_TITLE}`}
         openGraph={{
@@ -68,7 +67,7 @@ function MyApp(props: AppProps) {
       <ResetCSS />
       <GlobalStyle />
       <PersistGate loading={null} persistor={persistor}>
-        <App {...props} />
+        {() => <App {...props} />}
       </PersistGate>
     </Providers>
   )
