@@ -5,7 +5,7 @@ import {
   Flex,
   Text,
   TransactionButton,
-  TokenDisplay,
+  ERC20Balance,
 } from '@/components'
 import { NATIVE_HASH } from '@/config'
 import {
@@ -14,6 +14,7 @@ import {
   useMarketplaceTransaction,
 } from '@/hooks'
 import { Token } from '@/types'
+import { findAcceptableTokens } from '@/utils'
 
 import { Container, StyledTable, TitleContainer } from './styles'
 
@@ -70,10 +71,12 @@ function TableView({ token: { collection, offers, id } }: OfferListingProps) {
             return (
               <tr key={offer.startTime}>
                 <td>
-                  <TokenDisplay
-                    contractHash={
-                      offer.payToken ? `hash-${offer.payToken}` : NATIVE_HASH
-                    }
+                  <ERC20Balance
+                    token={findAcceptableTokens({
+                      contractHash: offer.payToken
+                        ? `hash-${offer.payToken}`
+                        : NATIVE_HASH,
+                    })}
                     amount={offer.price}
                   />
                 </td>

@@ -1,10 +1,11 @@
 import { useCallback } from 'react'
 import styled from 'styled-components'
 
-import { Flex, Text, TokenDisplay, TransactionButton } from '@/components'
+import { Flex, Text, ERC20Balance, TransactionButton } from '@/components'
 import { NATIVE_HASH } from '@/config'
 import { useMarketplaceTransaction } from '@/hooks'
 import { Token } from '@/types'
+import { findAcceptableTokens } from '@/utils'
 
 const PriceContainer = styled(Flex)`
   flex-direction: column;
@@ -52,12 +53,12 @@ export default function Buy({ token }: BuyProps) {
         <Text fontSize="16px">Current Price</Text>
         <Text fontSize="30px" fontWeight={700} mt="-10px">
           {token.price ? (
-            <TokenDisplay
-              contractHash={
-                token.price.payToken
+            <ERC20Balance
+              token={findAcceptableTokens({
+                contractHash: token.price.payToken
                   ? `hash-${token.price.payToken}`
-                  : NATIVE_HASH
-              }
+                  : NATIVE_HASH,
+              })}
               amount={token.price.price}
             />
           ) : (

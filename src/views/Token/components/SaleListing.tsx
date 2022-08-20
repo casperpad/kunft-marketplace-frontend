@@ -5,11 +5,12 @@ import {
   TransactionButton,
   Text,
   Address,
-  TokenDisplay,
+  ERC20Balance,
 } from '@/components'
 import { NATIVE_HASH } from '@/config'
 import { useCasperWeb3Provider, useMarketplaceTransaction } from '@/hooks'
 import { Token } from '@/types'
+import { findAcceptableTokens } from '@/utils'
 
 import { Container, StyledTable, TitleContainer } from './styles'
 
@@ -53,10 +54,12 @@ function TableView({ token }: SaleListingProps) {
             return (
               <tr key={sale.startTime}>
                 <td>
-                  <TokenDisplay
-                    contractHash={
-                      sale.payToken ? `hash-${sale.payToken}` : NATIVE_HASH
-                    }
+                  <ERC20Balance
+                    token={findAcceptableTokens({
+                      contractHash: sale.payToken
+                        ? `hash-${sale.payToken}`
+                        : NATIVE_HASH,
+                    })}
                     amount={sale.price}
                   />
                 </td>
