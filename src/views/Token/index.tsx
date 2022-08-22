@@ -42,7 +42,11 @@ export default function Token({ token: _token }: { token: IToken }) {
           description: token.collection.description,
           images: [
             {
-              url: token.metadata.image || token.collection.image || '',
+              url:
+                token.metadata.image ||
+                token.metadata.logo ||
+                token.collection.image ||
+                '',
               width: 800,
               height: 600,
               alt: token.name,

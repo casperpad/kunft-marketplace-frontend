@@ -40,7 +40,10 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
       },
     })
 
-    return { props: { collection: data?.getCollections?.collections[0] } }
+    return {
+      props: { collection: data?.getCollections?.collections[0] },
+      revalidate: 10,
+    }
   } catch (error: any) {
     console.error(error, { depth: null })
     return {

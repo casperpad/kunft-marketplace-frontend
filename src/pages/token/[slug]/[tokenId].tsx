@@ -3,7 +3,6 @@ import { GetServerSideProps } from 'next'
 
 import { asToken } from '@/types'
 import TokenViews from '@/views/Token'
-// import { client } from '../../../Providers'
 
 export default TokenViews
 
