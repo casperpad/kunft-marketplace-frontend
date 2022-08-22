@@ -126,11 +126,11 @@ export default function Landing() {
             height={235}
           />
         </LandingImageContainer>
-        <h1>
+        <StyledIntro>
           WHERE ART AND
           <br />
           THE FUTURE COLLIDE
-        </h1>
+        </StyledIntro>
         <StyledLink href="/explorer-collections">
           Go on a Stroll
           <BiChevronRight />
@@ -139,3 +139,7 @@ export default function Landing() {
     </Layout>
   )
 }
+
+const StyledIntro = styled.h1`
+  text-align: center;
+`

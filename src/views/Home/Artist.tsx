@@ -24,7 +24,7 @@ export default function Artist() {
   )
 }
 
-const Title = styled.h1`
+const Title = styled.h2`
   font-size: 30px;
   color: white;
   ${({ theme }) => theme.mediaQueries.md} {

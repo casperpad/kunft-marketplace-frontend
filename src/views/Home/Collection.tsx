@@ -60,7 +60,7 @@ export default function Collection() {
   )
 }
 
-const Title = styled.h1`
+const Title = styled.h2`
   font-size: 40px;
   color: white;
   text-align: center;

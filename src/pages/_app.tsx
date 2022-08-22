@@ -57,6 +57,11 @@ function MyApp(props: AppProps) {
           locale: 'en_IE',
           url: meta.SITE_URL,
           site_name: meta.SITE_NAME,
+          images: [
+            {
+              url: `${meta.SITE_URL}/logo.jpg`,
+            },
+          ],
         }}
       />
       <ResetCSS />

@@ -21,7 +21,7 @@ export default function About() {
   )
 }
 
-const Title = styled.h1`
+const Title = styled.h2`
   text-align: center;
   margin-bottom: 50px;
 
