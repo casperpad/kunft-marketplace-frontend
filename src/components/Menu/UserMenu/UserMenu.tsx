@@ -15,7 +15,6 @@ import {
   ItemContainer as UserMenuItem,
   StyledText,
   UserMenuDivider,
-  StyledImage,
 } from './UserMenu.styles'
 
 interface UserMenuProps {
