@@ -69,66 +69,6 @@ export const LazyBackgrounds: React.FC<React.PropsWithChildren> = () => {
   );
 };
 
-const StyledBox = styled(Box)`
-  border: 1px solid ${({ theme }) => theme.colors.cardBorder};
-  flex-basis: 100px;
-  text-align: center;
-`;
-
-export const TokenImages: React.FC<React.PropsWithChildren> = () => {
-  const tokens = Object.values(tokenList).filter((token) => !!token?.address);
-  return (
-    <Flex flexWrap="wrap">
-      {tokens.map((token) => {
-        const src = `https://pancakeswap.finance/images/tokens/${token.address[56]}.png`;
-
-        return (
-          <StyledBox key={token.symbol} p="16px">
-            <Text fontSize="14px" color="textSubtle">
-              {token.symbol}
-            </Text>
-            <TokenImage src={src} height={64} width={64} title={token.symbol} />
-          </StyledBox>
-        );
-      })}
-    </Flex>
-  );
-};
-
-export const TokenPairImages: React.FC<React.PropsWithChildren> = () => {
-  const tokens = Object.values(tokenList).filter((token) => !!token?.address);
-  return (
-    <Flex flexWrap="wrap">
-      {tokens.map((token) => {
-        const randomTokenIndex = random(0, tokens.length - 1);
-        const primarySrc = `https://pancakeswap.finance/images/tokens/${token.address[56]}.png`;
-        const secondarySrc = `https://pancakeswap.finance/images/tokens/${tokens[randomTokenIndex].address[56]}.png`;
-
-        return (
-          <StyledBox key={token.symbol} p="16px">
-            <TokenPairImage
-              primarySrc={primarySrc}
-              secondarySrc={secondarySrc}
-              height={64}
-              width={64}
-              title={token.symbol}
-              mb="16px"
-            />
-            <TokenPairImage
-              variant="inverted"
-              primarySrc={secondarySrc}
-              secondarySrc={primarySrc}
-              height={64}
-              width={64}
-              title={token.symbol}
-            />
-          </StyledBox>
-        );
-      })}
-    </Flex>
-  );
-};
-
 export const ProfileAvatar: React.FC<React.PropsWithChildren> = () => {
   return (
     <div>

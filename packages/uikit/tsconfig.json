@@ -16,6 +16,6 @@
     "noEmit": false,
     "jsx": "react-jsx"
   },
-  "include": ["src"],
+  "include": ["src", "src/styled.d.ts"],
   "exclude": ["node_modules", "src/**/*.stories.tsx", "src/__tests__/**/*", "src/testHelpers.tsx"]
 }
