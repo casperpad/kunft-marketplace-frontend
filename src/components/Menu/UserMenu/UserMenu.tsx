@@ -1,5 +1,6 @@
 import React from 'react'
 
+import { ProfileAvatar } from '@kunftmarketplace/uikit'
 import { IoSettingsOutline } from 'react-icons/io5'
 import { RiLogoutBoxRLine } from 'react-icons/ri'
 
@@ -26,14 +27,10 @@ export default function UserMenu(props: UserMenuProps) {
   const { avatar, onSettingClick } = props
   const { signOut, user } = useAuth()
 
-  const profileAvatar = avatar
-    ? (avatar as string)
-    : '/images/Avatar/Default.svg'
-
   return (
     <UserMenuContainer>
       <UserProfile>
-        <StyledImage src={profileAvatar} alt="" width={73} height={74} />
+        <ProfileAvatar src={avatar} width={73} height={74} />
         <Box>
           <Address variant="secondary" address={user!.publicKey} />
           <Link href="/profile">
