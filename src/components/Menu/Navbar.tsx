@@ -1,4 +1,6 @@
 import { useCallback, useEffect, useState } from 'react'
+import { useWalletModal } from '@kunftmarketplace/uikit'
+import { useTranslation } from 'next-i18next'
 import Image from 'next/image'
 import { useRouter } from 'next/router'
 import { HiMenu } from 'react-icons/hi'
@@ -72,14 +74,15 @@ const NavbarContainer = styled.nav`
 
 export default function Navbar() {
   const { pathname } = useRouter()
-  const { signIn, user, setUser } = useAuth()
-  const { currentAccount, connect } = useCasperWeb3Provider()
-  const [requestConnect, setRequestConnect] = useState(false)
-  const size = useWindowSize()
-
   const [modalShow, setModalShow] = useState(false)
   const [show, setShow] = useState(false)
   const [menuShow, setMenuShow] = useState(false)
+  const [requestConnect, setRequestConnect] = useState(false)
+  const { signIn, user, setUser } = useAuth()
+  const { currentAccount, connect } = useCasperWeb3Provider()
+  const size = useWindowSize()
+  const { t } = useTranslation()
+
   const menuAvatar = user
     ? user.avatar
       ? user.avatar
@@ -94,6 +97,16 @@ export default function Navbar() {
       signIn()
     }
   }, [connect, currentAccount, signIn])
+
+  const connectWalletById = useCallback(
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    (connectorId: string) => {
+      signInOnConnected()
+    },
+    [signInOnConnected],
+  )
+
+  const { onPresentConnectModal } = useWalletModal(connectWalletById, t)
 
   useEffect(() => {
     setMenuShow(false)
@@ -128,6 +141,7 @@ export default function Navbar() {
             height={57}
           />
         </Link>
+
         <MenuContainer>
           <ShowMenu onClick={() => setMenuShow(!menuShow)}>
             <HiMenu size={25} />
@@ -158,7 +172,7 @@ export default function Navbar() {
               alt=""
               width={30}
               height={30}
-              onClick={user ? undefined : signInOnConnected}
+              onClick={user ? undefined : onPresentConnectModal}
             />
           </Flex>
         </MenuContainer>

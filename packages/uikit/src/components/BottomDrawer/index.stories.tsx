@@ -15,8 +15,9 @@ export const Default: React.FC<React.PropsWithChildren> = () => {
   const content = (
     <Box px="16px" pt="22px" height="100%" overflowY="auto">
       <Text fontSize="20px">Example</Text>
-      {[...Array(10).keys()].map(() => (
-        <Text mb="16px">
+      {[...Array(10).keys()].map((value, index) => (
+        // eslint-disable-next-line react/no-array-index-key
+        <Text key={`text-${index}`} mb="16px">
           Lorem ipsum dolor sit amet consectetur adipisicing elit. Culpa optio et laudantium ipsum ipsam nesciunt, odio
           hic quibusdam molestias magnam. Tempora saepe ea quidem quo, commodi sint tempore iste explicabo!
         </Text>
@@ -33,6 +34,7 @@ export const Default: React.FC<React.PropsWithChildren> = () => {
       </Text>
       <Button onClick={() => setIsOpen(true)}>Show bottom drawer</Button>
       {[...Array(10).keys()].map(() => (
+        // eslint-disable-next-line react/jsx-key
         <Text mb="16px">
           Lorem ipsum dolor sit amet consectetur adipisicing elit. Culpa optio et laudantium ipsum ipsam nesciunt, odio
           hic quibusdam molestias magnam. Tempora saepe ea quidem quo, commodi sint tempore iste explicabo!

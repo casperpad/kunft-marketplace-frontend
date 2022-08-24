@@ -1,32 +1,34 @@
 import React from 'react'
 import { ApolloClient, InMemoryCache, ApolloProvider } from '@apollo/client'
+import {
+  ModalProvider,
+  light,
+  ThemeProvider as UIKitThemeProvider,
+} from '@kunftmarketplace/uikit'
 import { SkeletonTheme } from 'react-loading-skeleton'
 import { Provider } from 'react-redux'
 import { Store } from 'redux'
-import styled, { ThemeProvider } from 'styled-components'
-import {
-  ModalProvider as StyledModalProvider,
-  BaseModalBackground,
-} from 'styled-react-modal'
+import { ThemeProvider } from 'styled-components'
 
-import { ModalProvider } from '@/components'
 import CasperWeb3Provider from './providers/CasperWeb3Provider'
 
-import { light } from './theme'
-
-const StyledThemeProvider = (props: any) => {
-  return <ThemeProvider theme={light} {...props} />
+const StyledThemeProvider: React.FC<React.PropsWithChildren> = ({
+  children,
+  ...props
+}) => {
+  return (
+    <UIKitThemeProvider theme={light} {...props}>
+      <ThemeProvider theme={light} {...props}>
+        {children}
+      </ThemeProvider>
+    </UIKitThemeProvider>
+  )
 }
 
 interface ProvdersProps {
   children: React.ReactNode
   store: Store
 }
-
-const BlurBackground = styled(BaseModalBackground)`
-  backdrop-filter: blur(3px);
-  background-color: rgb(0, 0, 0, 0);
-`
 
 export const client = new ApolloClient({
   uri: '/api/graphql',
@@ -39,13 +41,9 @@ export default function Providers({ children, store }: ProvdersProps) {
       <ApolloProvider client={client}>
         <CasperWeb3Provider>
           <StyledThemeProvider>
-            <StyledModalProvider backgroundComponent={BlurBackground}>
-              <ModalProvider>
-                <SkeletonTheme baseColor="#aaaaaa40" highlightColor="#aaaaaa20">
-                  {children}
-                </SkeletonTheme>
-              </ModalProvider>
-            </StyledModalProvider>
+            <SkeletonTheme baseColor="#aaaaaa40" highlightColor="#aaaaaa20">
+              <ModalProvider>{children}</ModalProvider>
+            </SkeletonTheme>
           </StyledThemeProvider>
         </CasperWeb3Provider>
       </ApolloProvider>

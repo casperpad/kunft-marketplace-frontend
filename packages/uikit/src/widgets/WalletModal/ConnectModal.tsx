@@ -1,12 +1,11 @@
 import React, { useState } from "react";
-import styled, { useTheme } from "styled-components";
+import styled from "styled-components";
 import Box from "../../components/Box/Box";
 import Grid from "../../components/Box/Grid";
 import { Button } from "../../components/Button";
 import Heading from "../../components/Heading/Heading";
 import Text from "../../components/Text/Text";
 import EXTERNAL_LINK_PROPS from "../../util/externalLinkProps";
-import getThemeValue from "../../util/getThemeValue";
 import { ModalBody, ModalCloseButton, ModalContainer, ModalHeader, ModalTitle } from "../Modal";
 import config, { walletLocalStorageKey } from "./config";
 import { Config, Login } from "./types";
@@ -61,7 +60,6 @@ const ConnectModal: React.FC<React.PropsWithChildren<Props>> = ({
   connectors,
 }) => {
   const [showMore, setShowMore] = useState(false);
-  const theme = useTheme();
   const sortedConfig = getPreferredConfig(connectors || config);
   // Filter out WalletConnect if user is inside TrustWallet built-in browser
   const walletsToShow = window.ethereum?.isTrust
@@ -71,7 +69,7 @@ const ConnectModal: React.FC<React.PropsWithChildren<Props>> = ({
 
   return (
     <ModalContainer $minWidth="320px">
-      <ModalHeader background={getThemeValue(theme, "colors.gradients.bubblegum")}>
+      <ModalHeader>
         <ModalTitle>
           <Heading>{t("Connect Wallet")}</Heading>
         </ModalTitle>
@@ -94,7 +92,7 @@ const ConnectModal: React.FC<React.PropsWithChildren<Props>> = ({
           </Text>
           <Button
             as="a"
-            href="https://docs.pancakeswap.finance/get-started/connection-guide"
+            href="https://docs.kunftmarketplace.io/get-started/connection-guide"
             variant="subtle"
             width="100%"
             {...EXTERNAL_LINK_PROPS}

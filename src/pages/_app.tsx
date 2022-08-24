@@ -1,6 +1,7 @@
 import React, { useEffect, Fragment } from 'react'
 
 import { NextPage } from 'next'
+// import { appWithTranslation } from 'next-i18next'
 import { DefaultSeo } from 'next-seo'
 import Router, { useRouter } from 'next/router'
 import nProgress from 'nprogress'
@@ -127,3 +128,4 @@ const App = ({ Component, pageProps }: AppPropsWithLayout) => {
 }
 
 export default MyApp
+// export default appWithTranslation(MyApp)

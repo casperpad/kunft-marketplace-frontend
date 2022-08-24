@@ -87,7 +87,7 @@ const StyledButton = styled.button<BaseButtonProps>`
       &::before {
         content: "${decorator.text}";
         position: absolute;
-        border-bottom: 20px solid ${decorator.backgroundColor ?? theme.colors.secondary};
+        border-bottom: 20px solid ${decorator.backgroundColor ?? theme.colors.backgroundSecondary};
         border-left: 34px solid transparent;
         border-right: 12px solid transparent;
         height: 0;

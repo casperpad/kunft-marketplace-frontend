@@ -1,12 +1,12 @@
-import Metamask from "../../components/Svg/Icons/Metamask";
+import Casper from "../../components/Svg/Icons/Casper";
 
 import { Config, ConnectorNames } from "./types";
 
 const connectors: Config[] = [
   {
-    title: "Metamask",
-    icon: Metamask,
-    connectorId: ConnectorNames.MetaMask,
+    title: "Casper Signer",
+    icon: Casper,
+    connectorId: ConnectorNames.CasperSigner,
     priority: 1,
     href: "https://metamask.app.link/dapp/pancakeswap.finance/",
   },

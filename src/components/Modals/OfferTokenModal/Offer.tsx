@@ -45,7 +45,7 @@ export default function Offer({ token, offerToken }: OfferProps) {
             Highest Offer
           </Text>
           <Text fontFamily="Avenir" fontSize="18px" fontWeight={700}>
-            50,531 KNFT
+            -
           </Text>
         </Flex>
       </PriceContainer>

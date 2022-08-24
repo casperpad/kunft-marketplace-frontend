@@ -1,5 +1,6 @@
 import { Breakpoints, Colors, MediaQueries, Shadows, ZIndices } from "./types";
 
+export { ThemeProvider } from "styled-components";
 export interface KUNFTTheme {
   isDark: boolean;
   colors: Colors;

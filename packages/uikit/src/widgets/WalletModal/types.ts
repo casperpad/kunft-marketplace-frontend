@@ -2,12 +2,9 @@ import { FC } from "react";
 import { SvgProps } from "../../components/Svg/types";
 
 export enum ConnectorNames {
-  MetaMask = "metaMask",
-  Injected = "injected",
-  WalletConnect = "walletConnect",
-  BSC = "bsc",
-  Blocto = "blocto",
-  WalletLink = "coinbaseWallet",
+  CasperSigner = "casperSigner",
+  Ledger = "ledger",
+  TorusWallet = "torusWallet",
 }
 
 export type Login = (connectorId: ConnectorNames) => void;

@@ -1,7 +1,7 @@
 /* eslint-disable react/jsx-no-constructed-context-values */
 import React, { createContext, useEffect, useRef, useState } from "react";
 import { AnimatePresence, domMax, LazyMotion, m } from "framer-motion";
-import styled from "styled-components";
+import styled, { useTheme } from "styled-components";
 import { mountAnimation, unmountAnimation } from "../../components/BottomDrawer/styles";
 import { Overlay } from "../../components/Overlay";
 import {
@@ -71,6 +71,9 @@ const ModalProvider: React.FC<React.PropsWithChildren> = ({ children }) => {
   const [nodeId, setNodeId] = useState("");
   const [closeOnOverlayClick, setCloseOnOverlayClick] = useState(true);
   const animationRef = useRef<HTMLDivElement>(null);
+
+  const theme = useTheme();
+  console.log(theme);
 
   useEffect(() => {
     const setViewportHeight = () => {

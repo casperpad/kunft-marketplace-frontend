@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "description": "KUNFT Marketplace UI Kit",
   "main": "src/index.ts",
+  "sideEffects": false,
   "keywords": [
     "KUNFT",
     "Marketplace",
@@ -13,8 +14,9 @@
   "scripts": {
     "start": "yarn storybook",
     "build:rollup": "rm -rf ./dist && rollup -c && tsc -d --emitDeclarationOnly --declarationDir dist",
+    "build": "rollup -c",
     "watch": "rollup -c -w",
-    "lint": "eslint 'src/**/*.{js,jsx,ts,tsx}'",
+    "lint": "eslint \"src/**/*.{js,jsx,ts,tsx}\"",
     "format:check": "prettier --check --loglevel error 'src/**/*.{js,jsx,ts,tsx}'",
     "format:write": "prettier --write 'src/**/*.{js,jsx,ts,tsx}'",
     "storybook": "start-storybook -p 6006",

@@ -1,4 +1,4 @@
-import { useCallback, useState, useEffect, useMemo } from 'react'
+import { useCallback, useState, useEffect } from 'react'
 import { parseFixed } from '@ethersproject/bignumber'
 import { CLPublicKey } from 'casper-js-sdk'
 import styled from 'styled-components'
@@ -19,12 +19,7 @@ interface OfferProps {
 export default function Offer({ token }: OfferProps) {
   const [offerPrice, setOfferPrice] = useState('')
   const [offerToken, setOfferToken] = useState(acceptableTokens[1].contractHash)
-  const {
-    balanceOf,
-    allowances,
-    approve,
-    loading: erc20Loading,
-  } = useERC20({
+  const { balanceOf, loading: erc20Loading } = useERC20({
     contractHash: offerToken,
   })
   const [balance, setBalance] = useState(0)
@@ -48,7 +43,6 @@ export default function Offer({ token }: OfferProps) {
       setLoading(true)
       if (offerToken.startsWith('hash-')) {
         const balance = await balanceOf(CLPublicKey.fromHex(currentAccount))
-        console.log(balance)
         setBalance(balance.toNumber())
       }
       setLoading(false)
@@ -79,7 +73,7 @@ export default function Offer({ token }: OfferProps) {
             Highest Offer
           </Text>
           <Text fontFamily="Avenir" fontSize="18px" fontWeight={700}>
-            50,531 KNFT
+            -
           </Text>
         </Flex>
       </PriceContainer>

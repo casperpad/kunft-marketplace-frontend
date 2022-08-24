@@ -43,7 +43,7 @@ export default function Sell({ token }: SellProps) {
             Highest Sell
           </Text>
           <Text fontFamily="Avenir" fontSize="18px" fontWeight={700}>
-            50,531 KNFT
+            -
           </Text>
         </Flex>
       </PriceContainer>
