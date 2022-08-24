@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react'
-import { useWalletModal, Image } from '@kunftmarketplace/uikit'
+import { useWalletModal, useModal, Image } from '@kunftmarketplace/uikit'
 import { useTranslation } from 'next-i18next'
 // import Image from 'next/image'
 import { useRouter } from 'next/router'
@@ -9,7 +9,7 @@ import styled from 'styled-components'
 
 import { Flex } from '@/components/Box'
 import Link from '@/components/Link'
-import { ProfileModal as Modal, ProfileSubmitProps } from '@/components/Modals'
+import { ProfileModal, ProfileSubmitProps } from '@/components/Modals'
 import { navLinks } from '@/config/constants/data'
 import { useCasperWeb3Provider, useAuth, useWindowSize } from '@/hooks'
 import { authApis } from '@/service'
@@ -74,7 +74,7 @@ const NavbarContainer = styled.nav`
 
 export default function Navbar() {
   const { pathname } = useRouter()
-  const [modalShow, setModalShow] = useState(false)
+
   const [show, setShow] = useState(false)
   const [menuShow, setMenuShow] = useState(false)
   const [requestConnect, setRequestConnect] = useState(false)
@@ -125,74 +125,66 @@ export default function Navbar() {
       const user = await authApis.updateInfo(info)
       setUser(user)
       toast.success('User info updated successfully')
-      setModalShow(false)
     },
     [setUser],
   )
 
+  const [onPresentModal] = useModal(
+    <ProfileModal onSave={onSave} user={user} />,
+  )
   return (
-    <>
-      <NavbarContainer>
-        <Link href="/">
-          <Image
-            src="/images/Logo/KUNFTLogo.png"
-            alt="KUNFT"
-            width={101}
-            height={57}
-          />
-        </Link>
-
-        <MenuContainer>
-          <ShowMenu onClick={() => setMenuShow(!menuShow)}>
-            <HiMenu size={25} />
-          </ShowMenu>
-          <MobileMenu show={menuShow} />
-          <Menus>
-            {navLinks.map((item) => {
-              const active = pathname.indexOf(item.path) > -1
-              return (
-                <Link href={item.path} key={item.name} active={active}>
-                  {item.name}
-                </Link>
-              )
-            })}
-          </Menus>
-          <Flex
-            width="70px"
-            height="70px"
-            justifyContent="center"
-            alignItems="center"
-            ml="-20px"
-            onMouseEnter={() => setShow(true)}
-            onMouseLeave={() => setShow(false)}
-            onClick={() => setShow(!show)}
-          >
-            <StyledAvatar
-              src={menuAvatar}
-              alt=""
-              width={30}
-              height={30}
-              onClick={user ? undefined : onPresentConnectModal}
-            />
-          </Flex>
-        </MenuContainer>
-        {user && show && (
-          <ProfileMenu
-            onMouseEnter={() => setShow(true)}
-            onMouseLeave={() => setShow(false)}
-          >
-            <UserMenu onSettingClick={setModalShow} avatar={user.avatar} />
-          </ProfileMenu>
-        )}
-      </NavbarContainer>
-      {user && (
-        <Modal
-          setShow={setModalShow}
-          show={modalShow}
-          onSave={onSave}
-          {...user}
+    <NavbarContainer>
+      <Link href="/">
+        <Image
+          src="/images/Logo/KUNFTLogo.png"
+          alt="KUNFT"
+          width={101}
+          height={57}
         />
+      </Link>
+
+      <MenuContainer>
+        <ShowMenu onClick={() => setMenuShow(!menuShow)}>
+          <HiMenu size={25} />
+        </ShowMenu>
+        <MobileMenu show={menuShow} />
+        <Menus>
+          {navLinks.map((item) => {
+            const active = pathname.indexOf(item.path) > -1
+            return (
+              <Link href={item.path} key={item.name} active={active}>
+                {item.name}
+              </Link>
+            )
+          })}
+        </Menus>
+        <Flex
+          width="70px"
+          height="70px"
+          justifyContent="center"
+          alignItems="center"
+          ml="-20px"
+          onMouseEnter={() => setShow(true)}
+          onMouseLeave={() => setShow(false)}
+          onClick={() => setShow(!show)}
+        >
+          <StyledAvatar
+            src={menuAvatar}
+            alt=""
+            width={30}
+            height={30}
+            onClick={user ? undefined : onPresentConnectModal}
+          />
+        </Flex>
+      </MenuContainer>
+      {user && show && (
+        <ProfileMenu
+          onMouseEnter={() => setShow(true)}
+          onMouseLeave={() => setShow(false)}
+        >
+          <UserMenu onSettingClick={onPresentModal} avatar={user.avatar} />
+        </ProfileMenu>
       )}
-    </>
+    </NavbarContainer>
   )
 }

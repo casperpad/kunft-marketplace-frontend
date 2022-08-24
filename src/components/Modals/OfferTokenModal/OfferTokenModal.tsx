@@ -1,9 +1,9 @@
 import React from 'react'
 import { BigNumberish } from '@ethersproject/bignumber'
+import { Modal, InjectedModalProps } from '@kunftmarketplace/uikit'
 import { CLKeyParameters } from 'casper-js-sdk'
 import { Token } from '@/types'
 import { Flex } from '../../Box'
-import { Modal, InjectedModalProps } from '../Modal'
 
 import Offer from './Offer'
 

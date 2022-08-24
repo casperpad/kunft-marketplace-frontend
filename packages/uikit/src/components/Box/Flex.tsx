@@ -6,6 +6,7 @@ import { FlexProps } from "./types";
 const Flex = styled(Box)<FlexProps>`
   display: flex;
   ${flexbox}
+  ${(props) => (props.gap ? `gap: ${props.gap}px;` : "")}
 `;
 
 export default Flex;

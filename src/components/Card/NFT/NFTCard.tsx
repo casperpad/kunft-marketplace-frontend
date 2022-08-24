@@ -1,6 +1,7 @@
 /* eslint-disable no-bitwise */
 import React, { useCallback, useMemo, useRef, useState } from 'react'
 import { BigNumberish, formatFixed } from '@ethersproject/bignumber'
+import { useModal } from '@kunftmarketplace/uikit'
 import { CLKeyParameters, CLPublicKey } from 'casper-js-sdk'
 import { useRouter } from 'next/router'
 import Skeleton from 'react-loading-skeleton'
@@ -11,7 +12,6 @@ import { Text } from '@/components/Text'
 import {
   useCasperWeb3Provider,
   useMarketplaceTransaction,
-  useModal,
   useWindowSize,
 } from '@/hooks'
 import { Token } from '@/types'

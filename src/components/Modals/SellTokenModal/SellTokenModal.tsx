@@ -1,7 +1,7 @@
 import React from 'react'
 import { BigNumberish } from '@ethersproject/bignumber'
+import { Modal, InjectedModalProps } from '@kunftmarketplace/uikit'
 import { Token } from '@/types'
-import { Modal, InjectedModalProps } from '../Modal'
 
 import Sell from './Sell'
 

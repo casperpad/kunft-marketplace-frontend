@@ -1,6 +1,6 @@
-export { default as ProfileModal } from './Profile'
+export { default as ProfileModal } from './ProfileSettings'
 export { default as ImportTokenModal } from './ImportToken'
-export type { SubmitProps as ProfileSubmitProps } from './Profile'
-export * from './Modal'
+export type { SubmitProps as ProfileSubmitProps } from './ProfileSettings'
+
 export * from './OfferTokenModal'
 export * from './SellTokenModal'

@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
+import { Modal, InjectedModalProps } from '@kunftmarketplace/uikit'
 import { useForm } from 'react-hook-form'
 import { toast } from 'react-toastify'
 import styled from 'styled-components'
-import Modal from 'styled-react-modal'
 
 import { Box } from '@/components/Box'
 import { CardButton } from '@/components/Button'
@@ -23,35 +23,7 @@ const SaveButton = styled(CardButton)`
   transform: translateY(100%);
 `
 
-const MyModal = Modal.styled``
-
-const StyledModal = styled(MyModal)`
-  position: relative;
-  background: ${({ theme }) => theme.colors.backgroundSecondary};
-  border-radius: 10px 10px 0px 0px;
-  margin: auto 10px;
-
-  min-width: 350px;
-  z-index: 20;
-
-  padding: 30px 47px 38px 48px;
-
-  ${({ theme }) => theme.mediaQueries.md} {
-    padding: 38px 57px 48px 64px;
-  }
-
-  ${({ theme }) => theme.mediaQueries.lg} {
-    padding: 44px 67px 56px 74px;
-  }
-
-  ${({ theme }) => theme.mediaQueries.xl2} {
-    padding: 44px 77px 56px 84px;
-  }
-`
-
-interface ImportTokenProps {
-  show: boolean
-  setShow: React.Dispatch<React.SetStateAction<boolean>>
+interface ImportTokenProps extends InjectedModalProps {
   onImport: any
 }
 
@@ -61,11 +33,7 @@ interface SubmitProps {
   tokenId: string
 }
 
-export default function ImportToken({
-  show,
-  setShow,
-  onImport,
-}: ImportTokenProps) {
+export default function ImportToken({ onImport, ...props }: ImportTokenProps) {
   const [contractHash, setContractHash] = useState<string | undefined>()
   const [tokenId, setTokenId] = useState<string | undefined>()
   const [loading] = useState(false)
@@ -76,21 +44,13 @@ export default function ImportToken({
     formState: { errors },
   } = useForm<SubmitProps>()
 
-  const closeModal = () => {
-    setShow(false)
-  }
-
   const onSubmit = handleSubmit(() => {
     if (isValidHash(contractHash!)) onImport(contractHash, tokenId)
     else toast.error('Invalid hash')
   })
 
   return (
-    <StyledModal
-      isOpen={show}
-      onBackgroundClick={closeModal}
-      onEscapeKeydown={closeModal}
-    >
+    <Modal title="Import token" {...props}>
       <form onSubmit={onSubmit}>
         <InputContainer>
           <Text fontSize="15px" color="background">
@@ -124,6 +84,6 @@ export default function ImportToken({
           disabled={loading}
         />
       </form>
-    </StyledModal>
+    </Modal>
   )
 }

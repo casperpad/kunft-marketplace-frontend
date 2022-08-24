@@ -6,11 +6,11 @@ import { ImageProps } from "./types";
 import Wrapper from "./Wrapper";
 
 const StyledImage = styled.img`
-  height: 100%;
+  /* height: 100%; */
   left: 0;
   /* position: absolute; */
   top: 0;
-  width: 100%;
+  /* width: 100%; */
 `;
 
 const Image: React.FC<React.PropsWithChildren<ImageProps>> = ({ src, alt, width, height, ...props }) => {
@@ -45,7 +45,7 @@ const Image: React.FC<React.PropsWithChildren<ImageProps>> = ({ src, alt, width,
 
   return (
     <Wrapper ref={imgRef} height={height} width={width} {...props}>
-      {isLoaded ? <StyledImage src={src} alt={alt} /> : <Placeholder />}
+      {isLoaded ? <StyledImage src={src} alt={alt} height={height} width={width} /> : <Placeholder />}
     </Wrapper>
   );
 };
