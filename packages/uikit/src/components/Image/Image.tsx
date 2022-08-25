@@ -1,53 +1,55 @@
-import React, { useEffect, useRef, useState } from "react";
+import React from "react";
+import LazyLoad from "react-lazyload";
 import styled from "styled-components";
-import observerOptions from "./options";
 import Placeholder from "./Placeholder";
 import { ImageProps } from "./types";
-import Wrapper from "./Wrapper";
 
 const StyledImage = styled.img`
-  /* height: 100%; */
+  height: 100%;
   left: 0;
-  /* position: absolute; */
   top: 0;
-  /* width: 100%; */
+  width: 100%;
+  object-fit: cover;
 `;
 
-const Image: React.FC<React.PropsWithChildren<ImageProps>> = ({ src, alt, width, height, ...props }) => {
-  const imgRef = useRef<HTMLDivElement>(null);
-  const [isLoaded, setIsLoaded] = useState(false);
+const Image: React.FC<React.PropsWithChildren<ImageProps>> = ({
+  src,
+  alt,
+  width,
+  height,
+  display = "fixed",
+  ...props
+}) => {
+  const refPlaceholder = React.useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    let observer: IntersectionObserver;
-    const isSupported = typeof window === "object" && window.IntersectionObserver;
-
-    if (imgRef.current && isSupported) {
-      observer = new window.IntersectionObserver((entries) => {
-        entries.forEach((entry) => {
-          const { isIntersecting } = entry;
-          if (isIntersecting) {
-            setIsLoaded(true);
-            if (typeof observer?.disconnect === "function") {
-              observer.disconnect();
-            }
-          }
-        });
-      }, observerOptions);
-      observer.observe(imgRef.current);
-    }
-
-    return () => {
-      if (typeof observer?.disconnect === "function") {
-        observer.disconnect();
-      }
-    };
-  }, [src]);
+  const removePlaceholder = () => {
+    refPlaceholder.current?.remove();
+  };
 
   return (
-    <Wrapper ref={imgRef} height={height} width={width} {...props}>
-      {isLoaded ? <StyledImage src={src} alt={alt} height={height} width={width} /> : <Placeholder />}
+    <Wrapper $width={display === "fixed" ? width : undefined} $height={display === "fixed" ? height : undefined}>
+      <Placeholder ref={refPlaceholder} />
+      <LazyLoad>
+        <StyledImage
+          src={src}
+          alt={alt}
+          height={height}
+          width={width}
+          onLoad={removePlaceholder}
+          onError={removePlaceholder}
+          {...props}
+        />
+      </LazyLoad>
     </Wrapper>
   );
 };
+
+const Wrapper = styled.div<{ $width?: number; $height?: number }>`
+  ${({ $height }) => ($height ? `max-height: ${$height}px;` : "")};
+  ${({ $width }) => ($width ? `max-width: ${$width}px;` : "")};
+  position: relative;
+  width: 100%;
+  object-fit: cover;
+`;
 
 export default Image;

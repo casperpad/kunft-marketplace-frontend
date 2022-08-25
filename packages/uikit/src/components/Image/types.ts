@@ -10,6 +10,7 @@ export interface WrapperProps extends SpaceProps, HTMLAttributes<HTMLDivElement>
 export interface ImageProps extends ImgHTMLAttributes<HTMLImageElement>, SpaceProps {
   width: number;
   height: number;
+  display?: "fixed" | "cover";
   wrapperProps?: WrapperProps;
 }
 

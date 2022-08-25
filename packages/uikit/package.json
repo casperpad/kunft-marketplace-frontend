@@ -50,6 +50,7 @@
     "@types/lodash": "^4.14.168",
     "@types/react": "^18.0.17",
     "@types/react-dom": "^18.0.6",
+    "@types/react-lazyload": "^3.2.0",
     "@types/react-router-dom": "^5.1.7",
     "@vue/compiler-sfc": "3.2.31",
     "babel-jest": "^27.5.1",
@@ -79,6 +80,7 @@
     "framer-motion": "6.5.1",
     "lodash": "^4.17.20",
     "react-device-detect": "^2.2.2",
+    "react-lazyload": "^3.2.0",
     "react-popper": "^2.2.5",
     "styled-system": "^5.1.5",
     "tslib": "^2.2.0"

@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import KUNFTPlaceholder from "../Svg/Icons/KUNFTPlaceholder";
 import BackgroundImage from "./BackgroundImage";
-import { BackgroundImageProps } from "./types";
+import { ImageProps } from "./types";
 
 const StyledProfileAvatar = styled(BackgroundImage)`
   border-radius: 50%;
@@ -13,7 +13,7 @@ const StyledKUNFTPlaceholder = styled(KUNFTPlaceholder)`
   width: 100%;
 `;
 
-const ProfileAvatar: React.FC<React.PropsWithChildren<BackgroundImageProps>> = (props) => (
+const ProfileAvatar: React.FC<React.PropsWithChildren<ImageProps>> = (props) => (
   <StyledProfileAvatar loadingPlaceholder={<StyledKUNFTPlaceholder />} {...props} />
 );
 
