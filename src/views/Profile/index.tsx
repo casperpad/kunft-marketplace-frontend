@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from 'react'
+import { useModal } from '@kunftmarketplace/uikit'
 import { CLPublicKey } from 'casper-js-sdk'
 import uniqWith from 'lodash/uniqWith'
 import { Rating } from 'react-simple-star-rating'
@@ -30,8 +31,9 @@ import {
 
 export default function Profile() {
   const [rating, setRating] = useState(0)
-  const [showImportTokenDialog, setShowImportTokenDialog] = useState(false)
+
   const { user } = useAppSelector((state) => state.user)
+
   const profileAvatar = user?.avatar || '/images/Avatar/Default.svg'
 
   const handleRating = (rate: number) => {
@@ -50,7 +52,6 @@ export default function Profile() {
   const handleImportToken = useCallback(
     async (contractHash: string, tokenId: string) => {
       const _ = await userApis.addToken(contractHash, tokenId)
-      setShowImportTokenDialog(false)
     },
     [],
   )
@@ -61,6 +62,10 @@ export default function Profile() {
     )
     toast.success(result)
   }, [user])
+
+  const [onPresentImportModal] = useModal(
+    <ImportTokenModal onImport={handleImportToken} />,
+  )
 
   useEffect(() => {
     if (loading || !data) return
@@ -102,7 +107,7 @@ export default function Profile() {
         </NFTContainer>
       </Flex>
 
-      <AddButton onClick={() => setShowImportTokenDialog(true)} />
+      <AddButton onClick={() => onPresentImportModal()} />
       <StyledButton
         text="Import all token(*experimental)"
         link={false}
@@ -111,11 +116,6 @@ export default function Profile() {
             pending: 'Adding tokens...',
           })
         }
-      />
-      <ImportTokenModal
-        show={showImportTokenDialog}
-        setShow={setShowImportTokenDialog}
-        onImport={handleImportToken}
       />
     </CustomLayout>
   )

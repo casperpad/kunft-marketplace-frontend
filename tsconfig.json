@@ -6,9 +6,9 @@
     "noFallthroughCasesInSwitch": true,
     "downlevelIteration": true,
     "target": "es5",
-    "baseUrl": "./",
+    "baseUrl": "./src",
     "paths": {
-      "@/*": ["src/*"]
+      "@/*": ["./*"]
     }
   },
   "include": [
@@ -20,8 +20,3 @@
   ],
   "exclude": ["node_modules"]
 }
-
-//
-// "paths": {
-//   "@/*": ["src/*"]
-// }
