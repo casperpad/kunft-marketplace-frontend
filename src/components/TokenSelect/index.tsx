@@ -15,8 +15,9 @@ export default function TokenSelect({
 }: TokenSelectProps) {
   return (
     <Select
-      options={tokens}
       getOptionLabel={(t) => t.symbol}
+      getOptionValue={(t) => t.contractHash}
+      options={tokens}
       value={value}
       onChange={onChange}
     />

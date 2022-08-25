@@ -26,7 +26,8 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
               description
               symbol
               slug
-              image
+              logo
+              background
               verified
               promoted
             }

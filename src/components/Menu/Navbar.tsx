@@ -1,7 +1,6 @@
 import { useCallback, useEffect, useState } from 'react'
 import { useWalletModal, useModal, Image } from '@kunftmarketplace/uikit'
 import { useTranslation } from 'next-i18next'
-// import Image from 'next/image'
 import { useRouter } from 'next/router'
 import { HiMenu } from 'react-icons/hi'
 import { toast } from 'react-toastify'
@@ -187,6 +186,10 @@ const ProfileAvatarWrapper = styled(Flex)`
   margin-left: -20px;
   &:hover {
     cursor: pointer;
+    img {
+      transition: all 0.2s ease-in-out;
+      box-shadow: ${({ theme }) => theme.shadows.focus};
+    }
   }
 `
 
@@ -194,8 +197,4 @@ const StyledAvatar = styled(Image)`
   border-radius: 50%;
   width: 30px;
   height: 30px;
-  &:hover {
-    transition: all 0.2s ease-in-out;
-    box-shadow: ${({ theme }) => theme.shadows.focus};
-  }
 `

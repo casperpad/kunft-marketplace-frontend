@@ -5,7 +5,7 @@ fragment CollectionFields on Collection {
   description
   symbol
   slug
-  image
+  background
   logo
   verified
   promoted

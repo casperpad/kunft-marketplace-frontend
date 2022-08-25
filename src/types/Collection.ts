@@ -7,7 +7,7 @@ export interface Collection {
   description?: string
   symbol: string
   slug: string
-  image?: string
+  background?: string
   logo?: string
   verified: boolean
   promoted: boolean
@@ -20,7 +20,7 @@ export const asCollection = (fields: CollectionFieldsFragment): Collection => ({
   description: fields.description ? fields.description : undefined,
   symbol: fields.symbol,
   slug: fields.slug,
-  image: fields.image ? fields.image : undefined,
+  background: fields.background ? fields.background : undefined,
   logo: fields.logo ? fields.logo : undefined,
   verified: fields.verified,
   promoted: fields.promoted,

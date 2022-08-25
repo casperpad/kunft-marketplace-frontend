@@ -9,10 +9,10 @@ import { NFTCard } from '@/components'
 import { useGetTokensLazy } from '@/hooks'
 import { Collection as ICollection, Token } from '@/types'
 import { isEqual } from '@/utils/token'
-// import { useRouter } from '@/utils/route'
+import Description from './Description'
 
 export default function CollectionExplorer({
-  collection: _,
+  collection,
 }: {
   collection: ICollection
 }) {
@@ -75,21 +75,31 @@ export default function CollectionExplorer({
   }, [query])
 
   return (
-    <StyledInfiniteScroll
-      dataLength={tokens.length}
-      next={fetchTokens}
-      hasMore={hasMore}
-      loader={<h4>Loading...</h4>}
-    >
-      {tokens.map((token) => (
-        <NFTCard
-          key={`${token.collection.contractPackageHash}-${token.id}`}
-          {...token}
-        />
-      ))}
-    </StyledInfiniteScroll>
+    <Container>
+      <Description collection={collection} />
+      <StyledInfiniteScroll
+        dataLength={tokens.length}
+        next={fetchTokens}
+        hasMore={hasMore}
+        loader={<h4>Loading...</h4>}
+      >
+        {tokens.map((token) => (
+          <NFTCard
+            key={`${token.collection.contractPackageHash}-${token.id}`}
+            {...token}
+          />
+        ))}
+      </StyledInfiniteScroll>
+    </Container>
   )
 }
+
+const Container = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  width: 100%;
+`
 
 // @ts-ignore
 const StyledInfiniteScroll = styled(InfiniteScroll)`

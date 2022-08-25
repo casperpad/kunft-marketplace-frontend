@@ -1,7 +1,7 @@
 import React, { useEffect, Fragment } from 'react'
 
 import { NextPage } from 'next'
-// import { appWithTranslation } from 'next-i18next'
+import { appWithTranslation } from 'next-i18next'
 import { DefaultSeo } from 'next-seo'
 import Router, { useRouter } from 'next/router'
 import nProgress from 'nprogress'
@@ -70,24 +70,9 @@ function MyApp(props: AppProps) {
       <PersistGate loading={null} persistor={persistor}>
         {() => <App {...props} />}
       </PersistGate>
-
-      {/*  */}
     </Providers>
   )
 }
-
-// MyApp.getInitialProps = async (appContext: AppContext) => {
-//   const appProps = await NextApp.getInitialProps(appContext)
-//   // initialize redux store on server side
-//   const reduxStore = initializeStore()
-
-//   appProps.pageProps = {
-//     ...appProps.pageProps,
-//     initialReduxState: reduxStore.getState(),
-//   }
-
-//   return appProps
-// }
 
 type NextPageWithLayout = NextPage & {
   Layout?: React.FC<React.PropsWithChildren<unknown>>
@@ -127,5 +112,4 @@ const App = ({ Component, pageProps }: AppPropsWithLayout) => {
   )
 }
 
-export default MyApp
-// export default appWithTranslation(MyApp)
+export default appWithTranslation(MyApp)

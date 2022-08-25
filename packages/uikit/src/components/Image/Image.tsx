@@ -1,8 +1,8 @@
-import React from "react";
+import React, { ImgHTMLAttributes } from "react";
 import LazyLoad from "react-lazyload";
 import styled from "styled-components";
+import { SpaceProps } from "styled-system";
 import Placeholder from "./Placeholder";
-import { ImageProps } from "./types";
 
 const StyledImage = styled.img`
   height: 100%;
@@ -11,6 +11,12 @@ const StyledImage = styled.img`
   width: 100%;
   object-fit: cover;
 `;
+
+interface ImageProps extends ImgHTMLAttributes<HTMLImageElement>, SpaceProps {
+  width?: number | string;
+  height?: number | string;
+  display?: "fixed" | "cover";
+}
 
 const Image: React.FC<React.PropsWithChildren<ImageProps>> = ({
   src,
@@ -27,7 +33,10 @@ const Image: React.FC<React.PropsWithChildren<ImageProps>> = ({
   };
 
   return (
-    <Wrapper $width={display === "fixed" ? width : undefined} $height={display === "fixed" ? height : undefined}>
+    <Wrapper
+      $width={display === "fixed" ? (typeof width === "number" ? `${width}px` : width) : undefined}
+      $height={display === "fixed" ? (typeof height === "number" ? `${height}px` : height) : undefined}
+    >
       <Placeholder ref={refPlaceholder} />
       <LazyLoad>
         <StyledImage
@@ -44,12 +53,12 @@ const Image: React.FC<React.PropsWithChildren<ImageProps>> = ({
   );
 };
 
-const Wrapper = styled.div<{ $width?: number; $height?: number }>`
-  ${({ $height }) => ($height ? `max-height: ${$height}px;` : "")};
-  ${({ $width }) => ($width ? `max-width: ${$width}px;` : "")};
+const Wrapper = styled.div<{ $width?: string; $height?: string }>`
+  ${({ $height }) => ($height ? `max-height: ${$height};` : "")};
+  ${({ $width }) => ($width ? `max-width: ${$width};` : "")};
   position: relative;
   width: 100%;
-  object-fit: cover;
+  /* object-fit: cover; */
 `;
 
 export default Image;
