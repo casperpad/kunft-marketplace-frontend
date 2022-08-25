@@ -3,6 +3,7 @@ import { BigNumber, BigNumberish, formatFixed } from '@ethersproject/bignumber'
 import {
   NEXT_PUBLIC_CASPER_NODE_ADDRESS,
   NEXT_PUBLIC_CASPER_CHAIN_NAME,
+  NATIVE_HASH,
 } from '@/config'
 import { ERC20SignerClient } from '@/web3/client/erc20'
 
@@ -41,7 +42,7 @@ export default function useERC20({
       setTotalSupply(totalSupply)
       setLoading(false)
     }
-    if (contractHash.startsWith('hash-')) fetchData()
+    if (contractHash !== NATIVE_HASH) fetchData()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [contractHash, contractPackageHash])
 

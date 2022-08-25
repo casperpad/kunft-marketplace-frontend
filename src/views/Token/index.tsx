@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { Image } from '@kunftmarketplace/uikit'
 import { CLPublicKey } from 'casper-js-sdk'
 import { NextSeo } from 'next-seo'
 import { Box, Text } from '@/components'
@@ -19,8 +20,6 @@ import {
 import {
   RowContainer,
   PriceContainer,
-  ImageContainer,
-  StyledImage,
   HistoryContainer,
   DescriptionContainer,
   Layout,
@@ -75,16 +74,17 @@ export default function Token({ token: _token }: { token: IToken }) {
               </>
             )}
           </PriceContainer>
-          <ImageContainer>
-            {token.metadata.image || token.collection.image ? (
-              <StyledImage
-                src={token.metadata.image || token.collection.image || ''}
-                alt={token.name}
-                width={405}
-                height={405}
-              />
-            ) : null}
-          </ImageContainer>
+          <Image
+            src={
+              token.metadata.image ||
+              token.metadata.logo ||
+              token.collection.image
+            }
+            display="cover"
+            alt={token.name}
+            width={405}
+            height={405}
+          />
         </RowContainer>
         <RowContainer>
           {(size[0] >= 1280 && (

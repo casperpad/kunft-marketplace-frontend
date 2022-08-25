@@ -3,7 +3,7 @@ import { parseFixed } from '@ethersproject/bignumber'
 import styled from 'styled-components'
 
 import { Flex, TransactionButton, Input, Text, TokenSelect } from '@/components'
-import { acceptableTokens } from '@/config'
+import { acceptableTokens, NATIVE_HASH } from '@/config'
 import { useMarketplaceTransaction } from '@/hooks'
 import { Token } from '@/types'
 
@@ -13,11 +13,12 @@ interface SellProps {
 
 export default function Sell({ token }: SellProps) {
   const [sellPrice, setSellPrice] = useState('')
-  const [payToken, setPayToken] = useState(acceptableTokens[1].contractHash)
+  const [payToken, setPayToken] = useState(acceptableTokens[1])
 
   const { sellToken } = useMarketplaceTransaction(token.collection.contractHash)
   const sell = useCallback(async () => {
-    const preferPayToken = payToken.startsWith('hash-') ? payToken : undefined
+    const preferPayToken =
+      payToken.contractHash !== NATIVE_HASH ? payToken.contractHash : undefined
     const _ = await sellToken(
       token.id,
       parseFixed(sellPrice, 9),

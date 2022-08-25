@@ -24,7 +24,7 @@ interface OfferProps {
 
 export default function Offer({ token, offerToken }: OfferProps) {
   const [offerPrice, setOfferPrice] = useState('')
-  const [payToken, setPayToken] = useState(acceptableTokens[1].contractHash)
+  const [payToken, setPayToken] = useState(acceptableTokens[1])
   return (
     <Container>
       <PriceContainer>
@@ -55,7 +55,9 @@ export default function Offer({ token, offerToken }: OfferProps) {
           offerToken(
             token.id,
             parseFixed(offerPrice, 9),
-            payToken === NATIVE_HASH ? undefined : payToken,
+            payToken.contractHash === NATIVE_HASH
+              ? undefined
+              : payToken.contractHash,
           )
         }
         disabled={offerPrice.length === 0}

@@ -4,7 +4,7 @@ import { CLPublicKey } from 'casper-js-sdk'
 import styled from 'styled-components'
 
 import { Flex, Input, Text, TransactionButton, TokenSelect } from '@/components'
-import { acceptableTokens } from '@/config'
+import { acceptableTokens, NATIVE_HASH } from '@/config'
 import {
   useMarketplaceTransaction,
   useERC20,
@@ -18,9 +18,9 @@ interface OfferProps {
 
 export default function Offer({ token }: OfferProps) {
   const [offerPrice, setOfferPrice] = useState('')
-  const [offerToken, setOfferToken] = useState(acceptableTokens[1].contractHash)
+  const [offerToken, setOfferToken] = useState(acceptableTokens[1])
   const { balanceOf, loading: erc20Loading } = useERC20({
-    contractHash: offerToken,
+    contractHash: offerToken.contractHash,
   })
   const [balance, setBalance] = useState(0)
   const [loading, setLoading] = useState(false)
@@ -33,7 +33,7 @@ export default function Offer({ token }: OfferProps) {
     const _ = await handleOfferToken(
       token.id,
       parseFixed(offerPrice, 9),
-      offerToken,
+      offerToken.contractHash,
     )
   }, [handleOfferToken, token.id, offerPrice, offerToken])
 
@@ -41,7 +41,7 @@ export default function Offer({ token }: OfferProps) {
     async function fetchData() {
       if (!currentAccount || erc20Loading) return
       setLoading(true)
-      if (offerToken.startsWith('hash-')) {
+      if (offerToken.contractHash !== NATIVE_HASH) {
         const balance = await balanceOf(CLPublicKey.fromHex(currentAccount))
         setBalance(balance.toNumber())
       }

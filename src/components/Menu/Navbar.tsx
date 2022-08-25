@@ -24,11 +24,6 @@ const ProfileMenu = styled.div`
   transform: translateY(100%);
 `
 
-const StyledAvatar = styled(Image)`
-  cursor: pointer;
-  border-radius: 50%;
-`
-
 const Menus = styled(Flex)`
   gap: 32px;
   flex-direction: column;
@@ -158,12 +153,7 @@ export default function Navbar() {
             )
           })}
         </Menus>
-        <Flex
-          width="70px"
-          height="70px"
-          justifyContent="center"
-          alignItems="center"
-          ml="-20px"
+        <ProfileAvatarWrapper
           onMouseEnter={() => setShow(true)}
           onMouseLeave={() => setShow(false)}
           onClick={() => setShow(!show)}
@@ -175,7 +165,7 @@ export default function Navbar() {
             height={30}
             onClick={user ? undefined : onPresentConnectModal}
           />
-        </Flex>
+        </ProfileAvatarWrapper>
       </MenuContainer>
       {user && show && (
         <ProfileMenu
@@ -188,3 +178,24 @@ export default function Navbar() {
     </NavbarContainer>
   )
 }
+
+const ProfileAvatarWrapper = styled(Flex)`
+  width: 70px;
+  height: 70px;
+  justify-content: center;
+  align-items: center;
+  margin-left: -20px;
+  &:hover {
+    cursor: pointer;
+  }
+`
+
+const StyledAvatar = styled(Image)`
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  &:hover {
+    transition: all 0.2s ease-in-out;
+    box-shadow: ${({ theme }) => theme.shadows.focus};
+  }
+`

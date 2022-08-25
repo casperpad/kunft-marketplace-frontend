@@ -8,7 +8,7 @@ import { getERC20Logo } from '@/utils'
 
 interface ERC20BalanceProps {
   amount: BigNumberish
-  token?: ERC20
+  token: ERC20
 }
 
 export default function ERC20Balance({ amount, token }: ERC20BalanceProps) {
@@ -30,6 +30,7 @@ const StyledERC20Balance = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
+  color: ${({ theme }) => theme.colors.primary};
   justify-content: center;
   gap: 4px;
 `

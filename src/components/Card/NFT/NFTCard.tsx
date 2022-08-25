@@ -1,26 +1,26 @@
-/* eslint-disable no-bitwise */
 import React, { useCallback, useMemo, useRef, useState } from 'react'
-import { BigNumberish, formatFixed } from '@ethersproject/bignumber'
-import { useModal } from '@kunftmarketplace/uikit'
+import { BigNumberish } from '@ethersproject/bignumber'
+import { Image, useModal } from '@kunftmarketplace/uikit'
 import { CLKeyParameters, CLPublicKey } from 'casper-js-sdk'
 import { useRouter } from 'next/router'
-import Skeleton from 'react-loading-skeleton'
 import styled from 'styled-components'
 
 import { Box } from '@/components/Box'
+import ERC20Balance from '@/components/ERC20Balance'
 import { Text } from '@/components/Text'
+import { NATIVE_HASH } from '@/config'
 import {
   useCasperWeb3Provider,
   useMarketplaceTransaction,
   useWindowSize,
 } from '@/hooks'
 import { Token } from '@/types'
+import { findAcceptableTokens } from '@/utils'
 
 import FavoriteToken from '../../FavoriteToken'
 import { OfferTokenModal, SellTokenModal } from '../../Modals'
 import {
   SaleButton,
-  StyledImage,
   Wrapper,
   NameContainer,
   ValueContainer,
@@ -28,7 +28,6 @@ import {
 
 export default function NFTCard(_token: Token) {
   const [token, setToken] = useState<Token>(_token)
-  const [loading, setLoading] = useState(true)
   const ref = useRef<HTMLDivElement>(null)
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [width] = useWindowSize()
@@ -131,34 +130,40 @@ export default function NFTCard(_token: Token) {
 
   return (
     <Wrapper ref={ref}>
-      <StyledLink href={`/token/${slug}/${id}`}>
+      <StyledLink
+        href={`/token/${slug}/${id}`}
+        onClick={(e) => {
+          e.preventDefault()
+          router.push(`/token/${slug}/${token.id}`)
+        }}
+      >
         <ImageWrapper>
           <StyledImage
             src={metadata?.image || metadata?.logo || collectionImage || ''}
             width={320}
-            height={loading ? 0 : 320}
-            layout="responsive"
+            height={320}
+            display="cover"
             alt={name}
-            onLoadingComplete={() => setLoading(false)}
           />
         </ImageWrapper>
       </StyledLink>
 
-      {loading ? (
-        <Skeleton width="100%" height={ref.current?.clientWidth || 320} />
-      ) : null}
       <Box px="28px" py={[14, 17]}>
         <NameContainer>
           <Text fontFamily="Castle">{name}</Text>
-          <Text>Price</Text>
         </NameContainer>
         <ValueContainer>
           <FavoriteToken token={token} setToken={setToken} />
-          <Text color="primary">
-            {price
-              ? parseFloat(formatFixed(price.price, 9)).toLocaleString()
-              : 'Not Available'}
-          </Text>
+          {price ? (
+            <ERC20Balance
+              token={findAcceptableTokens({
+                contractHash: price.payToken
+                  ? `hash-${price.payToken}`
+                  : NATIVE_HASH,
+              })}
+              amount={price.price}
+            />
+          ) : null}
         </ValueContainer>
       </Box>
       <SaleButton
@@ -188,4 +193,10 @@ const ImageWrapper = styled.div`
   position: relative;
   overflow: hidden;
   z-index: 1;
+`
+const StyledImage = styled(Image)`
+  transition: all 1s;
+  &:hover {
+    transform: scale(1.15);
+  }
 `

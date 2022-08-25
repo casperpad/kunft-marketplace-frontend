@@ -25,7 +25,7 @@ export default function Filter({
   const router = useRouter()
   const [minValue, setMinValue] = useState(min)
   const [maxValue, setMaxValue] = useState(max)
-  const [payToken, setPayToken] = useState(acceptableTokens[1].contractHash)
+  const [payToken, setPayToken] = useState(acceptableTokens[1])
 
   const handleChange = useCallback((value: any) => {
     setMinValue(value[0])
@@ -93,7 +93,7 @@ export default function Filter({
         pathname: router.pathname,
         query: {
           ...router.query,
-          price_payToken: payToken,
+          price_payToken: payToken.contractHash,
           price_min: minValue,
           price_max: maxValue,
         },

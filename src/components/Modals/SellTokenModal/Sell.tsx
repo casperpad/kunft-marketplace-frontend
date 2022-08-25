@@ -22,7 +22,7 @@ interface SellProps {
 
 export default function Sell({ token, sellToken }: SellProps) {
   const [sellPrice, setSellPrice] = useState('')
-  const [payToken, setPayToken] = useState(acceptableTokens[1].contractHash)
+  const [payToken, setPayToken] = useState(acceptableTokens[1])
 
   return (
     <Container>
@@ -49,7 +49,9 @@ export default function Sell({ token, sellToken }: SellProps) {
       </PriceContainer>
       <TransactionButton
         title="Sell"
-        onClick={() => sellToken(token.id, parseFixed(sellPrice, 9), payToken)}
+        onClick={() =>
+          sellToken(token.id, parseFixed(sellPrice, 9), payToken.contractHash)
+        }
         disabled={sellPrice.length === 0}
       />
     </Container>
