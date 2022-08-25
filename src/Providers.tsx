@@ -1,10 +1,6 @@
 import React from 'react'
 import { ApolloClient, InMemoryCache, ApolloProvider } from '@apollo/client'
-import {
-  ModalProvider,
-  light,
-  ThemeProvider as UIKitThemeProvider,
-} from '@kunftmarketplace/uikit'
+import { ModalProvider, light } from '@kunftmarketplace/uikit'
 import { SkeletonTheme } from 'react-loading-skeleton'
 import { Provider } from 'react-redux'
 import { Store } from 'redux'
@@ -17,11 +13,9 @@ const StyledThemeProvider: React.FC<React.PropsWithChildren> = ({
   ...props
 }) => {
   return (
-    <UIKitThemeProvider theme={light} {...props}>
-      <ThemeProvider theme={light} {...props}>
-        {children}
-      </ThemeProvider>
-    </UIKitThemeProvider>
+    <ThemeProvider theme={light} {...props}>
+      {children}
+    </ThemeProvider>
   )
 }
 

@@ -2,6 +2,10 @@
   "name": "kunft-marketplace-frontend",
   "version": "0.1.0",
   "private": true,
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
   "scripts": {
     "dev": "next dev",
     "storybook": "start-storybook -p 6006",
@@ -33,7 +37,6 @@
     "@graphql-tools/merge": "^8.3.0",
     "@graphql-tools/schema": "^8.5.0",
     "@graphql-tools/utils": "^8.8.0",
-    "@kunftmarketplace/uikit": "workspace:*",
     "@mdx-js/react": "^2.1.2",
     "@next/bundle-analyzer": "^12.2.5",
     "@reduxjs/toolkit": "^1.8.3",

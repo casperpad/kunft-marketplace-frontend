@@ -1,9 +1,10 @@
 /* eslint-disable react/jsx-no-constructed-context-values */
-import React, { createContext, useEffect, useRef, useState } from "react";
+import React, { createContext, useRef, useState } from "react";
 import { AnimatePresence, domMax, LazyMotion, m } from "framer-motion";
 import styled from "styled-components";
 import { mountAnimation, unmountAnimation } from "../../components/BottomDrawer/styles";
 import { Overlay } from "../../components/Overlay";
+import { useIsomorphicEffect } from "../../hooks/useIsomorphicEffect";
 import {
   animationHandler,
   animationMap,
@@ -72,7 +73,7 @@ const ModalProvider: React.FC<React.PropsWithChildren> = ({ children }) => {
   const [closeOnOverlayClick, setCloseOnOverlayClick] = useState(true);
   const animationRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
+  useIsomorphicEffect(() => {
     const setViewportHeight = () => {
       const vh = window.innerHeight * 0.01;
       document.documentElement.style.setProperty("--vh", `${vh}px`);
