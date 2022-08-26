@@ -44,7 +44,7 @@ export default function Token({ token: _token }: { token: IToken }) {
               url:
                 token.metadata.image ||
                 token.metadata.logo ||
-                token.collection.image ||
+                token.collection.logo ||
                 '',
               width: 800,
               height: 600,
@@ -78,7 +78,7 @@ export default function Token({ token: _token }: { token: IToken }) {
             src={
               token.metadata.image ||
               token.metadata.logo ||
-              token.collection.image
+              token.collection.logo
             }
             display="cover"
             alt={token.name}

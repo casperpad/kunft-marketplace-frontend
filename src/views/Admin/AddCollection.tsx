@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { NextSeo } from 'next-seo'
 import { useForm } from 'react-hook-form'
 import styled from 'styled-components'
 import { Button, Input, Text } from '@/components'
@@ -32,12 +33,13 @@ export default function AddCollection() {
 
   const onSubmit = handleSubmit(
     async ({ contractHash, contractPackageHash }) => {
-      console.log(contractHash, contractPackageHash)
+      console.info(contractHash, contractPackageHash)
     },
   )
 
   return (
     <StyledContainer onSubmit={onSubmit}>
+      <NextSeo nofollow noindex />
       <Input
         {...register('contractPackageHash')}
         value={contractPackageHash}

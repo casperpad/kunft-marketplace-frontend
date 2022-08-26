@@ -36,7 +36,7 @@ export default function NFTCard(_token: Token) {
     id,
     name,
     metadata,
-    collection: { contractHash, image: collectionImage, slug },
+    collection: { contractHash, logo: collectionImage, slug },
     owner,
     listed,
     price,

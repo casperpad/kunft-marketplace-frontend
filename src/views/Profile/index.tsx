@@ -2,6 +2,7 @@ import { useCallback, useEffect, useState } from 'react'
 import { useModal } from '@kunftmarketplace/uikit'
 import { CLPublicKey } from 'casper-js-sdk'
 import uniqWith from 'lodash/uniqWith'
+import { NextSeo } from 'next-seo'
 import { Rating } from 'react-simple-star-rating'
 import { toast } from 'react-toastify'
 import {
@@ -77,6 +78,7 @@ export default function Profile() {
 
   return (
     <CustomLayout>
+      <NextSeo nofollow noindex />
       <DataContainer>
         <ImageContainer>
           <StyledImage src={profileAvatar} alt="" width={235} height={235} />

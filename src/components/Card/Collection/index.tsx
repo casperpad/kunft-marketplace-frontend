@@ -1,5 +1,5 @@
 import React, { useRef } from 'react'
-import Image from 'next/image'
+import { Image } from '@kunftmarketplace/uikit'
 import Avatar from 'react-avatar'
 import { MdVerified } from 'react-icons/md'
 import styled from 'styled-components'
@@ -10,7 +10,7 @@ import Link from '../../Link'
 
 export default function CollectionCard({
   slug,
-  image,
+  logo,
   name,
   verified,
 }: Collection) {
@@ -20,8 +20,16 @@ export default function CollectionCard({
   return (
     <Link href={`/collections/${slug}`}>
       <StyledCollectionCard ref={ref}>
-        {image ? (
-          <Image src={image} width={320} height={320} />
+        {logo ? (
+          <ImageWrapper>
+            <StyledImage
+              src={logo}
+              width={320}
+              height={320}
+              display="cover"
+              alt={name}
+            />
+          </ImageWrapper>
         ) : (
           <Avatar
             name={name}
@@ -63,4 +71,17 @@ const StyledNameContainer = styled.div`
       color: #4980f8;
     }
   }
+`
+
+const StyledImage = styled(Image)`
+  transition: all 1s;
+  &:hover {
+    transform: scale(1.15);
+  }
+`
+const ImageWrapper = styled.div`
+  border-radius: 10px 10px 0px 0px;
+  position: relative;
+  overflow: hidden;
+  z-index: 1;
 `
