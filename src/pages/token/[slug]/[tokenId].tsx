@@ -28,7 +28,8 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
                 description
                 symbol
                 slug
-                image
+                logo
+                background
                 verified
                 promoted
               }

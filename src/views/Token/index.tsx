@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { Image } from '@kunftmarketplace/uikit'
 import { CLPublicKey } from 'casper-js-sdk'
 import { NextSeo } from 'next-seo'
-import { Box, Text } from '@/components'
+import { Text } from '@/components'
 import { meta } from '@/config'
 import { useCasperWeb3Provider, useWindowSize } from '@/hooks'
 import { Token as IToken } from '@/types'
@@ -67,9 +67,7 @@ export default function Token({ token: _token }: { token: IToken }) {
               <Sell token={token} />
             ) : (
               <>
-                <Box mb="10px">
-                  <Offer token={token} />
-                </Box>
+                <Offer token={token} />
                 <Buy token={token} setToken={setToken} />
               </>
             )}

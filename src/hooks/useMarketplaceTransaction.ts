@@ -13,6 +13,7 @@ import {
   NEXT_PUBLIC_CASPER_CHAIN_NAME,
   NEXT_PUBLIC_CASPER_NODE_ADDRESS,
   contracts,
+  NATIVE_HASH,
 } from '@/config'
 import { Token } from '@/types'
 import { openCsprExplorer } from '@/utils/casper'
@@ -228,9 +229,12 @@ export default function useMarketplaceTransaction(contractHash: string) {
 
   const buyToken = useCallback(
     async (token: Token) => {
-      if (token.price!.payToken)
-        await buyTokenERC20(token.id, token.price!.payToken, token.price!.price)
-      else await buyTokenCspr(token.id, token.price!.price)
+      if (token.price!.payToken) {
+        const preferContractHash = token.price!.payToken.startsWith('hash-')
+          ? token.price!.payToken
+          : `hash-${token.price!.payToken}`
+        await buyTokenERC20(token.id, preferContractHash, token.price!.price)
+      } else await buyTokenCspr(token.id, token.price!.price)
     },
     [buyTokenERC20, buyTokenCspr],
   )
@@ -316,11 +320,11 @@ export default function useMarketplaceTransaction(contractHash: string) {
       payToken?: string,
       additionalRecipient?: CLKeyParameters,
     ) => {
-      if (payToken && payToken.startsWith('hash-'))
+      if (payToken && payToken !== NATIVE_HASH)
         return await offerTokenERC20(
           tokenId,
           amount,
-          payToken.slice(5),
+          payToken,
           additionalRecipient,
         )
       return await offerTokenCspr(tokenId, amount, additionalRecipient)
@@ -452,7 +456,7 @@ export default function useMarketplaceTransaction(contractHash: string) {
     async (contractHash: string, amount: BigNumberish) => {
       if (!currentAccount) throw Error('')
       toast.info('Checking allowance...')
-      await erc20Client.setContractHash(`hash-${contractHash}`)
+      await erc20Client.setContractHash(contractHash)
 
       const balance = await erc20Client.balanceOf(
         CLPublicKey.fromHex(currentAccount),

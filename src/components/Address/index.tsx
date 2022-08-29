@@ -1,8 +1,8 @@
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { useEffect, useState } from 'react'
+import { useTooltip } from '@kunftmarketplace/uikit'
 import { CLPublicKey } from 'casper-js-sdk'
 import { CopyToClipboard } from 'react-copy-to-clipboard'
 import { FiCopy } from 'react-icons/fi'
-import ReactTooltip from 'react-tooltip'
 import styled from 'styled-components'
 import { useCasperWeb3Provider } from '@/hooks'
 import { shortenHash } from '@/utils/hash'
@@ -22,69 +22,44 @@ export default function Address({
   ...props
 }: AddressProps) {
   const [copied, setCopied] = useState(false)
-  const [mounted, setMounted] = useState(false)
-  const [tooltip, setTooltip] = useState(false)
+  const [isOwner, setIsOwner] = useState(false)
   const { currentAccount } = useCasperWeb3Provider()
+
   useEffect(() => {
     if (copied) setTimeout(() => setCopied(false), 1000)
   }, [copied])
 
   useEffect(() => {
-    setMounted(true)
-  }, [])
-
-  const isOwner = useMemo(() => {
-    if (!currentAccount) return false
-    if (
-      CLPublicKey.fromHex(currentAccount).toAccountHashStr().endsWith(address)
+    if (!currentAccount) {
+      return setIsOwner(false)
+    }
+    setIsOwner(
+      CLPublicKey.fromHex(currentAccount).toAccountHashStr().endsWith(address),
     )
-      return true
-    return false
   }, [currentAccount, address])
 
+  const { targetRef: targetRefFineTuned, tooltip: tooltipFineTuned } =
+    useTooltip(copied ? 'Copied' : 'Copy', {
+      placement: 'top',
+    })
+
   return (
-    <>
-      <CopyToClipboard text={address} onCopy={() => setCopied(true)}>
-        {variant === 'primary' ? (
-          <StyledAddress
-            data-tip
-            data-for="react-tooltip"
-            onMouseEnter={() => setTooltip(true)}
-            onMouseLeave={() => {
-              setTooltip(false)
-            }}
-            {...props}
-          >
+    <CopyToClipboard text={address} onCopy={() => setCopied(true)}>
+      {variant === 'primary' ? (
+        <StyledAddress ref={targetRefFineTuned} {...props}>
+          {isOwner ? 'Me' : shortenHash(address)}
+          {showTooltip && tooltipFineTuned}
+        </StyledAddress>
+      ) : (
+        <StyledFlex alignItems="center" ref={targetRefFineTuned} {...props}>
+          <Text mr="8px" fontSize="10px" color="input">
             {isOwner ? 'Me' : shortenHash(address)}
-          </StyledAddress>
-        ) : (
-          <StyledFlex
-            data-tip
-            data-for="react-tooltip"
-            onMouseEnter={() => setTooltip(true)}
-            onMouseLeave={() => {
-              setTooltip(false)
-            }}
-            flexDirection="row"
-            alignItems="center"
-          >
-            <Text mr="8px" fontSize="10px" color="input">
-              {shortenHash(address)}
-            </Text>
-            <StyledIcon size={20} />
-          </StyledFlex>
-        )}
-      </CopyToClipboard>
-      {mounted && showTooltip && tooltip && (
-        <ReactTooltip
-          id="react-tooltip"
-          place="top"
-          type="dark"
-          effect="float"
-          getContent={() => (copied ? 'Copied' : 'Copy')}
-        />
+          </Text>
+          <StyledIcon size={20} />
+          {showTooltip && tooltipFineTuned}
+        </StyledFlex>
       )}
-    </>
+    </CopyToClipboard>
   )
 }
 
