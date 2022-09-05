@@ -1,11 +1,15 @@
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { BigNumber, BigNumberish, formatFixed } from '@ethersproject/bignumber'
+import { CLKeyParameters, CLPublicKey } from 'casper-js-sdk'
+import { toast } from 'react-toastify'
 import {
   NEXT_PUBLIC_CASPER_NODE_ADDRESS,
   NEXT_PUBLIC_CASPER_CHAIN_NAME,
   NATIVE_HASH,
 } from '@/config'
-import { ERC20SignerClient } from '@/web3/client/erc20'
+import { showDeployHash } from '@/utils/toast'
+import { ERC20SignerClient, RecipientType } from '@/web3/client/erc20'
+import { useCasperWeb3Provider } from '../providers/CasperWeb3Provider'
 
 export default function useERC20({
   contractHash,
@@ -19,12 +23,12 @@ export default function useERC20({
     NEXT_PUBLIC_CASPER_CHAIN_NAME,
   )
 
-  const [name, setName] = useState('')
+  const [name, setName] = useState<string | undefined>()
   const [symbol, setSymbol] = useState<string | undefined>()
-  const [decimals, setDecimals] = useState(0)
-  const [totalSupply, setTotalSupply] = useState<BigNumberish>(0)
-
+  const [decimals, setDecimals] = useState<number | undefined>()
+  const [totalSupply, setTotalSupply] = useState<number | undefined>()
   const [loading, setLoading] = useState(false)
+  const { getDeploy } = useCasperWeb3Provider()
 
   useEffect(() => {
     async function fetchData() {
@@ -42,9 +46,45 @@ export default function useERC20({
       setTotalSupply(totalSupply)
       setLoading(false)
     }
-    if (contractHash !== NATIVE_HASH) fetchData()
+    if (
+      contractHash !== NATIVE_HASH &&
+      contractHash.length === NATIVE_HASH.length
+    )
+      fetchData()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [contractHash, contractPackageHash])
+
+  const transferCallback = useCallback(
+    async (
+      sender: CLPublicKey,
+      recipient: CLKeyParameters,
+      amount: BigNumberish,
+      paymentAmount: BigNumberish,
+    ) => {
+      if (loading) throw Error('Loading...')
+      // I am not sure why should call setConractHash here twice
+      await client.setContractHash(contractHash, contractPackageHash)
+      const deployHash = await client.transfer(
+        sender,
+        recipient,
+        amount,
+        paymentAmount,
+      )
+      showDeployHash(deployHash)
+      getDeploy(deployHash).then(() => toast.success('Transaction confirmed'))
+      return deployHash
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [contractHash],
+  )
+
+  const balanceOf = useCallback(
+    async (account: RecipientType) => {
+      return await client.balanceOf(account)
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [contractHash],
+  )
 
   return {
     loading,
@@ -52,8 +92,9 @@ export default function useERC20({
     symbol,
     decimals,
     totalSupply,
+    transfer: transferCallback,
     approve: client.approve.bind(client),
     allowances: client.allowances.bind(client),
-    balanceOf: client.balanceOf.bind(client),
+    balanceOf,
   }
 }

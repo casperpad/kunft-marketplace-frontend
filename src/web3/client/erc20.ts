@@ -15,7 +15,7 @@ import { signDeploy } from '../utils'
 
 const { Contract } = Contracts
 
-type RecipientType = CLAccountHash | CLPublicKey | CLByteArray
+export type RecipientType = CLAccountHash | CLPublicKey | CLByteArray
 
 export class ERC20SignerClient extends Contract {
   client: ERC20Client
@@ -76,6 +76,31 @@ export class ERC20SignerClient extends Contract {
 
     const deploy = this.callEntrypoint(
       'approve',
+      runtimeArgs,
+      sender,
+      this.chainName,
+      paymentAmount.toString(),
+    )
+
+    const signedDeploy = await signDeploy(deploy, sender.toHex())
+
+    const deployHash = await this.casperClient!.putDeploy(signedDeploy)
+    return deployHash
+  }
+
+  async transfer(
+    sender: CLPublicKey,
+    recipient: CLKeyParameters,
+    amount: BigNumberish,
+    paymentAmount: BigNumberish,
+  ) {
+    const runtimeArgs = RuntimeArgs.fromMap({
+      recipient: new CLKey(recipient),
+      amount: CLValueBuilder.u256(amount),
+    })
+
+    const deploy = this.callEntrypoint(
+      'transfer',
       runtimeArgs,
       sender,
       this.chainName,

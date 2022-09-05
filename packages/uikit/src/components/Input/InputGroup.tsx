@@ -1,6 +1,8 @@
 import React, { cloneElement } from "react";
+import uniqueId from "lodash/uniqueId";
 import styled from "styled-components";
 import Box from "../Box/Box";
+import { Text } from "../Text";
 import Input from "./Input";
 import { InputGroupProps, scales, Scales } from "./types";
 
@@ -44,23 +46,42 @@ const InputIcon = styled.div<{ scale: Scales; isEndIcon?: boolean }>`
   `}
 `;
 
-const InputGroup = ({ scale = scales.MD, startIcon, endIcon, children, ...props }: InputGroupProps): JSX.Element => (
-  <StyledInputGroup
-    scale={scale}
-    width="100%"
-    position="relative"
-    hasStartIcon={!!startIcon}
-    hasEndIcon={!!endIcon}
-    {...props}
-  >
-    {startIcon && <InputIcon scale={scale}>{startIcon}</InputIcon>}
-    {cloneElement(children, { scale })}
-    {endIcon && (
-      <InputIcon scale={scale} isEndIcon>
-        {endIcon}
-      </InputIcon>
-    )}
-  </StyledInputGroup>
-);
+const StyledLabel = styled.label`
+  margin-bottom: 5px;
+`;
+
+const InputGroup = ({
+  scale = scales.MD,
+  startIcon,
+  endIcon,
+  children,
+  error,
+  label,
+  ...props
+}: InputGroupProps): JSX.Element => {
+  const id = uniqueId();
+  return (
+    <StyledInputGroup
+      scale={scale}
+      width="100%"
+      position="relative"
+      hasStartIcon={!!startIcon}
+      hasEndIcon={!!endIcon}
+      {...props}
+    >
+      {label && <StyledLabel htmlFor={id}>{label}</StyledLabel>}
+      {startIcon && <InputIcon scale={scale}>{startIcon}</InputIcon>}
+      {cloneElement(children, { scale, isWarning: !!error, id: label ? id : undefined })}
+      {endIcon && (
+        <InputIcon scale={scale} isEndIcon>
+          {endIcon}
+        </InputIcon>
+      )}
+      <Text color="primary" fontSize={10}>
+        {error}
+      </Text>
+    </StyledInputGroup>
+  );
+};
 
 export default InputGroup;

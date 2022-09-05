@@ -19,5 +19,7 @@ export interface InputGroupProps extends SpaceProps {
   scale?: Scales;
   startIcon?: ReactElement;
   endIcon?: ReactElement;
+  label?: string;
+  error?: string;
   children: JSX.Element;
 }
