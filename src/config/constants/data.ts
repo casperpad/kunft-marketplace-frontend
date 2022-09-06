@@ -11,4 +11,8 @@ export const navLinks = [
     name: 'TopNFTs',
     path: '/topnfts',
   },
+  {
+    name: 'ERC20',
+    path: '/erc20',
+  },
 ]
