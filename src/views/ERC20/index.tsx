@@ -1,19 +1,49 @@
 import React, { useState } from 'react'
 import { Text, Flex, Input, InputGroup, Heading } from '@kunftmarketplace/uikit'
+import Select from 'react-select'
+
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs'
 import 'react-tabs/style/react-tabs.css'
 
 import { useERC20 } from '@/hooks'
-
 import TransferTab from './TransferTab'
+
+const NETWORKS = [
+  {
+    value: {
+      nodeAddress:
+        'https://dev.casper.the-swappery.io/api/cors?url=http://65.109.54.159:7777/rpc',
+      chainName: 'casper',
+    },
+    label: 'Mainnet',
+  },
+  {
+    value: {
+      nodeAddress:
+        'https://dev.casper.the-swappery.io/api/cors?url=http://65.21.227.126:7777/rpc',
+      chainName: 'casper-test',
+    },
+    label: 'Testnet',
+  },
+]
 
 export default function ERC20() {
   const [contractHash, setContractHash] = useState('')
+  const [network, setNetwork] = useState(NETWORKS[0])
 
-  const { balanceOf, transfer, name, symbol, totalSupply, loading, decimals } =
-    useERC20({
-      contractHash: `hash-${contractHash}`,
-    })
+  const {
+    balanceOf,
+    transfer,
+    name,
+    symbol,
+    totalSupply,
+    loading,
+    decimals,
+    error,
+  } = useERC20({
+    contractHash: `hash-${contractHash}`,
+    ...network.value,
+  })
 
   return (
     <Flex
@@ -27,6 +57,7 @@ export default function ERC20() {
       <Heading as="h1">
         You can transfer and approve your ERC20 token here.
       </Heading>
+      <Select value={network} options={NETWORKS} onChange={setNetwork} />
       <Flex flexDirection="column" gap={16}>
         <Flex flexDirection="column" gap={8} minWidth={350}>
           <InputGroup label="Contract Hash">
@@ -49,6 +80,7 @@ export default function ERC20() {
               <Text>TotalSupply:{totalSupply}</Text>
             </>
           )}
+          {error}
         </Flex>
       </Flex>
       <Tabs>

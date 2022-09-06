@@ -14,20 +14,22 @@ import { useCasperWeb3Provider } from '../providers/CasperWeb3Provider'
 export default function useERC20({
   contractHash,
   contractPackageHash,
+  nodeAddress = NEXT_PUBLIC_CASPER_NODE_ADDRESS,
+  chainName = NEXT_PUBLIC_CASPER_CHAIN_NAME,
 }: {
   contractHash: string
   contractPackageHash?: string
+  nodeAddress?: string
+  chainName?: string
 }) {
-  const client = new ERC20SignerClient(
-    NEXT_PUBLIC_CASPER_NODE_ADDRESS,
-    NEXT_PUBLIC_CASPER_CHAIN_NAME,
-  )
+  const client = new ERC20SignerClient(nodeAddress, chainName)
 
   const [name, setName] = useState<string | undefined>()
   const [symbol, setSymbol] = useState<string | undefined>()
   const [decimals, setDecimals] = useState<number | undefined>()
   const [totalSupply, setTotalSupply] = useState<number | undefined>()
   const [loading, setLoading] = useState(false)
+  const [error, setError] = useState<string | undefined>()
   const { getDeploy } = useCasperWeb3Provider()
 
   useEffect(() => {
@@ -49,10 +51,15 @@ export default function useERC20({
     if (
       contractHash !== NATIVE_HASH &&
       contractHash.length === NATIVE_HASH.length
-    )
-      fetchData()
+    ) {
+      try {
+        fetchData()
+      } catch (err: any) {
+        setError(err.toString())
+      }
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [contractHash, contractPackageHash])
+  }, [contractHash, contractPackageHash, nodeAddress, chainName])
 
   const transferCallback = useCallback(
     async (
@@ -88,6 +95,7 @@ export default function useERC20({
 
   return {
     loading,
+    error,
     name,
     symbol,
     decimals,
