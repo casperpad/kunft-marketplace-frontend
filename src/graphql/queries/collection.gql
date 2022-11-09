@@ -1,5 +1,6 @@
 fragment CollectionFields on Collection {
   contractPackageHash
+  contractHash
   name
   description
   symbol

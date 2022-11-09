@@ -1,6 +1,7 @@
 import { ApolloClient, gql, InMemoryCache } from '@apollo/client'
 import { GetStaticProps, GetStaticPaths } from 'next'
 import Collection from '@/views/Collection'
+// import { client } from '../../Providers'
 
 export default Collection
 
@@ -20,6 +21,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
           getCollections(query: $query, page: $page, limit: $limit) {
             collections {
               contractPackageHash
+              contractHash
               name
               description
               symbol

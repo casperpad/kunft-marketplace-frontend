@@ -23,6 +23,7 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
             tokens {
               collection {
                 contractPackageHash
+                contractHash
                 name
                 description
                 symbol
