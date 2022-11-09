@@ -25,6 +25,7 @@ export default function Collections() {
   const fetchCollections = useCallback(async () => {
     if (loading) return
     const { data } = await getCollections({ page, limit })
+
     if (data) {
       setCollections((prev) =>
         uniqBy([...prev, ...data.collections], (c) => c.contractPackageHash),
