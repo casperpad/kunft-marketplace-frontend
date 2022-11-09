@@ -2,7 +2,6 @@ import { CollectionFieldsFragment } from '@/graphql/queries/__generated__/collec
 
 export interface Collection {
   contractPackageHash: string
-  contractHash: string
   name: string
   description?: string
   symbol: string
@@ -15,7 +14,6 @@ export interface Collection {
 
 export const asCollection = (fields: CollectionFieldsFragment): Collection => ({
   contractPackageHash: fields.contractPackageHash,
-  contractHash: fields.contractHash,
   name: fields.name,
   description: fields.description ? fields.description : undefined,
   symbol: fields.symbol,
