@@ -24,7 +24,7 @@ export default function OfferTokenModal({
 }: OfferTokenModalProps) {
   return (
     <Modal title={`Offer ${token.name} Token`} {...props}>
-      <Flex flexDirection="column" gap={8}>
+      <Flex flexDirection="column" gap={12} my={4}>
         The smart contract will hold the offer amount until it is either
         accepted by the NFT owner or it expires.
         <Offer token={token} offerToken={offerToken} />

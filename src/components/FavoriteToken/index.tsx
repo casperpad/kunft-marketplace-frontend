@@ -65,6 +65,7 @@ export default function FavoriteToken({ token, setToken }: FavoriteTokenProps) {
           success: 'Completed',
         })
       }
+      disabled={!user}
     >
       {userStarred ? <BsHeartFill /> : <BsHeart />}
       <Text color="primary">{token.favoritedUsers.length}</Text>

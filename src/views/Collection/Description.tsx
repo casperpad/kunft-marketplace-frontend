@@ -9,12 +9,12 @@ import {
 } from '@kunftmarketplace/uikit'
 import { IoMdShare } from 'react-icons/io'
 import styled from 'styled-components'
-import { CasperExplorerLink } from '@/components'
+import { CasperExplorerLink, Text } from '@/components'
 import { Collection } from '@/types'
 import { getCsprExplorer } from '@/utils/casper'
 
 export default function Description({
-  collection: { name, verified, logo, contractPackageHash },
+  collection: { name, verified, logo, contractPackageHash, description },
 }: {
   collection: Collection
 }) {
@@ -36,8 +36,11 @@ export default function Description({
         />
         {verified && <VerifiedIcon width={32} height={32} />}
       </CollectionLogoWrapper>
-      <Flex flexDirection="row" alignItems="center" gap={16}>
-        <Heading as="h1">{name}</Heading>
+      <Flex flexDirection="column" alignItems="start" gap={16}>
+        <Flex flexDirection="column" gap={8}>
+          <Heading as="h1">{name}</Heading>
+          {description && <Text as="p">{description}</Text>}
+        </Flex>
         <Flex flexDirection="row" alignItems="center" gap={8}>
           <ButtonWrapper ref={targetRefFineTuned}>
             <IconButton scale="sm">

@@ -52,7 +52,7 @@ export default function useMarketplaceTransaction(contractHash: string) {
     async (id: string, price: BigNumberish, payToken?: string) => {
       if (currentAccount === undefined) return
 
-      toast.info('Checking allownace')
+      toast.info('Checking allowance')
       let shouldApprove = true
       try {
         const allowance = await getAllowance(
@@ -336,7 +336,7 @@ export default function useMarketplaceTransaction(contractHash: string) {
     async (id: string, bidder: CLKeyParameters) => {
       if (!currentAccount) throw Error('')
 
-      toast.info('Checking allownace')
+      toast.info('Checking allowance')
       let shouldApprove = true
       try {
         const allowance = await getAllowance(
