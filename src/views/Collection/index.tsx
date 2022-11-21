@@ -36,7 +36,7 @@ export default function Collection({
         }}
       />
       <StyledPage>
-        <Filter />
+        <Filter slug={collection.slug} />
         <CollectionExplorer collection={collection} />
       </StyledPage>
     </>
@@ -44,7 +44,6 @@ export default function Collection({
 }
 
 const StyledPage = styled(Page)`
-  padding: 0px 0px 40px 0px;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
