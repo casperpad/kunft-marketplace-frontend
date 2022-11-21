@@ -6,7 +6,7 @@ import { Text } from '@/components/Text'
 import Checkbox, { CheckboxProps } from './Checkbox'
 
 const StyledText = styled(Text)<{ disabled: boolean }>`
-  font-size: 20px;
+  font-size: 14px;
   color: ${({ disabled, theme }) =>
     disabled ? theme.colors.checkboxDisabled : theme.colors.text};
 `

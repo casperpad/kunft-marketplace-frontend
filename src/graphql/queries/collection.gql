@@ -30,3 +30,17 @@ query getCollections($query: String, $page: Int, $limit: Int) {
     }
   }
 }
+
+query getMetadataInfo($slug: String!) {
+  getMetadataInfo(slug: $slug) {
+    data {
+      trait
+      total
+      distinctValues {
+        value
+        count
+        percent
+      }
+    }
+  }
+}

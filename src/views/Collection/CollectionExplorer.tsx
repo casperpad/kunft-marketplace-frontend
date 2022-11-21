@@ -35,7 +35,7 @@ export default function CollectionExplorer({
         // @ts-ignore
         preferWhere.metadata = {
           ...preferWhere.metadata,
-          [key.split('_')[1]]: value,
+          [key.split('_')[1]]: typeof value === 'string' ? [value] : value,
         }
         // @ts-ignore
         delete preferWhere[key]
@@ -70,6 +70,7 @@ export default function CollectionExplorer({
 
   useEffect(() => {
     setTokens([])
+    setPage(1)
     fetchTokens()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [query])
@@ -108,5 +109,5 @@ const StyledInfiniteScroll = styled(InfiniteScroll)`
   gap: 20px;
   padding-bottom: 20px;
   margin: 0px 40px 0px 40px;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
 `

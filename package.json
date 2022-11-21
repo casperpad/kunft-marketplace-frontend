@@ -25,7 +25,7 @@
     "test:watch": "jest --watch",
     "test:config": "jest src/config/__tests__/ --testPathIgnorePatterns",
     "prepare": "husky install",
-    "postinstall": "pnpm run generate:queries"
+    "postinstall": "yarn run generate:queries"
   },
   "dependencies": {
     "@apollo/client": "^3.6.9",
