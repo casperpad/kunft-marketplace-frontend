@@ -257,7 +257,7 @@ export default function useMarketplaceTransaction(contractHash: string) {
           contractHash,
           id,
           amount,
-          '1000000000',
+          '5000000000',
           CLPublicKey.fromHex(currentAccount),
           additionalRecipient,
         )
