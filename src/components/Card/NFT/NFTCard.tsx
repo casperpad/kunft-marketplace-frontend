@@ -90,7 +90,7 @@ export default function NFTCard(_token: Token) {
           .slice(13)
         if (currentAccountHash === owner) {
           if (offers.find((o) => o.status === 'pending'))
-            router.push(`/token/${token.collection.slug}/${token.id}`)
+            return router.push(`/token/${token.collection.slug}/${token.id}`)
           return onPresentSellModal()
         }
       }
@@ -120,7 +120,7 @@ export default function NFTCard(_token: Token) {
         .toAccountHashStr()
         .slice(13)
       if (currentAccountHash === owner) {
-        if (offers.find((o) => o.status === 'pending')) return 'Accep Offer'
+        if (offers.find((o) => o.status === 'pending')) return 'Accept Offer'
         return 'Sell'
       }
     }
