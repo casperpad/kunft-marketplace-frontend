@@ -22,6 +22,7 @@ export default function CollectionExplorer({
   const { loading, getTokens } = useGetTokensLazy()
   const [tokens, setTokens] = useState<Token[]>([])
   const [hasMore, setHasMore] = useState(true)
+  const [refetch, setRefetch] = useState(true)
 
   const where = useMemo(() => {
     const preferWhere = clone(query) as any
@@ -51,7 +52,6 @@ export default function CollectionExplorer({
   }, [query])
 
   const fetchTokens = useCallback(async () => {
-    if (loading) return
     const { data } = await getTokens(where, page, limit)
     if (data) {
       setTokens((prev) => uniqWith([...prev, ...data.tokens], isEqual))
@@ -61,19 +61,19 @@ export default function CollectionExplorer({
         setHasMore(false)
       }
     }
-  }, [getTokens, where, page, limit, loading])
-
-  useEffect(() => {
-    fetchTokens()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, [getTokens, where, page, limit])
 
   useEffect(() => {
     setTokens([])
     setPage(1)
-    fetchTokens()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    setHasMore(true)
+    // Since 18 setState triggers are all handled by one time we need a refetch flag.
+    setRefetch((prev) => !prev)
   }, [query])
+
+  useEffect(() => {
+    fetchTokens()
+  }, [refetch, fetchTokens])
 
   return (
     <Container>
@@ -81,7 +81,7 @@ export default function CollectionExplorer({
       <StyledInfiniteScroll
         dataLength={tokens.length}
         next={fetchTokens}
-        hasMore={hasMore}
+        hasMore={!loading && hasMore}
         loader={<h4>Loading...</h4>}
       >
         {tokens.map((token) => (

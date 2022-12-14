@@ -1,5 +1,7 @@
-import { useState, useCallback } from 'react'
+/* eslint-disable camelcase */
+import { useState, useCallback, useMemo } from 'react'
 
+import clone from 'lodash/clone'
 import { useRouter } from 'next/router'
 import styled from 'styled-components'
 import { space, SpaceProps } from 'styled-system'
@@ -31,9 +33,15 @@ export default function Filter({ slug }: { slug: string }) {
   const { data } = useMetadataInfo(slug)
 
   const router = useRouter()
+  const [priceRange] = useState({ min: 0, max: 5000 })
   const [minValue, setMinValue] = useState(0)
   const [maxValue, setMaxValue] = useState(5000)
   const [payToken, setPayToken] = useState(acceptableTokens[1])
+
+  const isPriceFilterActive = useMemo(() => {
+    const { price_payToken, price_min, price_max } = router.query
+    return !!price_payToken && !!price_min && !!price_max
+  }, [router])
 
   const handleChange = useCallback((value: any) => {
     setMinValue(value[0])
@@ -83,8 +91,7 @@ export default function Filter({ slug }: { slug: string }) {
     return false
   }
 
-  const handlePriceFilter = useCallback(() => {
-    //
+  const applyPriceFilter = useCallback(() => {
     router.push(
       {
         pathname: router.pathname,
@@ -98,18 +105,27 @@ export default function Filter({ slug }: { slug: string }) {
       undefined,
       { shallow: true },
     )
-  }, [minValue, maxValue, payToken, router])
+  }, [maxValue, minValue, payToken.contractHash, router])
 
-  const _handleClearFilters = useCallback(() => {
+  const clearPriceFilter = useCallback(() => {
+    const query = clone(router.query)
+    delete query.price_payToken
+    delete query.price_min
+    delete query.price_max
     router.push(
       {
         pathname: router.pathname,
-        query: { slug: router.query.slug },
+        query,
       },
       undefined,
       { shallow: true },
     )
   }, [router])
+
+  const handlePriceFilter = useCallback(() => {
+    if (isPriceFilterActive) clearPriceFilter()
+    else applyPriceFilter()
+  }, [applyPriceFilter, clearPriceFilter, isPriceFilterActive])
 
   return (
     <FilterContainer width={show ? '300px' : '0px'}>
@@ -146,14 +162,13 @@ export default function Filter({ slug }: { slug: string }) {
           </Flex>
           <Flex mt="28px" mb="5px" pr="27px" pl="12px">
             <RangeSlider
-              min={minValue}
-              max={maxValue}
+              {...priceRange}
               step={20}
               onValueChange={handleChange}
             />
           </Flex>
           <PriceFilterButton onClick={handlePriceFilter}>
-            Apply Price Filter
+            {isPriceFilterActive ? 'Clear Price Filter' : 'Apply Price Filter'}
           </PriceFilterButton>
         </Flex>
         <Flex flexDirection="column" gap={8}>

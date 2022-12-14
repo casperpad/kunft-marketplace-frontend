@@ -24,11 +24,12 @@ export default function TraitSearchItem({
   const [keyword, setKeyword] = useState('')
   const router = useRouter()
   const valueChecked = (value: string) => {
-    const selectedTraitValues = router.query[`metadata_${trait}`]
-    if (
-      selectedTraitValues !== undefined &&
-      selectedTraitValues.includes(value)
-    )
+    let selectedTraitValues = router.query[`metadata_${trait}`]
+    selectedTraitValues =
+      typeof selectedTraitValues === 'string'
+        ? [selectedTraitValues]
+        : selectedTraitValues
+    if (selectedTraitValues && selectedTraitValues.some((v) => v === value))
       return true
     return false
   }
