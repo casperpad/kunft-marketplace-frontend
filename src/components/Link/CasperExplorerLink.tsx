@@ -1,14 +1,6 @@
 import React from 'react'
-import { useTooltip } from '@kunftmarketplace/uikit'
-import dynamic from 'next/dynamic'
+import { CasperIcon, useTooltip } from '@kunftmarketplace/uikit'
 import styled from 'styled-components'
-
-const CasperIcon = dynamic(
-  () => import('@kunftmarketplace/uikit').then((mod) => mod.CasperIcon),
-  {
-    ssr: false,
-  },
-)
 
 export default function CasperExplorerLink({ href }: { href: string }) {
   const { targetRef: targetRefFineTuned, tooltip } = useTooltip(

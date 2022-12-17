@@ -2,7 +2,6 @@ import { useState, useCallback } from 'react'
 import styled from 'styled-components'
 
 import { Box, Flex } from '@/components/Box'
-import { CheckboxItem } from '@/components/Checkbox'
 import { RangeSlider } from '@/components/Slider'
 import { Text } from '@/components/Text'
 
@@ -15,20 +14,6 @@ const PriceText = styled(Text)`
   font-family: 'Avenir';
   font-size: 12px;
   border: 1px solid ${({ theme }) => theme.colors.border};
-`
-
-const CheckboxContainer = styled(Flex)`
-  flex-direction: column;
-  gap: 2px;
-  font-family: 'Avenir';
-  font-size: 16px;
-
-  ${({ theme }) => theme.mediaQueries.xl} {
-    flex-wrap: wrap;
-    height: 60px;
-    min-width: 240px;
-    justify-content: space-around;
-  }
 `
 
 const SliderContainer = styled(Flex)`
