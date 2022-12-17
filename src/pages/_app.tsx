@@ -3,19 +3,19 @@ import React, { useEffect, Fragment } from 'react'
 import { NextPage } from 'next'
 import { appWithTranslation } from 'next-i18next'
 import { DefaultSeo } from 'next-seo'
+import dynamic from 'next/dynamic'
 import Router, { useRouter } from 'next/router'
 import nProgress from 'nprogress'
 import { ToastContainer } from 'react-toastify'
 import { PersistGate } from 'redux-persist/integration/react'
 import type { AppProps } from 'next/app'
 
-import { Navbar, Footer, Spinner } from '@/components'
+import { Footer, Spinner } from '@/components'
 import { meta } from '@/config'
 import { useAuth } from '@/hooks'
 import GlobalStyle, { ResetCSS } from '@/styles/Global'
 import Providers from '../Providers'
 import { useStore, persistor } from '../store'
-
 // eslint-disable-next-line import/order
 import '../assets/scss/main.scss'
 // eslint-disable-next-line import/order
@@ -24,6 +24,10 @@ import '../styles/react-toastify.css'
 import 'react-loading-skeleton/dist/skeleton.css'
 // eslint-disable-next-line import/order
 import 'nprogress/nprogress.css'
+
+const Navbar = dynamic(() => import('@/components/Menu/Navbar'), {
+  ssr: false,
+})
 
 function Auth({ children }: { children: React.ReactNode }) {
   const { user } = useAuth()

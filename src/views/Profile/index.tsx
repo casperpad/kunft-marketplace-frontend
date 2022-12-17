@@ -1,23 +1,13 @@
-import { useCallback, useEffect, useState } from 'react'
+import React, { useCallback } from 'react'
 import { useModal } from '@kunftmarketplace/uikit'
 import { CLPublicKey } from 'casper-js-sdk'
-import uniqWith from 'lodash/uniqWith'
 import { NextSeo } from 'next-seo'
-import { Rating } from 'react-simple-star-rating'
 import { toast } from 'react-toastify'
-import {
-  NFTCard,
-  AddButton,
-  ImportTokenModal,
-  StyledButton,
-  Flex,
-} from '@/components'
-import { useGetTokens } from '@/hooks'
+import { AddButton, ImportTokenModal, StyledButton } from '@/components'
+
 import { tokenApis, userApis } from '@/service'
 import { useAppSelector } from '@/store'
-import { isEqual } from '@/utils/token'
-import { Token } from '../../types/Token'
-import Filter from './Filter'
+import Tokens from '@/views/Tokens'
 
 import {
   StyledImage,
@@ -26,30 +16,33 @@ import {
   Description,
   NameContainer,
   DataContainer,
-  NFTContainer,
   CustomLayout,
 } from './Profile.styles'
 
-export default function Profile() {
-  const [rating, setRating] = useState(0)
+export interface ProfileProps {
+  slug: string
+  publicKey: string
+  accountHash: string
+  verified: boolean
+  name?: string
+  avatar?: string
+  description?: string
+  ownedTokens: number
+}
 
+export default function Profile({
+  publicKey,
+  accountHash,
+  name,
+  avatar,
+  description,
+}: ProfileProps) {
   const { user } = useAppSelector((state) => state.user)
 
-  const profileAvatar = user?.avatar || '/images/Avatar/Default.svg'
+  const isMyProfile = user?.publicKey === publicKey
 
-  const handleRating = (rate: number) => {
-    setRating(rate)
-  }
-  const [page] = useState(1)
-  const [limit] = useState(20)
-  const [tokens, setTokens] = useState<Token[]>([])
-  const { data, loading } = useGetTokens(
-    {
-      owner: CLPublicKey.fromHex(user!.publicKey).toAccountHashStr().slice(13),
-    },
-    page,
-    limit,
-  )
+  const profileAvatar = avatar || '/images/Avatar/Default.svg'
+
   const handleImportToken = useCallback(
     async (contractHash: string, tokenId: string) => {
       const _ = await userApis.addToken(contractHash, tokenId)
@@ -68,14 +61,6 @@ export default function Profile() {
     <ImportTokenModal onImport={handleImportToken} />,
   )
 
-  useEffect(() => {
-    if (loading || !data) return
-    setTokens((prev) => {
-      return uniqWith([...prev, ...data.tokens], isEqual)
-    })
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [loading])
-
   return (
     <CustomLayout>
       <NextSeo nofollow noindex />
@@ -84,41 +69,31 @@ export default function Profile() {
           <StyledImage src={profileAvatar} alt="" width={235} height={235} />
         </ImageContainer>
         <NameContainer>
-          <Title>{user!.name || 'Please set name.'}</Title>
-          <Rating
-            onClick={handleRating}
-            ratingValue={rating}
-            size={15}
-            fillColor="#FA5F0C"
-          />
+          <Title>{name || (isMyProfile ? 'Please set name.' : '')}</Title>
           <Description mt="25px">
-            {user!.description || 'You can write your bio.'}
+            {description || (isMyProfile ? 'You can write your bio.' : '')}
           </Description>
         </NameContainer>
       </DataContainer>
-      <Flex flexDirection="row">
-        <Filter />
-        <NFTContainer>
-          {tokens.map((token) => (
-            <NFTCard
-              key={`${token.collection.contractPackageHash}_${token.id}`}
-              {...token}
-            />
-          ))}
-          {loading ? 'Loading...' : null}
-        </NFTContainer>
-      </Flex>
-
-      <AddButton onClick={() => onPresentImportModal()} />
-      <StyledButton
-        text="Import all token(*experimental)"
-        link={false}
-        onClick={() =>
-          toast.promise(handleImportAllToken, {
-            pending: 'Adding tokens...',
-          })
-        }
+      <Tokens
+        where={{
+          owner: accountHash,
+        }}
       />
+      {isMyProfile ? (
+        <>
+          <AddButton onClick={() => onPresentImportModal()} />
+          <StyledButton
+            text="Import all token(*experimental)"
+            link={false}
+            onClick={() =>
+              toast.promise(handleImportAllToken, {
+                pending: 'Adding tokens...',
+              })
+            }
+          />
+        </>
+      ) : null}
     </CustomLayout>
   )
 }

@@ -5,11 +5,13 @@ import {
   Flex,
   Text,
   FavoriteToken,
-  Address,
   CasperExplorerLink,
+  Link,
 } from '@/components'
+import { contracts, NEXT_PUBLIC_CASPER_CHAIN_NAME } from '@/config'
 import { Token } from '@/types'
 import { getNFTExplorerUrl } from '@/utils/casper'
+import { shortenHash } from '@/utils/hash'
 
 interface NameProps {
   token: Token
@@ -23,7 +25,15 @@ export default function Name({ token, setToken }: NameProps) {
       <DataContainer>
         <Flex flexDirection="row" alignItems="center">
           <Text mr="4px">Owned by</Text>
-          <Address address={token.owner} />
+          {contracts.marketplace[
+            NEXT_PUBLIC_CASPER_CHAIN_NAME
+          ].contractPackageHash.slice(5) !== token.owner ? (
+            <Link href={`/profile/${token.owner}`}>
+              {shortenHash(token.owner)}
+            </Link>
+          ) : (
+            <Text>Marketplace</Text>
+          )}
         </Flex>
         <Flex flexDirection="row" gap={8}>
           <FavoriteToken token={token} setToken={setToken} />

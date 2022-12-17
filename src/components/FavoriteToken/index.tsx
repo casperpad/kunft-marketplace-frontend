@@ -19,6 +19,10 @@ export const StarsButton = styled(DefaultButton)`
   font-weight: 300;
   font-size: 20px;
   z-index: 1;
+  &:disabled {
+    background-color: transparent;
+    cursor: not-allowed;
+  }
 `
 
 interface FavoriteTokenProps {

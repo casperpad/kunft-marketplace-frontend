@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useRef, useState } from 'react'
+import React, { useCallback, useMemo, useState } from 'react'
 import { BigNumberish } from '@ethersproject/bignumber'
 import { Image, useModal } from '@kunftmarketplace/uikit'
 import { CLKeyParameters, CLPublicKey } from 'casper-js-sdk'
@@ -9,28 +9,16 @@ import { Box } from '@/components/Box'
 import ERC20Balance from '@/components/ERC20Balance'
 import { Text } from '@/components/Text'
 import { NATIVE_HASH } from '@/config'
-import {
-  useCasperWeb3Provider,
-  useMarketplaceTransaction,
-  useWindowSize,
-} from '@/hooks'
+import { useCasperWeb3Provider, useMarketplaceTransaction } from '@/hooks'
 import { Token } from '@/types'
 import { findAcceptableTokens } from '@/utils'
 
 import FavoriteToken from '../../FavoriteToken'
 import { OfferTokenModal, SellTokenModal } from '../../Modals'
-import {
-  SaleButton,
-  Wrapper,
-  NameContainer,
-  ValueContainer,
-} from './NFTCard.styles'
+import { SaleButton, Wrapper, ValueContainer } from './NFTCard.styles'
 
 export default function NFTCard(_token: Token) {
   const [token, setToken] = useState<Token>(_token)
-  const ref = useRef<HTMLDivElement>(null)
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [width] = useWindowSize()
 
   const {
     id,
@@ -129,7 +117,7 @@ export default function NFTCard(_token: Token) {
   }, [listed, owner, offers, currentAccount])
 
   return (
-    <Wrapper ref={ref}>
+    <Wrapper>
       <StyledLink
         href={`/token/${slug}/${id}`}
         onClick={(e) => {
@@ -149,9 +137,7 @@ export default function NFTCard(_token: Token) {
       </StyledLink>
 
       <Box px="28px" py={[14, 17]}>
-        <NameContainer>
-          <Text fontFamily="Castle">{name}</Text>
-        </NameContainer>
+        <Text fontFamily="Castle">{name}</Text>
         <ValueContainer>
           <FavoriteToken token={token} setToken={setToken} />
           {price ? (
