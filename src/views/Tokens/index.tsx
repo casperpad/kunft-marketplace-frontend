@@ -12,7 +12,7 @@ export interface TokensProps {
   where: GetTokensInput
 }
 
-export default function Tokens({ where }: TokensProps) {
+export default function Tokens({ where, ...props }: TokensProps) {
   const { query } = useRouter()
   const [page, setPage] = useState(1)
   const [limit] = useState(20)
@@ -52,6 +52,7 @@ export default function Tokens({ where }: TokensProps) {
       next={fetchTokens}
       hasMore={!loading && hasMore}
       loader={<h4>Loading...</h4>}
+      {...props}
     >
       {tokens.map((token) => (
         <NFTCard
@@ -70,5 +71,18 @@ const StyledInfiniteScroll = styled(InfiniteScroll)`
   gap: 20px;
   padding-bottom: 20px;
   margin: 0px 40px 0px 40px;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+
+  grid-template-columns: repeat(1, minmax(200px, 1fr));
+
+  ${({ theme }) => theme.mediaQueries.sm} {
+    grid-template-columns: repeat(2, minmax(200px, 1fr));
+  }
+
+  ${({ theme }) => theme.mediaQueries.xl} {
+    grid-template-columns: repeat(3, minmax(200px, 1fr));
+  }
+
+  ${({ theme }) => theme.mediaQueries.xl3} {
+    grid-template-columns: repeat(5, minmax(200px, 1fr));
+  }
 `

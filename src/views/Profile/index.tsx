@@ -11,12 +11,12 @@ import Tokens from '@/views/Tokens'
 
 import {
   StyledImage,
-  ImageContainer,
+  AvatarWrapper,
   Title,
   Description,
   NameContainer,
-  DataContainer,
-  CustomLayout,
+  UserInfo,
+  Container,
 } from './Profile.styles'
 
 export interface ProfileProps {
@@ -62,19 +62,19 @@ export default function Profile({
   )
 
   return (
-    <CustomLayout>
+    <Container>
       <NextSeo nofollow noindex />
-      <DataContainer>
-        <ImageContainer>
+      <UserInfo>
+        <AvatarWrapper>
           <StyledImage src={profileAvatar} alt="" width={235} height={235} />
-        </ImageContainer>
+        </AvatarWrapper>
         <NameContainer>
           <Title>{name || (isMyProfile ? 'Please set name.' : '')}</Title>
           <Description mt="25px">
             {description || (isMyProfile ? 'You can write your bio.' : '')}
           </Description>
         </NameContainer>
-      </DataContainer>
+      </UserInfo>
       <Tokens
         where={{
           owner: accountHash,
@@ -94,6 +94,6 @@ export default function Profile({
           />
         </>
       ) : null}
-    </CustomLayout>
+    </Container>
   )
 }

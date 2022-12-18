@@ -3,7 +3,7 @@ import styled from 'styled-components'
 
 import { Flex, Grid, Box, Text, Layout } from '@/components'
 
-export const ImageContainer = styled(Box)`
+export const AvatarWrapper = styled(Box)`
   min-width: 235px;
   height: 235px;
   border: 1px solid ${({ theme }) => theme.colors.border};
@@ -49,7 +49,7 @@ export const NameContainer = styled(Box)`
   }
 `
 
-export const DataContainer = styled(Flex)`
+export const UserInfo = styled(Flex)`
   flex-direction: column;
   gap: 20px;
   justify-content: space-between;
@@ -70,10 +70,9 @@ export const NFTContainer = styled(Grid)`
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
 `
 
-export const CustomLayout = styled(Layout)`
-  position: relative;
-  padding-left: 50px;
-  padding-right: 50px;
+export const Container = styled(Layout)`
+  padding-left: 14px;
+  padding-right: 14px;
 
   ${({ theme }) => theme.mediaQueries.md} {
     padding-left: 56px;

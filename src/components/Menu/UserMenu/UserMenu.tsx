@@ -32,7 +32,7 @@ export default function UserMenu(props: UserMenuProps) {
         <ProfileAvatar src={avatar} width={73} height={74} />
         <Box>
           <Address variant="secondary" address={user!.publicKey} />
-          <Link href="/profile">
+          <Link href={`/profile/${user.publicKey}`}>
             <StyledText fontSize="12px" color="textSecondary">
               Profile
             </StyledText>

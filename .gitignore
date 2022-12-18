@@ -37,3 +37,5 @@ yarn-error.log*
 # sitemap
 sitemap*.xml
 robots.txt
+# Sentry
+.sentryclirc
