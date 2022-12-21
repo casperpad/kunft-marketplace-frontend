@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { useModal } from '@kunftmarketplace/uikit'
 import { CLPublicKey } from 'casper-js-sdk'
 import { NextSeo } from 'next-seo'
@@ -38,8 +38,7 @@ export default function Profile({
   description,
 }: ProfileProps) {
   const { user } = useAppSelector((state) => state.user)
-
-  const isMyProfile = user?.publicKey === publicKey
+  const [isMyProfile, setIsMyProfile] = useState(false)
 
   const profileAvatar = avatar || '/images/Avatar/Default.svg'
 
@@ -60,6 +59,10 @@ export default function Profile({
   const [onPresentImportModal] = useModal(
     <ImportTokenModal onImport={handleImportToken} />,
   )
+
+  useEffect(() => {
+    setIsMyProfile(user?.publicKey === publicKey)
+  }, [user?.publicKey, publicKey])
 
   return (
     <Container>

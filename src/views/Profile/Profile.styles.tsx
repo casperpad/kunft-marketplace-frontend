@@ -1,4 +1,4 @@
-import Image from 'next/image'
+import { Image } from '@kunftmarketplace/uikit'
 import styled from 'styled-components'
 
 import { Flex, Grid, Box, Text, Layout } from '@/components'

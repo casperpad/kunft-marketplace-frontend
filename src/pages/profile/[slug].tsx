@@ -46,9 +46,7 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
     const { __typename, ...user } = data.getUserInfo
 
     return {
-      props: {
-        ...user,
-      },
+      props: user,
     }
   } catch (e) {
     console.error(e)
